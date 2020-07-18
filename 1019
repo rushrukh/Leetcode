@@ -1,0 +1,70 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *reverseLL(ListNode * head) {
+        ListNode *prev, *curr, *next;
+        prev = curr = NULL;
+        next = head;
+        
+        while(next) {
+            prev = curr;
+            curr = next;
+            next = next -> next;
+            curr -> next = prev;
+        }
+        
+        return curr;
+    }
+    vector<int> nextLargerNodes(ListNode* head) {
+        ListNode* reverseHead = reverseLL(head);
+        stack <int> s;
+        vector <int> res;
+        
+        while(reverseHead) {
+            if(s.empty()) {
+                res.push_back(0);
+                s.push(reverseHead -> val);
+            }
+            
+            else {
+                if(reverseHead -> val >= s.top()) {
+                    while(!s.empty()) {
+                        int x = s.top();
+                        s.pop();
+                        if(!s.empty() && s.top() > reverseHead -> val)
+                            break;  
+                    }
+               
+                    if(!s.empty()) {
+                        res.push_back(s.top());
+                        s.push(reverseHead -> val);     
+                    }
+                    
+                    else {
+                        s.push(reverseHead -> val);
+                        res.push_back(0);    
+                    }
+                }
+                
+                else {
+                    res.push_back(s.top());
+                    s.push(reverseHead -> val);
+                }
+            }
+            
+            reverseHead = reverseHead -> next;
+        }
+        
+        reverse(res.begin(), res.end());
+        return res;
+    }
+};
