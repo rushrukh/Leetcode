@@ -1,0 +1,72 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *reverseLL(ListNode *head) {
+        ListNode *prev, *curr, *next;
+        prev = curr = NULL;
+        next = head;
+        while(next) {
+            prev = curr;
+            curr = next;
+            next = next -> next;
+            curr -> next = prev;
+        }
+        return curr;
+    }
+    bool isPalindrome(ListNode* head) {  
+        
+        if(!head || !head -> next)
+            return true;
+        
+        ListNode *firstHead = head;
+        
+        int count = 0;
+        
+        while(firstHead) {
+            count++;
+            firstHead = firstHead -> next;
+        }
+        
+        ListNode *secondHead = NULL;
+        firstHead = head;
+       
+        if(count % 2 == 1) {
+            for(int i = 0; i < count / 2 - 1; i++)
+                firstHead = firstHead -> next;
+            
+            secondHead = firstHead -> next -> next;
+            firstHead -> next = NULL;
+        }
+        else {
+            for(int i = 0; i < count / 2 - 1; i++)
+                firstHead = firstHead -> next;
+            
+            secondHead = firstHead -> next;
+            firstHead -> next = NULL;
+        }
+        
+        firstHead = head;
+        secondHead = reverseLL(secondHead);
+        
+        while(firstHead && secondHead) {
+            
+            if(firstHead -> val != secondHead -> val)
+                return false;
+            
+            else {
+                firstHead = firstHead -> next;
+                secondHead = secondHead -> next;
+            }
+        }
+        return true;
+    }
+};
