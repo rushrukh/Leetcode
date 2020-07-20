@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int numOfPairs(int n) {
+        return (n * (n - 1) / 2);
+    }
+    
+    int numIdenticalPairs(vector<int>& nums) {
+        
+        int hash[101] = {0};
+        
+        for(int i = 0; i < nums.size(); i++)
+            hash[nums[i]]++;
+        
+        int numOfGoodPairs = 0;
+        for(int i = 0; i < 100; i++)
+            if(hash[i] > 1)
+                numOfGoodPairs += numOfPairs(hash[i]);
+
+        return numOfGoodPairs;
+    }
+};
