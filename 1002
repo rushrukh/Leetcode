@@ -1,0 +1,38 @@
+class Solution {
+public:
+    vector<string> commonChars(vector<string>& A) {
+        if(!A.size())
+            return A;
+        
+        int result[26] = {INT_MAX};
+        fill_n (result, 26, INT_MAX);
+        
+        for(auto a : A) {
+            
+            int tmp[26] = {0};
+            
+            for(auto c : a)
+                tmp[c - 'a']++;
+            
+            for(int i = 0; i < 26; i++) {
+                result[i] = result[i] < tmp[i] ? result[i] : tmp[i];
+            }
+        }
+        
+        vector<string> res;
+        
+        int i = 0;
+        while(i < 26) {
+            if(result[i]) {
+                string c;
+                c = (char) i + 97;
+                res.push_back(c);
+                result[i]--;
+            } 
+            else
+                i++;
+        }
+        
+        return  res;
+    }
+};
