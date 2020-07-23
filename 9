@@ -1,0 +1,25 @@
+class Solution {
+public:
+    bool isPalindrome(int x) {
+        if(x < 0)
+            return false;
+        
+        int tmp = x;
+        int res = 0;
+        
+        while(tmp) {
+            
+            if(res > INT_MAX / 10) 
+                return false;
+            
+            res *= 10;
+            res += tmp % 10;
+            tmp /= 10;
+        }
+        
+        if(res == x)
+            return true;
+        
+        return false;
+    }
+};
