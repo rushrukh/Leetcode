@@ -1,0 +1,14 @@
+class Solution {
+public:
+    int maximum69Number (int num) {
+    
+        int positionOfMsbSix = 0, tmp = num;
+        
+        for(int i = 1; i < num; i *= 10) {
+            if((tmp % 10)  == 6)
+                positionOfMsbSix = i;
+            tmp /= 10;
+        }
+        return num +( 3 * positionOfMsbSix);
+    }
+};
