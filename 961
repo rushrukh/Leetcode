@@ -1,0 +1,14 @@
+class Solution {
+public:
+    int repeatedNTimes(vector<int>& a) {   
+        
+        unordered_map<int, int> noRepeat;
+        
+        for(auto i : a)  {   
+            if(noRepeat[i]) 
+                return i;
+            noRepeat[i]++;            
+        }
+        return -1;
+    }
+};
