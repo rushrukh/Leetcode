@@ -1,0 +1,45 @@
+class Solution {
+public:
+    vector<string> uncommonFromSentences(string A, string B) {
+        
+        unordered_map<string, int> count;
+        vector<string> result;
+        
+        string tmp;
+        
+        if(A.length()) {
+            for(int i = 0; A[i] != '\0'; i++) {
+            
+                if(A[i] != ' ') 
+                    tmp.push_back(A[i]);
+
+                else {
+                    count[tmp]++;
+                    tmp = "";
+                }
+            }
+            count[tmp]++;
+            tmp = "";
+        }
+        
+        if(B.length()) {
+            for(int i = 0; B[i] != '\0'; i++) {
+            
+                if(B[i] != ' ') 
+                    tmp.push_back(B[i]);
+
+                else {
+                    count[tmp]++;
+                    tmp = "";
+                }
+            }
+            count[tmp]++;
+        }
+        
+        for(auto x : count)
+            if(x.second == 1)
+                result.push_back(x.first);
+        
+        return result;
+    }
+};
