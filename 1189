@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int maxNumberOfBalloons(string text) {
+        
+        unordered_map<char, int> balloon;
+        
+        balloon.insert({'b', 0});
+        balloon.insert({'a', 0});
+        balloon.insert({'l', 0});
+        balloon.insert({'o', 0});
+        balloon.insert({'n', 0});
+
+        for(auto s: text) {
+            if(s == 'b' || s == 'a' || s == 'l' || s == 'o' || s == 'n')
+                balloon[s]++;
+        }
+        balloon['l'] = balloon['l'] / 2;
+        balloon['o'] = balloon['o'] / 2;
+        
+        int min = INT_MAX;
+        
+        for(auto s: balloon)
+            if(s.first == 'b' || s.first == 'a' || s.first == 'l' || s.first == 'o' || s.first == 'n')
+                if(s.second < min)
+                    min = s.second;
+        
+        return min;
+    }
+};
