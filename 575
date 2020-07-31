@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int distributeCandies(vector<int>& candies) {
+        
+        unordered_map<int, int> counts;
+        
+        for(auto c: candies)
+            counts[c]++;
+        
+        int forSis = candies.size() / 2;
+        int typeForSis = 0;
+        
+        for(auto &c : counts) {
+            if(forSis && c.second) {
+                forSis--;
+                c.second--;
+                typeForSis++;
+            }
+        }
+        
+        return typeForSis;
+    }
+};
