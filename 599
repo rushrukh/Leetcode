@@ -1,0 +1,41 @@
+class Solution {
+public:
+    vector<string> findRestaurant(vector<string>& list1, vector<string>& list2) {
+       
+        vector<string> result;
+        unordered_map<string, int> allRestaurants;
+        
+        for(auto a: list1) {
+            auto it = find(list2.begin(), list2.end(), a);
+            if(it != list2.end()) 
+                allRestaurants[a]++;    
+        }
+        
+        if(allRestaurants.size() == 1) {
+            auto it = allRestaurants.begin();
+            result.push_back(it -> first);
+        }
+        else {
+            int minIndex = INT_MAX;
+            for(auto a : allRestaurants) {
+                int currIndexSum = 0;
+                for(int i = 0; i < list1.size(); i++) 
+                    if(list1[i] == a.first)
+                        currIndexSum += i;
+
+                for(int i = 0; i < list2.size(); i++) 
+                    if(list2[i] == a.first)
+                        currIndexSum += i;
+                
+                if(currIndexSum < minIndex) {
+                    minIndex = currIndexSum;
+                    result.clear();
+                    result.push_back(a.first);                    
+                }
+                else if(currIndexSum == minIndex)
+                    result.push_back(a.first);
+            }
+        }
+        return result;
+    }
+};
