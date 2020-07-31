@@ -1,0 +1,15 @@
+class Solution {
+public:
+    char findTheDifference(string s, string t) {
+        
+        int sVal = 0, tVal = 0;
+        
+        for(int i = 0; s[i] != '\0'; i++)
+            sVal += s[i] - 'a';
+        
+        for(int i = 0; t[i] != '\0'; i++)
+            tVal += t[i] - 'a';
+        
+        return char(tVal - sVal + 'a');
+    }
+};
