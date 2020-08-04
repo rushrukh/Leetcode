@@ -1,0 +1,9 @@
+class Solution {
+public:
+    bool isPowerOfFour(int num) {
+        
+        int n = num & 1431655765;
+        
+        return num && (n == num) && !(num & (num - 1));
+    }
+};
