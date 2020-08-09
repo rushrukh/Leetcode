@@ -1,0 +1,37 @@
+/*
+// Definition for Employee.
+class Employee {
+public:
+    int id;
+    int importance;
+    vector<int> subordinates;
+};
+*/
+
+class Solution {
+public:
+    int getImportance(vector<Employee*> employees, int id) {
+        
+        unordered_map<int, Employee*> employeeMap;
+        
+        for(auto employee : employees)
+            employeeMap[employee -> id] = employee;
+        
+        queue<Employee*> Q;
+        Q.push(employeeMap[id]);
+        
+        int result = 0;
+        
+        while(!Q.empty()) {
+            Employee *curr = Q.front();
+            Q.pop();
+            
+            result += curr -> importance;
+            
+            for(auto id: curr -> subordinates)
+                Q.push(employeeMap[id]);
+        }
+        
+        return result;
+    }
+};
