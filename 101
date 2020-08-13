@@ -1,0 +1,70 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+ 
+ //iterative solution:
+ 
+class Solution {
+public:
+    bool isSymmetric(TreeNode* root) {
+        if(!root)
+            return true;
+        
+        queue<TreeNode*> qOne;
+        queue<TreeNode*> qTwo;
+        
+        qOne.push(root);
+        qTwo.push(root);
+        
+        while(!qOne.empty()) {
+            TreeNode *q1= qOne.front();
+            qOne.pop();
+            TreeNode *q2= qTwo.front();
+            qTwo.pop();
+            
+            if((!q1 && q2) || (q1 && !q2))
+                return false;
+            if((q1 && q2) && (q1 -> val != q2 -> val))
+                return false;
+            
+            if(q1) {
+                qOne.push(q1 -> left);
+                qOne.push(q1 -> right);
+                
+                qTwo.push(q2 -> right);
+                qTwo.push(q2 -> left);
+            }
+        }
+        return true;
+    }
+};
+
+//recursive solution: 
+
+class Solution {
+public:
+    bool isSymmetric(TreeNode* root) {
+        if(!root)
+            return true;
+        
+        return checkIfSymmetric(root -> left, root -> right);
+    }
+    
+    bool checkIfSymmetric(TreeNode* lTree, TreeNode *rTree) {
+        if(!lTree && !rTree)
+            return true;
+        if((lTree && !rTree) || (!lTree && rTree))
+            return false;
+        if(lTree -> val != rTree -> val)
+            return false;
+        return (checkIfSymmetric(lTree -> left, rTree -> right) && checkIfSymmetric(lTree -> right, rTree -> left));
+    }
+};
