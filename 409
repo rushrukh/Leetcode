@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int longestPalindrome(string s) {
+        
+        unordered_map<char, int> um;
+        int result = 0, oddFlag = 0;
+        
+        for(auto a : s) 
+            um[a]++;
+        
+        for(auto a: um) {
+            if(a.second % 2 == 0) 
+                result += a.second;
+                
+            else {
+                oddFlag = 1;
+                result += a.second - 1;
+            }
+        }
+        if(oddFlag)
+            result += 1;
+        
+        return result;
+    }
+};
