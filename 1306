@@ -1,0 +1,27 @@
+class Solution {
+public:
+    bool canReach(vector<int>& arr, int start) {
+        queue<int> Q;
+        Q.push(start);
+        
+        while(!Q.empty()) {
+
+            int currIndex = Q.front();
+            Q.pop();
+    
+            if(arr[currIndex] >= 0) {
+                if(arr[currIndex] == 0)
+                    return true;
+                
+                if(!(currIndex + arr[currIndex] < 0) && !(currIndex + arr[currIndex] >= arr.size())) 
+                    Q.push(currIndex + arr[currIndex]);
+                
+                if(!(currIndex - arr[currIndex] < 0) && !(currIndex - arr[currIndex] >= arr.size())) 
+                    Q.push(currIndex - arr[currIndex]);
+                
+                arr[currIndex] = INT_MIN;
+            }
+        }
+        return false;
+    }
+};
