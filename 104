@@ -39,35 +39,6 @@ public:
     }
 };
 
-class Solution {
-public:
-    int maxDepth(TreeNode* root) {
-        if(!root)
-            return 0;
-        
-        stack<pair<TreeNode*, int>> S;
-        
-        int currDepth = 0, maxDepth = INT_MIN;        
-        while(!S.empty() || root) {
-            
-            while(root) {
-                S.push({root, ++currDepth});
-                root = root -> left;
-            }
-            
-            TreeNode* tmp = S.top().first;
-            currDepth = S.top().second;
-            S.pop();
-            
-            root = tmp -> right;
-            
-            maxDepth = max(currDepth, maxDepth);
-        }
-        
-        return maxDepth;
-    }
-};
-
 //Iterative DFS
 
 class Solution {
