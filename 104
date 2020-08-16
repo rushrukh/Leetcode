@@ -1,0 +1,100 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+ 
+ //Iterative BFS
+ 
+class Solution {
+public:
+    int maxDepth(TreeNode* root) {
+        if(!root)
+            return 0;
+        int currDepth = 0;
+        
+        queue<TreeNode*> Q;
+        Q.push(root);
+        
+        while(!Q.empty()) {
+            int currentQueueSize = Q.size();
+            currDepth++;
+            for(int i = 0; i < currentQueueSize; i++) {
+                TreeNode *currentNode = Q.front();
+                Q.pop();
+                
+                if(currentNode -> left)
+                    Q.push(currentNode -> left);
+                if(currentNode -> right)
+                    Q.push(currentNode -> right);
+            }
+        }
+        return currDepth;
+    }
+};
+
+class Solution {
+public:
+    int maxDepth(TreeNode* root) {
+        if(!root)
+            return 0;
+        
+        stack<pair<TreeNode*, int>> S;
+        
+        int currDepth = 0, maxDepth = INT_MIN;        
+        while(!S.empty() || root) {
+            
+            while(root) {
+                S.push({root, ++currDepth});
+                root = root -> left;
+            }
+            
+            TreeNode* tmp = S.top().first;
+            currDepth = S.top().second;
+            S.pop();
+            
+            root = tmp -> right;
+            
+            maxDepth = max(currDepth, maxDepth);
+        }
+        
+        return maxDepth;
+    }
+};
+
+//Iterative DFS
+
+class Solution {
+public:
+    int maxDepth(TreeNode* root) {
+        if(!root)
+            return 0;
+        
+        stack<pair<TreeNode*, int>> S;
+        
+        int currDepth = 0, maxDepth = INT_MIN;        
+        while(!S.empty() || root) {
+            
+            while(root) {
+                S.push({root, ++currDepth});
+                root = root -> left;
+            }
+            
+            TreeNode* tmp = S.top().first;
+            currDepth = S.top().second;
+            S.pop();
+            
+            root = tmp -> right;
+            
+            maxDepth = max(currDepth, maxDepth);
+        }
+        
+        return maxDepth;
+    }
+};
