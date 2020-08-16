@@ -1,0 +1,51 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+        if(!p && !q)
+            return true;
+        if((p && !q) || (!p && q))
+            return false;
+        
+        queue<TreeNode*> Q1;
+        queue<TreeNode*> Q2;
+        
+        Q1.push(p);
+        Q2.push(q);
+        
+        while(!Q1.empty() || !Q2.empty()) {
+            TreeNode* tmp1 = Q1.front(); Q1.pop();
+            TreeNode* tmp2 = Q2.front(); Q2.pop();
+            
+            if(tmp1 -> val != tmp2 -> val)
+                return false;
+            
+            if((tmp1 -> left && !tmp2 -> left) || (!tmp1 -> left && tmp2 -> left))
+                return false;
+            
+            if((tmp1 -> right && !tmp2 -> right) || (!tmp1 -> right && tmp2 -> right))
+                return false;
+            
+            if(tmp1 -> left)
+                Q1.push(tmp1 -> left);
+            if(tmp1 -> right)
+                Q1.push(tmp1 -> right);
+            
+            if(tmp2 -> left)
+                Q2.push(tmp2 -> left);
+            if(tmp2 -> right)
+                Q2.push(tmp2 -> right);
+        }
+        return true;
+    }
+};
