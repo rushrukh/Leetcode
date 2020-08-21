@@ -1,0 +1,33 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    int result = -111111;
+    int maxAncestorDiff(TreeNode* root) {
+        DFS(root);
+        return result;
+    }
+    pair<int, int> DFS(TreeNode* root) {
+        if(!root)
+            return {INT_MAX, INT_MIN};
+        
+        auto left = DFS(root -> left);
+        auto right = DFS(root -> right);
+
+        int currMin = min(left.first, min(right.first, root->val));
+        int currMax = max(left.second, max(right.second, root->val));
+        
+        result = max(result, max(abs(root -> val - currMin), abs(root -> val - currMax)));
+        
+        return {currMin, currMax};
+    }
+};
