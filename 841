@@ -1,0 +1,49 @@
+//Iterative BFS Solution:
+class Solution {
+public:
+    bool canVisitAllRooms(vector<vector<int>>& rooms) {
+        vector<bool> visited(rooms.size(), false);
+        queue<int> Q;
+        Q.push(0);
+        
+        while(!Q.empty()) {
+            
+            int currRoom = Q.front();
+            Q.pop();
+            visited[currRoom] = true;
+
+            for(int j = 0; j < rooms[currRoom].size(); j++) 
+                if(!visited[rooms[currRoom][j]]) 
+                    Q.push(rooms[currRoom][j]);
+        }
+        
+        for(auto x : visited) 
+            if(!x)
+                return false;
+        
+        return true;
+    }
+};
+
+//Recursive DFS Solution: 
+
+class Solution {
+public:
+    bool canVisitAllRooms(vector<vector<int>>& rooms) {
+        vector<bool> visited(rooms.size(), false);
+        DFS(rooms, 0, visited);
+        
+        for(auto x : visited)
+            if(!x)
+                return false;
+        return true;
+    }
+    
+    void DFS(vector<vector<int>>rooms, int vertex, vector<bool> &visited) {
+        visited[vertex] = true;
+        
+        for(int i = 0; i < rooms[vertex].size(); i++) 
+            if(!visited[rooms[vertex][i]])
+                DFS(rooms, rooms[vertex][i], visited);
+    }
+};
