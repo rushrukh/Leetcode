@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int ans = 0;
+    vector<pair<int, int>> graph[50009];
+    int minReorder(int n, vector<vector<int>>& connections) {
+        for(int i = 0; i < connections.size(); i++) {
+            graph[connections[i][0]].push_back({connections[i][1], 1});
+            graph[connections[i][1]].push_back({connections[i][0], 0});
+        };
+        DFS(0, 0);
+        return ans;
+    }
+    
+    void DFS(int currNode, int parentNode) {
+        for(auto g : graph[currNode]) {
+            if(g.first == parentNode)
+                continue;
+            else {
+                if(g.second == 1) ans++;
+                DFS(g.first, currNode);
+            }
+        }
+    }
+};
