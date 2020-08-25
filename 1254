@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int closedIsland(vector<vector<int>>& grid) {
+        int count = 0;
+        for(int i = 1; i < grid.size() - 1; i++) 
+            for(int j = 1; j < grid[i].size() - 1; j++) 
+                if(grid[i][j] == 0 && DFS(grid, i, j)) 
+                    count++;
+        
+        return count;
+    }
+    
+    bool DFS(vector<vector<int>> &grid, int i, int j) {
+        if((i <= 0 || i >= grid.size() - 1 || j <= 0 || j >= grid[i].size() - 1) && grid[i][j] == 0) 
+            return false;    
+        
+        if(grid[i][j] == 1 || grid[i][j] == -1)
+            return true;
+        
+        grid[i][j] = -1;
+        bool top = DFS(grid, i - 1, j);
+        bool bottom = DFS(grid, i + 1, j);
+        bool left = DFS(grid, i, j - 1);
+        bool right = DFS(grid, i, j + 1);
+
+        return (top && bottom && left && right);
+    }
+};
