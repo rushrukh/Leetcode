@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int findJudge(int N, vector<vector<int>>& trust) {
+        vector<int> trustMap(N + 1, 0);
+        
+        for(int i = 0; i < trust.size(); i++) 
+            trustMap[trust[i][1]]++;
+        
+        int judge = -1;
+        
+        for(int i = 1; i <= N; i++) {
+            if(trustMap[i] == N -1) {
+                judge = i;
+                break;                
+            }
+        }
+        
+        for(int i = 0; i < trust.size(); i++) 
+            if(trust[i][0] == judge)
+                return -1;
+        
+        return judge;
+    }
+};
