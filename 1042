@@ -1,0 +1,30 @@
+class Solution {
+public:
+    vector<int> gardenNoAdj(int N, vector<vector<int>>& paths) {
+        vector<vector<int>> neighbors(N + 1);
+        
+        for(int i = 0; i < paths.size(); i++) {
+            neighbors[paths[i][0]].push_back(paths[i][1]);
+            neighbors[paths[i][1]].push_back(paths[i][0]);
+        }
+        
+        vector<int> answer(N, 0);
+ 
+        for(int i = 1; i < neighbors.size(); i++) {
+            vector<bool> flowerTable(5, true); 
+ 
+            for(int j = 0; j < neighbors[i].size(); j++) 
+                if(answer[neighbors[i][j] - 1] > 0) 
+                    flowerTable[answer[neighbors[i][j] - 1]] = false;
+ 
+            for(int j = 1; j < 5; j++) {
+                if(flowerTable[j] == true) {
+                    answer[i - 1] = j;
+                    break;
+                }
+            }
+        }
+ 
+        return answer;
+    }
+};
