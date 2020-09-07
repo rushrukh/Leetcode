@@ -1,0 +1,42 @@
+class Solution {
+public:
+    int countServers(vector<vector<int>>& grid) {
+        int count = 0;
+        
+        for(int i = 0; i < grid.size(); i++) 
+            for(int j = 0; j < grid[0].size(); j++) 
+                if(grid[i][j] == 1) {
+                    lookForNeighbors(grid, i, j); 
+                
+        for(int i = 0; i < grid.size(); i++) 
+            for(int j = 0; j < grid[0].size(); j++) 
+                if(grid[i][j] == 2) 
+                    count++; 
+                
+        return count;
+    }
+    
+    void lookForNeighbors(vector<vector<int>>& grid, int i, int j) {
+        
+        int row = 0;
+        for(int x = 0; x < grid[0].size(); x++) 
+            if(grid[i][x] == 1 || grid[i][x] == 2) 
+                row++;
+        
+        if(row > 1) 
+            for(int x = 0; x < grid[0].size(); x++) 
+                if(grid[i][x] == 1 || grid[i][x] == 2) 
+                    grid[i][x] = 2;
+            
+        int col = 0;
+        for(int x = 0; x < grid.size(); x++) 
+            if(grid[x][j] == 1 || grid[x][j] == 2) 
+                col++;                
+        
+        if(col > 1) 
+            for(int x = 0; x < grid.size(); x++) 
+                if(grid[x][j] == 1 || grid[x][j] == 2) 
+                    grid[x][j] = 2;                
+            
+    }
+};
