@@ -1,0 +1,84 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int K) {
+        unordered_map<TreeNode*, TreeNode*> parentMap;
+        parentMap.insert({root, NULL});
+        queue<TreeNode*> Q;
+        Q.push(root);
+        
+        while(!Q.empty()) {
+            TreeNode* tmp = Q.front();
+            Q.pop();
+            
+            if(tmp -> left) {
+                Q.push(tmp -> left);
+                parentMap.insert({tmp -> left, tmp});
+            }
+            if(tmp -> right) {
+                Q.push(tmp -> right);
+                parentMap.insert({tmp -> right, tmp});
+            }
+        }
+        
+        int currLevel = 0;
+        Q.push(target);
+        vector<TreeNode*> visited;
+        visited.push_back(target);
+        
+        while(!Q.empty()) {
+            int currQueueSize = Q.size();
+            if(currLevel == K)
+                break;
+            
+            for(int i = 0; i < currQueueSize; i++) {
+                TreeNode* tmp = Q.front();
+                Q.pop();
+                
+                if(tmp -> left) {
+                    auto it = find(visited.begin(), visited.end(), tmp -> left);
+                    if(it == visited.end()) {
+                        Q.push(tmp -> left);
+                        visited.push_back(tmp -> left);
+                    }
+                }
+                
+                if(tmp -> right) {
+                    auto it = find(visited.begin(), visited.end(), tmp -> right);
+                    if(it == visited.end()) {
+                        Q.push(tmp -> right);
+                        visited.push_back(tmp -> right);
+                    }
+                }
+                
+                if(parentMap[tmp]) {
+                    auto it = find(visited.begin(), visited.end(), parentMap[tmp]);
+                    if(it == visited.end()) {
+                        Q.push(parentMap[tmp]);
+                        visited.push_back(parentMap[tmp]);
+                    }
+                }
+            }
+            currLevel++;
+        }
+        
+        vector<int> result;
+        int n = Q.size();
+        
+        for(int i = 0; i < n; i++) {
+            TreeNode* tmp = Q.front();
+            Q.pop();
+            result.push_back(tmp -> val);
+        }
+                    
+        return result;
+    }
+};
