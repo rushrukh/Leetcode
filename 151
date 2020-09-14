@@ -1,0 +1,34 @@
+class Solution {
+public:
+    string reverseWords(string s) {
+        vector<vector<char>> result;
+        
+        int i = 0;
+        vector<char> tmp;
+        while(i < s.length()) {
+            if(s[i] != ' ') 
+                tmp.push_back(s[i]);
+            
+            else {
+                if(tmp.size() > 0) 
+                    result.push_back(tmp);
+                
+                tmp.clear();
+            }
+            i++;
+        }
+        if(tmp.size())        
+            result.push_back(tmp);
+        
+        string reverseString;
+        
+        for(int i = result.size() - 1; i >= 0; i--) {
+            for(int j = 0; j < result[i].size(); j++) 
+                reverseString.push_back(result[i][j]);
+            
+            if(i > 0)
+                reverseString.push_back(' ');
+        }
+        return reverseString;
+    }
+};
