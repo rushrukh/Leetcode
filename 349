@@ -1,0 +1,19 @@
+class Solution {
+public:
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+        unordered_set<int> setOne;
+        vector<int> result;
+        
+        for(auto x: nums1) 
+            setOne.insert(x);
+        
+        for(auto x: nums2) {
+            if(setOne.find(x) != setOne.end()) {
+                setOne.erase(x);     
+                result.push_back(x);
+            }
+        }
+        
+        return result;
+    }
+};
