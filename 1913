@@ -1,0 +1,25 @@
+// Time: O(n) and  Space: O(1)
+class Solution {
+public:
+    int maxProductDifference(vector<int>& nums) {
+        int firstMax = INT_MIN, secondMax = INT_MIN;
+        int firstMin = INT_MAX, secondMin = INT_MAX;
+        
+        for(auto x : nums) {
+            if(x > secondMax || x > firstMax) {
+                firstMax = max(firstMax, secondMax);
+                secondMax = x;
+            }
+
+        }
+        
+        for(auto x : nums) {
+            if(x < secondMin || x < firstMin) {
+                firstMin = min(firstMin, secondMin);
+                secondMin = x;
+            }
+        }
+        
+        return ((firstMax * secondMax) - (firstMin * secondMin));
+    }
+};
