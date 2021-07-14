@@ -1,0 +1,15 @@
+class Solution {
+public:
+    bool checkIfPangram(string sentence) {
+        int arr[26] = {0};
+        
+        for(auto x : sentence) 
+            arr[int(x) - 97]++;
+        
+        for(auto x: arr) 
+            if(!x)
+                return false;
+        
+        return true;
+    }
+};
