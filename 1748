@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int sumOfUnique(vector<int>& nums) {
+        
+        int numsHash[101] = {0};
+        int sumOfUnique = 0;
+        
+        for(auto x: nums) {
+            
+            if(numsHash[x] == 0) {
+                numsHash[x] = 1;
+                sumOfUnique += x;
+            }
+            else if(numsHash[x] == 1){
+                numsHash[x] = -1;
+                sumOfUnique -= x;
+            }
+        }
+        
+        return sumOfUnique;
+    }
+};
