@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int totalMoney(int n) {
+        int mondayDeposit = 1;
+        int currDeposit = 1;
+        int totalMoney = 0;
+        
+        for(int i = 1; i <= n; i++) {
+            if (i % 7 == 1 && i != 1) {
+                mondayDeposit++;
+                currDeposit = mondayDeposit;
+            }
+            totalMoney += currDeposit++;
+        }
+        
+        return totalMoney;
+    }
+};
