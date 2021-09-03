@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int countBalls(int lowLimit, int highLimit) {
+        
+        vector<int> box(46, 0);
+        int maxCount = INT_MIN;
+
+        for(int i = lowLimit; i <= highLimit; i++) {
+            if(i / 10 == 0) 
+                box[i]++;
+
+            else {
+                int tmp = i;
+                int sum = 0;
+                
+                while(tmp) {
+                    sum += (tmp % 10);
+                    tmp /= 10;
+                }
+                box[sum]++;
+            }
+        }
+        
+        for(auto x: box) 
+            maxCount = max(maxCount, x);
+
+        return maxCount;
+    }
+};
