@@ -1,0 +1,18 @@
+class Solution {
+public:
+    long long interchangeableRectangles(vector<vector<int>>& rectangles) {
+        unordered_map<double, int> umap;
+        long long rectangle = 0;
+
+        for(int i = 0; i < rectangles.size(); i++) {
+            double tmp = (double) rectangles[i][1] / rectangles[i][0];
+            
+            if(umap.find(tmp) != umap.end())
+                rectangle += umap[tmp];
+            
+            umap[tmp]++;
+        }
+        
+        return rectangle;
+    }
+};
