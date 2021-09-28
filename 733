@@ -1,0 +1,19 @@
+class Solution {
+public:
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor) {
+        
+        DFS(image, sr, sc, image[sr][sc], newColor);
+        return image;
+    }
+    
+    void DFS(vector<vector<int>> &image, int x, int y, int startingPixel, int newColor) {
+        if(x < 0 || y < 0 || x >= image.size() || y >= image[x].size() || image[x][y] != startingPixel || image[x][y] == newColor) return;
+        
+        image[x][y] = newColor;
+        
+        DFS(image, x, y - 1, startingPixel, newColor);
+        DFS(image, x, y + 1, startingPixel, newColor);
+        DFS(image, x - 1, y, startingPixel, newColor);
+        DFS(image, x + 1, y, startingPixel, newColor);
+    }
+};
