@@ -1,0 +1,15 @@
+class Solution {
+public:
+    int finalValueAfterOperations(vector<string>& operations) {
+        int X = 0;
+        
+        for(auto x: operations) {
+            if(x == "--X" || x == "X--")
+                X = X - 1;
+            else
+                X = X + 1;
+        }
+        
+        return X;
+    }
+};
