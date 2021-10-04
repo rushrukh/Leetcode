@@ -13,15 +13,18 @@ public:
     int getDecimalValue(ListNode* head) {
         int arr[31] = {0};
         int i = 0;
+
         while(head) {
             arr[i++] = head -> val;
             head = head -> next;
         }
-        int dec = 0;
-        for(int j = 0; j < i; j++) {
+
+        int decVal = 0;
+
+        for(int j = 0; j < i; j++) 
             if(arr[j])
-                dec += pow(2, i - j - 1);
-        }
-        return dec;
+                decVal += pow(2, i - j - 1);
+   
+        return decVal;
     }
 };
