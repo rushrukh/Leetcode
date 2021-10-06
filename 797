@@ -1,0 +1,26 @@
+class Solution {
+public:
+    vector<vector<int>> allPathsSourceTarget(vector<vector<int>>& graph) {
+        vector<int> currPath;
+        vector<vector<int>> allPaths;
+        
+        currPath.push_back(0);
+        
+        DFS(graph, 0, currPath, allPaths, graph.size() - 1);
+        
+        return allPaths;
+    }
+    
+    void DFS(vector<vector<int>> &graph, int source, vector<int> &currPath, vector<vector<int>> &allPaths, int n) {
+        if(source == n) {
+            allPaths.push_back(currPath);
+            return;
+        };
+        
+        for(auto i: graph[source]) {
+            currPath.push_back(i);
+            DFS(graph, i, currPath, allPaths, n);
+            currPath.pop_back();
+        }
+    }
+};
