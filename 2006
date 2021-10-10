@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int countKDifference(vector<int>& nums, int k) {
+        int hash[101] = {0};
+        int count = 0;
+        
+        for(auto x: nums)
+            hash[x]++;
+        
+        for(auto x: nums) 
+            if(k + x < 101 &&  hash[k + x]) 
+                count += hash[k + x];
+            
+        return count;
+    }
+};
