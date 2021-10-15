@@ -1,0 +1,13 @@
+class Solution {
+public:
+    int numTrees(int n) {
+        vector<int> hash (20);
+        hash[0] = hash [1] = 1;
+        
+        for(int i = 2; i <= n; i++) 
+            for(int j = 0; j < i; j++) 
+                hash[i] += hash[j] * hash[i - 1 - j];
+        
+        return hash[n];
+    }
+};
