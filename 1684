@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int countConsistentStrings(string allowed, vector<string>& words) {
+        int hash[27] = {0}, count = 0;
+        
+        for(auto x: allowed)
+            hash[x - 'a']++;
+
+        for(auto word: words) {
+            for(auto x: word) {
+                if(!hash[x - 'a']) {
+                    count --;
+                    break;
+                }
+            }
+            count++;
+        }
+        
+        return count;
+    }
+};
