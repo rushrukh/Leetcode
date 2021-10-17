@@ -1,0 +1,31 @@
+class Solution {
+public:
+    vector<int> twoOutOfThree(vector<int>& nums1, vector<int>& nums2, vector<int>& nums3) {
+        map<int, int> one; 
+        map<int, int>two;
+        map<int, int> three;
+        
+        for(auto x: nums1)
+            one[x]++;
+        
+        for(auto x: nums2)
+            two[x]++;
+        
+        for(auto x: nums3) 
+            three[x]++;
+        
+        vector<int> ans;
+        
+        for(auto x: one)
+            if(two.find(x.first) != two.end() || three.find(x.first) != three.end()) 
+                ans.push_back(x.first);
+        
+        for(auto x: two)
+            if(three.find(x.first) != three.end()) 
+                if((find(ans.begin(), ans.end(), x.first)) == ans.end()) 
+                    ans.push_back(x.first);
+        
+        return ans;
+        
+    }
+};
