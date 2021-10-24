@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int canBeTypedWords(string text, string brokenLetters) {
+        int arr[26] = {0};
+        int numberOfWords = 1;
+        
+        for(auto x: brokenLetters)
+            arr[x - 'a']++;
+        
+        string tmp;
+        vector<string> words;
+        for(int i = 0; i < text.size(); i++) {
+            if(text[i] == ' ') {
+                numberOfWords++;
+                words.push_back(tmp);
+                tmp = "";
+                continue;
+            }
+            
+            if(arr[text[i] - 'a'] > 0) text[i] = '0';
+            tmp.push_back(text[i]);
+        }
+        
+        words.push_back(tmp);
+        
+        for(auto x: words) 
+            if(find(x.begin(), x.end(), '0') != x.end()) 
+                numberOfWords--;
+        
+        return numberOfWords;
+    }
+};
