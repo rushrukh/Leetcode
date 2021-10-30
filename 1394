@@ -1,0 +1,15 @@
+class Solution {
+public:
+    int findLucky(vector<int>& arr) {
+        int hash[501] = {0}, result = -1;
+
+        for(auto x: arr)
+            hash[x]++;
+        
+        for(int i = 1; i < 501; i++) 
+            if(i == hash[i])
+                result = max (result, i);
+        
+        return result;
+    }
+};
