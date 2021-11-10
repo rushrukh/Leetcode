@@ -1,0 +1,23 @@
+class Solution {
+public:
+    char nextGreatestLetter(vector<char>& letters, char target) {
+        int arr[26] = {0};
+        
+        for(char &c: letters)
+            arr[c - 'a']++;
+        
+        int i = (target - 'a' + 1) > 25 ? 0 : target - 'a' + 1;;
+        bool found = false;
+        
+        for(i; i < 26; i++) {
+            if(arr[i] > 0) {
+                found = true;
+                break;
+            }
+            if(!found && i == 25)
+                i = 0;
+        }
+        
+        return 'a' + i;
+    }
+};
