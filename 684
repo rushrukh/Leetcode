@@ -1,0 +1,31 @@
+class Solution {
+public:
+    vector<int> findRedundantConnection(vector<vector<int>>& edges) {
+        vector<int> trackParents(edges.size() + 1, -1);
+        
+        for(auto x: edges) {
+            int u = findParent(trackParents, x[0]), v = findParent(trackParents, x[1]);
+            
+            if(u != v) {
+                if(trackParents[u] <= trackParents[v]) {
+                    trackParents[v] = u;
+                    trackParents[u]--;
+                } 
+                else {
+                    trackParents[u] = v;
+                    trackParents[v]--;
+                }
+            }
+            else return x;
+        }
+        
+        return {};
+    }
+    
+    int findParent(vector<int> &trackParents, int u) {
+        while(trackParents[u] > 0) 
+            u = trackParents[u];
+        
+        return u;
+    }
+};
