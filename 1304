@@ -1,0 +1,15 @@
+class Solution {
+public:
+    vector<int> sumZero(int n) {
+        vector<int> res;
+        int runningSum = 0;
+        
+        for(int i = 1; i < n; i++) {
+            res.push_back(-i);
+            runningSum += i;
+        }
+        res.push_back(runningSum);
+        
+        return res;
+    }
+};
