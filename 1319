@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int makeConnected(int n, vector<vector<int>>& connections) {
+        if(connections.size() < n - 1) return -1;
+        
+        vector<int> parents(n, -1);
+        int count = 0;
+        
+        for(auto x: connections) {
+            int parentU = findParent(parents, x[0]);
+            int parentV = findParent(parents, x[1]);
+            
+            if(parentU != parentV) 
+                parents[parentV] = parentU;
+        }
+        
+        for(int &x: parents)
+            if(x == -1)
+                count++;
+        
+        return count - 1;
+    }
+    
+    int findParent(vector<int>& parents, int u) {
+        return parents[u] < 0 ? u : parents[u] = findParent(parents, parents[u]);
+    }
+};
