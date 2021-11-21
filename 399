@@ -1,0 +1,41 @@
+class Solution {
+public:
+    vector<double> calcEquation(vector<vector<string>>& equations, vector<double>& values, vector<vector<string>>& queries) {
+        unordered_map<string, unordered_map<string, double>> graph;
+        vector<double> result;
+        
+        for(int i = 0; i < equations.size(); i++) {
+            graph[equations[i][0]][equations[i][1]] = values[i];
+            graph[equations[i][1]][equations[i][0]] = 1 / values[i];
+        }
+        
+        for(auto x: queries) {
+            vector<string> visited;
+            double res = DFS(graph, x[0], x[1], visited, 1);
+            
+            if(!res) result.push_back(-1.0);
+            else result.push_back(res);
+        }
+        
+        return result;
+    }
+    
+    double DFS(unordered_map<string, unordered_map<string, double>>& graph, string start, string end, vector<string> &visited, double currentProduct) {
+        if(graph.find(start) == graph.end()) return 0;
+        
+        if(graph[start].find(end) != graph[start].end()) return currentProduct * graph[start][end];
+        
+        if(find(visited.begin(), visited.end(), start) == visited.end()) {
+            visited.push_back(start);
+            
+            for(auto x: graph[start]) {
+                if(find(visited.begin(), visited.end(), x.first) == visited.end()) {
+                    double res = DFS(graph, x.first, end, visited, currentProduct * x.second);
+                    if(res != 0) return res;
+                }
+            }
+        }
+        
+        return 0;
+    }
+};
