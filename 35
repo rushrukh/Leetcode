@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int searchInsert(vector<int>& nums, int target) {
+        return searchBinary(nums, target, 0, nums.size() -1);
+    }
+    
+    int searchBinary(vector<int>& nums, int target, int left, int right) {
+        if(left <= right) {
+            int mid = (left + right) / 2;
+
+            if(target > nums[right]) return right + 1;
+            if(target < nums[left]) return left;
+            if(target == nums[mid] || (target < nums[mid] && target > nums[mid - 1])) return mid;
+            else if(target < nums[mid]) return searchBinary(nums, target, left, mid);
+            else return searchBinary(nums, target, mid + 1, right);
+        }
+        return -1;
+    }
+};
