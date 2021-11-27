@@ -1,0 +1,20 @@
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        int countZero = 0, product = 1;
+        
+        for(int x: nums) {
+            if(!x) countZero++;
+            else product *= x;
+        }
+        
+        vector<int> ans (nums.size());
+        
+        for(int i = 0; i < nums.size(); i++) {
+            if(nums[i]) ans[i] = countZero? 0 : product/nums[i];
+            else ans[i] = countZero > 1 ? 0 : product;
+        }
+        
+        return ans;
+    }
+};
