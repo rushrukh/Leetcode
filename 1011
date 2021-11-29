@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int shipWithinDays(vector<int>& weights, int days) {
+        int high = 0, low = INT_MIN, result = 0;
+        
+        for(int& x: weights)
+            high += x, low = max(low, x);
+        
+        while(low <= high) {
+            int mid = low + (high - low) / 2;
+            if(canBeShipped(weights, mid, days)) {
+                result = mid;
+                high = mid - 1;
+            }
+            else low = mid + 1;
+        }
+        
+        return result;
+    }
+    
+    bool canBeShipped(vector<int>& weights, int mid, int days) {
+        int count = 1, sum = 0;
+        
+        for(int& x: weights) {
+            sum += x;
+            if(sum > mid) 
+                count++, sum = x;
+        }
+        
+        return count <= days ? true : false;
+    }
+};
