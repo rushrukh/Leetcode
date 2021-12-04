@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int numOfMinutes(int n, int headID, vector<int>& manager, vector<int>& informTime) {
+        unordered_map<int, vector<int>> managerMap;
+        for(int i = 0; i < manager.size(); i++) {
+            managerMap[manager[i]].push_back(i);
+        }
+        
+        queue<pair<int, int>> Q;
+        Q.push(make_pair(headID, 0));
+        
+        int maxTime = 0;
+        while(!Q.empty()) {
+            int n = Q.size();
+            
+            for(int i = 0; i < n; i++) {
+                int headNode = Q.front().first;
+                int timeTakenSoFar = Q.front().second;
+                Q.pop();
+                int durationIncludingThisNode = timeTakenSoFar + informTime[headNode];
+
+                maxTime = max(maxTime, durationIncludingThisNode);
+
+                for(auto it: managerMap[headNode]) {
+                    Q.push(make_pair(it, durationIncludingThisNode));
+                }
+            }
+        }
+        return maxTime;
+    }
+};
