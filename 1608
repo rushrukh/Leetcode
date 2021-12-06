@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int specialArray(vector<int>& nums) {
+        int left = 0;
+        int right = nums.size();
+        
+        while(left <= right) {
+            int mid = (left + right) / 2;
+            int solution = solve(nums, mid);
+           
+            if(mid == solution) return solution;
+            
+            if(solution > mid) left = mid + 1;
+            else right = mid - 1;
+        }
+        return -1;
+    }
+    
+    int solve(vector<int>& nums, int &mid) {
+        int count = 0;
+    
+        for(int& x: nums)
+            if(x >= mid) count++;
+        
+        return count;
+    }
+};
