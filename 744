@@ -2,7 +2,6 @@ class Solution {
 public:
     char nextGreatestLetter(vector<char>& letters, char target) {
         int arr[26] = {0};
-        
         for(char &c: letters)
             arr[c - 'a']++;
         
@@ -16,8 +15,7 @@ public:
             }
             if(!found && i == 25)
                 i = 0;
-        }
-        
+        } 
         return 'a' + i;
     }
 };
