@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int longestOnes(vector<int>& nums, int k) {
+        int left{}, maxWindow = INT_MIN;
+        
+        for(int right = 0; right < nums.size(); right++) {
+            if(!nums[right]) {
+                if(k) k--;
+                else while(nums[left++] != 0); 
+            }
+            
+            maxWindow = max(maxWindow, right - left + 1);    
+        }
+        
+        return maxWindow;
+    }
+};
