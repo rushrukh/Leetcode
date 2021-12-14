@@ -13,8 +13,7 @@ class Solution {
 public:
     TreeNode* subtreeWithAllDeepest(TreeNode* root) {
         while(root) {
-            int l = helper(root -> left);
-            int r = helper(root -> right);
+            int l = helper(root -> left), r = helper(root -> right);
             
             if(l > r) root = root -> left;
             else if(l < r) root = root -> right;
@@ -25,7 +24,6 @@ public:
     }
     int helper(TreeNode* root) {
         if(!root) return 0;
-        
         return max(1 + helper(root -> left), 1 + helper(root -> right));
     }
 };
