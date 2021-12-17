@@ -1,0 +1,13 @@
+class Solution {
+public:
+    vector<int> countBits(int n) {
+        vector<int> DP (n + 1);
+        
+        DP[0] = 0;
+        
+        for(int i = 1; i <= n; i++)
+            DP[i] = DP[i / 2] + i % 2;
+        
+        return DP;
+    }
+};
