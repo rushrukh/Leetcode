@@ -1,0 +1,18 @@
+//0-1 KnapSack Practice [Better solution exists]
+
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int n = prices.size();
+        vector<vector<int>> v(n, vector<int> (2, -1));
+        return calcProfit(prices, v, 0, 1);
+    }
+    
+    int calcProfit(vector<int>& prices, vector<vector<int>>& v, int index, int buy) {
+        if(index >= prices.size()) return 0;
+        if(v[index][buy] != -1) return v[index][buy];
+        
+        if(buy) return v[index][buy] = max(-prices[index] + calcProfit(prices, v, index + 1, !buy), calcProfit(prices, v, index + 1, buy));
+        else return v[index][buy] = max(prices[index] + calcProfit(prices, v, index + 1, !buy), calcProfit(prices, v, index + 1, buy));
+    }
+};
