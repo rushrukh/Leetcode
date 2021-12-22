@@ -1,30 +1,24 @@
-int power[1000001];
-
 class Solution {
 public:
-    int calculatePower(int n) {
-        if(n == 1)
-            return 0;
-        
-        if(power[n])
-            return power[n];
-                    
-        if(n % 2 == 0)
-            power[n] = 1 + calculatePower(n / 2);
-        else
-            power[n] = 1 + calculatePower(n * 3 + 1);
-        
-        return power[n];
-    }
-    
+    int dp[10001] = {-1};
     int getKth(int lo, int hi, int k) {
+        vector<pair<int, int>> v;
         
-        vector<vector<int>> result;
         for(int i = lo; i <= hi; i++) 
-            result.push_back({calculatePower(i), i});
+            v.push_back({calcPower(i), i});
         
-        sort(result.begin(), result.end());
+        sort(v.begin(), v.end());
+        return v[k - 1].second;
+    }
+    int calcPower(int n) {
+        if(dp[n] > 0) return dp[n];
+        int count = 0;
         
-        return result[k - 1][1];
+        while(n != 1) {
+            if(n % 2) n = n*3 + 1;
+            else n /= 2;
+            count++;
+        }
+        return dp[n] = count;
     }
 };
