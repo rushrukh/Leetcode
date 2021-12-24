@@ -1,0 +1,17 @@
+class Solution {
+public:
+    map<pair<int, int>, int> m;
+    int findTargetSumWays(vector<int>& nums, int target) {
+        return countWays(nums, 0, 0, target);
+    }
+    
+    int countWays(vector<int>& nums, int index, int total, int target) {
+        if(m.find({index, total}) != m.end()) return m[{index, total}];
+        if(index == nums.size() && total == target) return 1;
+        if(index == nums.size() && total != target) return 0;
+        
+        m[{index, total}] = countWays(nums, index + 1, total + nums[index], target) + countWays(nums, index + 1, total - nums[index], target);
+        
+        return m[{index, total}];
+    }
+};
