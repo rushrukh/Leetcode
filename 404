@@ -11,18 +11,15 @@
  */
 class Solution {
 public:
+    int leftSum = 0;
     int sumOfLeftLeaves(TreeNode* root) {
-        return DFS(root);
-    }
-    int DFS(TreeNode* root) {
-        if(!root)
-            return 0;
+        if(!root) return 0;
         
-        int sum = 0;
+        sumOfLeftLeaves(root -> left);
+        sumOfLeftLeaves(root -> right);
         
-        if(root -> left && !root -> left -> left && !root -> left -> right) 
-            sum += root -> left -> val;            
+        if(root -> left && !root -> left -> left && !root -> left -> right) leftSum += root -> left -> val;
         
-        return sum + DFS(root -> left) + DFS(root -> right);
+        return leftSum;
     }
 };
