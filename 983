@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int DP[366] = {0};
+    int mincostTickets(vector<int>& days, vector<int>& costs) {
+        return helper(days, costs, 0);
+    }
+    int helper(vector<int>& days, vector<int>& costs, int day) {
+        if(day >= days.size()) return 0;
+        if(DP[days[day]] != 0) return DP[days[day]];
+        
+        int oneDayTripCost = helper(days, costs, day + 1) + costs[0];
+        
+        int i = day;
+        for(i; i < days.size(); i++) 
+            if(days[i] >= days[day] + 7)
+                break;
+        
+        int sevenDayTripCost = helper(days, costs, i) + costs[1];
+        
+        i = day;
+        for(i; i < days.size(); i++) 
+            if(days[i] >= days[day] + 30)
+                break;
+        
+        int thirtyDayTripCost = helper(days, costs, i) + costs[2];
+        
+        return DP[days[day]] = min(thirtyDayTripCost, min(sevenDayTripCost, oneDayTripCost));
+    }
+};
