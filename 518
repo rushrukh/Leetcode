@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int DP[5001][301] = {0};
+    int change(int amount, vector<int>& coins) {
+        memset(DP, -1, sizeof(DP));
+        return knapSack(coins, amount, coins.size());
+    }
+    int knapSack(vector<int>& coins, int amount, int n) {
+        if(!amount || !n) return amount == 0 ? 1 : 0;
+        
+        if(DP[amount][n] != -1)
+            return DP[amount][n];
+        
+        if(coins[n - 1] <= amount)
+            return DP[amount][n] = knapSack(coins, amount - coins[n - 1], n) + knapSack(coins, amount, n - 1);
+        
+        if(coins[n - 1] > amount)
+            return DP[amount][n] = knapSack(coins, amount, n - 1);
+        
+        return 0;
+    }
+};
