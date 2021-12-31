@@ -1,19 +1,19 @@
-//Recursive Soln (Does not pass all the test cases, needs Memoization):
+//Top Down:
 
 class Solution {
 public:
     int DP[13][10001];
     int coinChange(vector<int>& coins, int amount) {
         memset(DP, -1, sizeof(DP));
-        int min = knapSack(coins, amount, coins.size(), 0);         
-        return min == INT_MAX ? -1 : min;
+        int min = knapSack(coins, amount, coins.size());         
+        return min == INT_MAX - 1 ? -1 : min;
     }
     
-    int knapSack(vector<int>& coins, int amount, int n, int curr) {
-        if(!amount) {return curr;}
-        if(!n) return INT_MAX;
+    int knapSack(vector<int>& coins, int amount, int n) {
+        if(!amount || !n) return !amount ? 0 : INT_MAX - 1;
+        if(DP[n][amount] != -1) return DP[n][amount];
         
-        if(coins[n - 1] > amount) return knapSack(coins, amount, n - 1, curr);
-        else return min(knapSack(coins, amount - coins[n - 1], n, curr + 1), knapSack(coins, amount, n - 1, curr));
+        if(coins[n - 1] > amount) return DP[n][amount] = knapSack(coins, amount, n - 1);
+        else return DP[n][amount] = min(1 + knapSack(coins, amount - coins[n - 1], n), knapSack(coins, amount, n - 1));
     }
 };
