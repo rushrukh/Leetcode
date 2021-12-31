@@ -1,3 +1,5 @@
+// Soln: Checks each element with + and - sign
+
 class Solution {
 public:
     map<pair<int, int>, int> m;
@@ -13,5 +15,30 @@ public:
         m[{index, total}] = countWays(nums, index + 1, total + nums[index], target) + countWays(nums, index + 1, total - nums[index], target);
         
         return m[{index, total}];
+    }
+};
+
+
+// Soln: Reducing Target Sum problem to Subset Sum
+
+class Solution {
+public:
+    int DP[21][1001];
+    int findTargetSumWays(vector<int>& nums, int target) {
+        int sum = 0, selfTarget = 0;
+        
+        for(int& x: nums) sum += x;
+        if((sum + target) % 2 == 1) return 0;
+        
+        selfTarget = (sum + target) / 2;
+        memset(DP, -1, sizeof(DP));
+        return countSubsetSum(nums, selfTarget, nums.size(), 0, 0);
+    }
+    
+    int countSubsetSum(vector<int>& nums, int target, int n, int currSum, int index) {
+        if(n == index && target == currSum) return 1;
+        if(n == index) return 0;
+        if(DP[index][currSum] != -1) return DP[index][currSum];
+        return DP[index][currSum] = countSubsetSum(nums, target, n, currSum + nums[index], index + 1) + countSubsetSum(nums, target, n, currSum, index + 1); 
     }
 };
