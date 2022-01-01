@@ -2,15 +2,14 @@ class Solution {
 public:
     vector<vector<int>> result;
     vector<vector<int>> findFarmland(vector<vector<int>>& land) {
-        
-        for (int i = 0; i < land.size(); i++) 
-            for (int j = 0; j < land[i].size(); j++) 
+        for(int i = 0; i < land.size(); i++) 
+            for(int j = 0; j < land[i].size(); j++) 
                 if(land[i][j] == 1) DFS(land, i, j);
-            
+        
         return result;
     }
     void DFS(vector<vector<int>>& land, int i, int j) {
-        if(i < 0 || i >= land.size() || j < 0 || j >= land[i].size() || land[i][j] == 0 || land[i][j] == -1) return;
+        if(i < 0 || i >= land.size() || j < 0 || j >= land[i].size() || !land[i][j] || land[i][j] == -1) return;
         
         land[i][j] = -1;
         computeBorder(land, i, j);
@@ -21,12 +20,12 @@ public:
         DFS(land, i, j + 1);
     }
     void computeBorder(vector<vector<int>>& land, int i, int j) {
-        bool left = i - 1 < 0 || land[i - 1][j] == 0; 
-        bool up = j - 1 < 0 || land[i][j - 1] == 0;
-        bool bottom = j + 1 >= land[i].size() || land[i][j + 1] == 0;
-        bool right = i + 1 >= land.size() || land[i + 1][j] == 0; 
+        bool left = j - 1 < 0 || !land[i][j - 1];
+        bool top = i - 1 < 0 || !land[i - 1][j];
+        bool right = j + 1 >= land[i].size() || !land[i][j + 1];
+        bool bottom = i + 1 >= land.size() || !land[i + 1][j];
         
-        if(up && left) result.push_back({i, j});
+        if(left && top) result.push_back({i, j});
         if(bottom && right) result.back().push_back(i), result.back().push_back(j);
     }
 };
