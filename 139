@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int DP[301];
+    bool wordBreak(string s, vector<string>& wordDict) {
+        unordered_set<string> wordSet;
+        memset(DP, -1, sizeof(DP));
+        for(auto x: wordDict) wordSet.insert(x);
+        
+        return helper(s, wordSet, 0);
+    }
+    bool helper(string s, unordered_set<string>& wordSet, int index){
+        if(index == s.length()) return 1;
+        if(DP[index] != -1) return DP[index];
+        
+        for(int i = index; i < s.length(); i++) 
+            if(wordSet.find(s.substr(index, i - index + 1)) != wordSet.end() && helper(s, wordSet, i + 1)) 
+                 return DP[index] = 1;
+        
+        return DP[index] = 0;
+    } 
+};
