@@ -1,0 +1,21 @@
+ class Solution {
+public:
+    int memo[101];
+    int numDecodings(string s) {
+        memset(memo, -1, sizeof(memo));
+        memo[s.size()] = 1;
+        return h(s, 0);
+    }
+    
+    int h(string &s, int idx) {
+        if(idx == s.length()) return 1;
+        if(s[idx] == '0') return memo[idx] = 0;
+        if(memo[idx] > -1) return memo[idx];
+        
+        int result = h(s, idx + 1);
+        
+        if(idx < s.length() - 1 && (s[idx] == '1' || (s[idx] == '2' && s[idx + 1] < '7'))) result += h(s, idx + 2);
+        
+        return memo[idx] = result;
+    }
+};
