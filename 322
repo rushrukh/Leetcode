@@ -1,19 +1,19 @@
-//Top Down:
+//Top Down Soln:
 
 class Solution {
 public:
-    int DP[13][10001];
+    int DP[10001][13];
     int coinChange(vector<int>& coins, int amount) {
         memset(DP, -1, sizeof(DP));
-        int min = knapSack(coins, amount, coins.size());         
-        return min == INT_MAX - 1 ? -1 : min;
+        int result = helper(coins, amount, coins.size());
+        return result == INT_MAX - 1? -1 : result;
     }
     
-    int knapSack(vector<int>& coins, int amount, int n) {
-        if(!amount || !n) return !amount ? 0 : INT_MAX - 1;
-        if(DP[n][amount] != -1) return DP[n][amount];
+    int helper(vector<int>& coins, int amount, int idx) {
+        if(!amount || !idx) return !amount ? 0 : INT_MAX - 1;
+        if(DP[amount][idx] != -1) return DP[amount][idx];
         
-        if(coins[n - 1] > amount) return DP[n][amount] = knapSack(coins, amount, n - 1);
-        else return DP[n][amount] = min(1 + knapSack(coins, amount - coins[n - 1], n), knapSack(coins, amount, n - 1));
+        if(coins[idx - 1] <= amount) return DP[amount][idx] = min(1 + helper(coins, amount - coins[idx - 1], idx), helper(coins, amount, idx - 1));
+        else return DP[amount][idx] = helper(coins, amount, idx - 1);
     }
 };
