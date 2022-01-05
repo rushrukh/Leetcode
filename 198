@@ -1,0 +1,16 @@
+//KnapSack Soln:
+
+class Solution {
+public:
+    int DP[101];
+    int rob(vector<int>& nums) {
+        memset(DP, -1, sizeof(DP));
+        return knapSack(nums, nums.size());
+    }
+    int knapSack(vector<int>& nums, int n) {
+        if(n <= 0) return 0;
+        if(DP[n] != -1) return DP[n];
+        
+        return DP[n] = max(nums[n - 1] + knapSack(nums, n - 2), knapSack(nums, n - 1));
+    }
+};
