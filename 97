@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int DP[101][101];
+    bool isInterleave(string s1, string s2, string s3) {
+        memset(DP, -1, sizeof(DP));
+        return helper(s1, s2, s3, 0, 0, 0);
+    }
+    
+    bool helper(string s1, string s2, string s3, int i, int j, int k) {
+        if(i == s1.size() && j == s2.size() && k == s3.size()) return true;
+        if(DP[i][j] != -1) return DP[i][j];
+        
+        //case1: matches with s1 and s2
+        if(s3[k] == s1[i] && s3[k] == s2[j]) return DP[i][j] = helper(s1, s2, s3, i + 1, j, k + 1) || helper(s1, s2, s3, i, j + 1, k + 1);
+        
+        //case2 matches with s1
+        if(i < s1.size() && s3[k] == s1[i]) return DP[i][j] = helper(s1, s2, s3, i + 1, j, k + 1);
+        
+        //case3: matches with s2
+        if(j < s2.size() && s3[k] == s2[j]) return DP[i][j] = helper(s1, s2, s3, i, j + 1, k + 1);
+        
+        //case4: matches with none
+        if(s3[k] != s1[i] && s3[k] != s2[j]) return DP[i][j] = false;
+        
+        return false;
+    }
+};
