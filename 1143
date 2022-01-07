@@ -16,3 +16,23 @@ public:
         else return DP[n1][n2] = max(LCS(t1, t2, n1 - 1, n2), LCS(t1, t2, n1, n2 - 1));
     }
 };
+
+/Bottom Up Soln:
+
+class Solution {
+public:
+    int DP[1001][1001];
+    int longestCommonSubsequence(string text1, string text2) {
+        for(int i = 0; i <= text1.size(); i++)
+            for(int j = 0; j <= text2.size(); j++)
+                if(i == 0 || j == 0) DP[i][j] = 0;
+        
+        for(int i = 1; i <= text1.size(); i++)
+            for(int j = 1; j <= text2.size(); j++) {
+                if(text1[i - 1] == text2[j - 1]) DP[i][j] = 1 + DP[i - 1][j - 1];
+                else DP[i][j] = max(DP[i - 1][j], DP[i][j - 1]);
+            }
+        
+        return DP[text1.size()][text2.size()];
+    }
+};
