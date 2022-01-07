@@ -1,0 +1,18 @@
+//Top Down Soln:
+
+class Solution {
+public:
+    int DP[1001][1001];
+    int longestCommonSubsequence(string text1, string text2) {
+        memset(DP, -1, sizeof(DP));
+        return LCS(text1, text2, text1.size(), text2.size());
+    }
+    
+    int LCS(string& t1, string& t2, int n1, int n2) {
+        if(!n1 || !n2) return 0;
+        if(DP[n1][n2] != -1) return DP[n1][n2];
+        
+        if(t1[n1 - 1] == t2[n2 - 1]) return DP[n1][n2] = 1 + LCS(t1, t2, n1 - 1, n2 - 1);
+        else return DP[n1][n2] = max(LCS(t1, t2, n1 - 1, n2), LCS(t1, t2, n1, n2 - 1));
+    }
+};
