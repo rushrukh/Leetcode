@@ -1,0 +1,43 @@
+//Top Down Soln: O(n)
+
+class Solution {
+public:
+    int DP[1001][1001];
+    int longestPalindromeSubseq(string s) {
+        string reverseS = s;
+        reverse(reverseS.begin(), reverseS.end());
+        memset(DP, -1, sizeof(DP));
+        return LCS(s, reverseS, s.size(), s.size());
+    }
+    int LCS(string& A, string& B, int m, int n) {
+        if(!m || !n) return 0;
+        if(DP[m][n] != -1) return DP[m][n];
+        
+        if(A[m - 1] == B[n - 1]) return DP[m][n] = 1 + LCS(A, B, m - 1, n - 1);
+        else return DP[m][n] = max(LCS(A, B, m, n - 1), LCS(A, B, m - 1, n));
+    }
+};
+
+
+//Bottom Up Soln: 
+
+class Solution {
+public:
+    int DP[1001][1001];
+    int longestPalindromeSubseq(string A) {
+        string B = A;
+        reverse(B.begin(), B.end());
+        int maxLength = INT_MIN;
+
+        for(int i = 0; i <= A.size(); i++) 
+            for(int j = 0; j <= A.size(); j++) 
+                if(i == 0 || j == 0) DP[i][j] = 0; 
+        
+        for(int i = 1; i <= A.size(); i++) 
+            for(int j = 1; j <= A.size(); j++) 
+                if(A[i - 1] == B[j - 1]) DP[i][j] = 1 + DP[i - 1][j - 1], maxLength = max(maxLength, DP[i][j]);
+                else DP[i][j] = max(DP[i][j - 1], DP[i - 1][j]), maxLength = max(maxLength, DP[i][j]);
+        
+        return maxLength;
+    }
+};
