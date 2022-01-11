@@ -11,40 +11,29 @@
  */
 class Solution {
 public:
+    int sum = 0;
     int sumRootToLeaf(TreeNode* root) {
-        if(!root) return 0;
-        
-        int sum = 0;
-        string s;
-        
-        DFS(root, s, sum);
+        string soFar;
+        DFS(root, soFar);
         return sum;
     }
-    
-    void DFS(TreeNode* root, string s, int &sum) {
+    void DFS(TreeNode* root, string& soFar) {
         if(!root) return;
-        s += to_string(root -> val);
         
-        if(!root -> left && !root -> right) {
-            sum += calc(s);
-            s.pop_back(); //this fucker took 2h of mine to figure out, ugh.
-            return;
-        }
-        if(root -> left)
-            DFS(root -> left, s, sum);
-        if(root -> right)
-            DFS(root -> right, s, sum);
+        soFar += to_string(root -> val);
         
-        return;
+        DFS(root -> left, soFar);
+        DFS(root -> right, soFar);
+        
+        if(!root -> left && !root -> right) makeDecimal(soFar);
+        soFar.pop_back();
     }
-    
-    int calc(string s) {
-        int n = 0;
-        reverse(s.begin(), s.end());
+    void makeDecimal(string binary) {
+        int tmp = 0;
         
-        for(int i = 0; i < s.size(); i++)
-            n += pow(2, i) * (s[i] - '0');
+        for(int i = binary.length() - 1, j = 0; i >= 0; i--) 
+            tmp += (binary[i] - '0') * pow(2, j++);
         
-        return n;
+        sum += tmp;
     }
 };
