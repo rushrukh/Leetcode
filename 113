@@ -12,27 +12,20 @@
 class Solution {
 public:
     vector<vector<int>> result;
-    
-    vector<vector<int>> pathSum(TreeNode* root, int sum) {
-        if(!root)
-            return {};
-        
-        vector<int> curr;
-        DFS(root, sum, curr);
+    vector<vector<int>> pathSum(TreeNode* root, int targetSum) {
+        vector<int> possibleResult;
+        DFS(root, targetSum, possibleResult);
         return result;
     }
-    
-    void DFS(TreeNode* root, int currSum, vector<int> curr) {
-        if(!root)
-            return;
+    void DFS(TreeNode* root, int targetSum, vector<int>& possibleResult) {
+        if(!root) return;
         
-        currSum -= root -> val;
-        curr.push_back(root -> val);
+        possibleResult.push_back(root -> val);
+        DFS(root -> left, targetSum - root -> val, possibleResult);
+        DFS(root -> right, targetSum - root -> val, possibleResult);
         
-        if(!root -> left && !root -> right && currSum == 0)
-            result.push_back(curr);
+        if(!(targetSum - root -> val) && !root -> left && !root -> right) result.push_back(possibleResult);
         
-        DFS(root -> left, currSum, curr);
-        DFS(root -> right, currSum, curr);
+        possibleResult.pop_back();
     }
 };
