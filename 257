@@ -12,35 +12,23 @@
 class Solution {
 public:
     vector<string> result;
-    
-    string createString(string str, int val) {
-        return str + "->" + to_string(val);
-    }
-    
     vector<string> binaryTreePaths(TreeNode* root) {
-        if(!root)
-            return {};
-        
-        string subResult = to_string(root -> val);
-        DFS(root -> left, subResult);
-        DFS(root -> right, subResult);
-        if(!result.size())
-            result.push_back(subResult);
-        
+        DFS(root, "");
         return result;
     }
+    void DFS(TreeNode* root, string soFar) {
+        if(!root) return;
+        
+        if(!soFar.length()) soFar += to_string(root -> val);
+        else soFar = stringBuilder(soFar, to_string(root -> val));
+        
+        DFS(root -> left, soFar);
+        DFS(root -> right, soFar);
+        
+        if(!root -> left && !root -> right) result.push_back(soFar);
+    }
     
-    void DFS(TreeNode* root, string subResult) {
-        if(!root) {
-            return;
-        }
-        
-        subResult = createString(subResult, root -> val);
-        
-        if(!root -> left && !root -> right)
-            result.push_back(subResult);
-        
-        DFS(root -> left, subResult);
-        DFS(root -> right, subResult);
+    string stringBuilder(string soFar, string latest) {
+        return soFar + "->" + latest;
     }
 };
