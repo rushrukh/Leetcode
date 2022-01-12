@@ -1,0 +1,36 @@
+class Solution {
+public:
+    string longestPalindrome(string A) {
+        int n = A.size(), max = 0;
+        string B = A, result;
+        reverse(B.begin(), B.end());
+        
+        int DP[n + 1][n + 1];
+        
+        for(int i = 0; i < n + 1; i++)
+            for(int j = 0; j < n + 1; j++)
+                if(!i || !j) DP[i][j] = 0;
+        
+        for(int i = 1; i < n + 1; i++)
+            for(int j = 1; j < n + 1; j++) {
+                if(A[i - 1] == B[j - 1]) {
+                    DP[i][j] = 1 + DP[i - 1][j - 1];
+                    
+                    if(DP[i][j] > max) {
+                        string tmp = A.substr(i - DP[i][j], DP[i][j]);
+                        string rTmp = tmp;
+                        reverse(rTmp.begin(), rTmp.end());
+
+                        if(rTmp == tmp) {
+                            result = tmp;
+                            max = DP[i][j];
+                        }
+                    }
+                }
+                
+                else DP[i][j] = 0;
+            }
+        
+        return result;        
+    }
+};
