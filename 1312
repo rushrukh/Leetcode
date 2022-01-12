@@ -1,0 +1,47 @@
+//Top Down Soln:
+
+class Solution {
+public:
+    int DP[501][501];
+    int minInsertions(string s) {
+        string reverseS = s;
+        reverse(reverseS.begin(), reverseS.end());
+        memset(DP, -1, sizeof(DP));
+        return s.size() - LCS(s, reverseS, s.size(), s.size());
+    }
+    int LCS(string& A, string& B, int m, int n) {
+        if(!m || !n) return 0;
+        if(DP[m][n] != -1) return DP[m][n];
+        
+        if(A[m - 1] == B[n - 1]) return DP[m][n] = 1 + LCS(A, B, m - 1, n - 1);
+        else return DP[m][n] = max(LCS(A, B, m - 1, n), LCS(A, B, m, n - 1));
+    }
+};
+
+
+//Bottom Up Soln: 
+
+class Solution {
+public:
+    int minInsertions(string A) {
+        string B = A;
+        reverse(B.begin(), B.end());
+        
+        int n = A.size(), lcsLength = INT_MIN;
+        
+        int DP[n + 1][n + 1];
+        
+        for(int i = 0; i <= n; i++)
+            for(int j = 0; j <= n; j++)
+                if(!i || !j) DP[i][j] = 0;
+        
+        for(int i = 1; i <= n; i++)
+            for(int j = 1; j <= n; j++) {
+                if(A[i - 1] == B[j - 1]) DP[i][j] = 1 + DP[i - 1][j - 1];
+                else DP[i][j] = max(DP[i - 1][j], DP[i][j - 1]);
+                lcsLength = max(lcsLength, DP[i][j]);
+            }
+
+        return n - lcsLength;
+    }
+};
