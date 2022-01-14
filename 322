@@ -40,3 +40,26 @@ public:
         return DP[coins.size()][amount] == INT_MAX - 1 ? -1 : DP[coins.size()][amount];
     }
 };
+
+
+//Bottom Up Soln: Better Space Complexity
+
+class Solution {
+public:
+    int coinChange(vector<int>& coins, int amount) {
+        int DP[amount + 1];
+        
+        DP[0] = 0;
+        sort(coins.begin(), coins.end());
+        for(int i = 1; i < amount + 1; i++) {
+            DP[i] = INT_MAX;
+            
+            for(auto c: coins) {
+                if (i - c < 0) break;
+                if(DP[i - c] != INT_MAX) DP[i] = min(DP[i], 1 + DP[i - c]);
+            }
+        } 
+        
+        return DP[amount] == INT_MAX ? -1 : DP[amount];
+    }
+};
