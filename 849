@@ -20,3 +20,19 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+public:
+    int maxDistToClosest(vector<int>& seats) {
+        int N = seats.size(), result = 0, leftOne = -1;
+        for(int i = 0; i < N; i++) {
+            if(seats[i] == 1) {
+                result = leftOne < 0 ? i : max(result, (i - leftOne)/2);
+                leftOne = i;
+            }
+        }
+        result = max(result, N - 1 - leftOne);
+        return result;
+    }
+};
