@@ -1,3 +1,5 @@
+//Top Down Soln:
+
 class Solution {
 public:
     int DP[366] = {0};
@@ -12,18 +14,38 @@ public:
         
         int i = day;
         for(i; i < days.size(); i++) 
-            if(days[i] >= days[day] + 7)
-                break;
+            if(days[i] >= days[day] + 7) break;
         
         int sevenDayTripCost = helper(days, costs, i) + costs[1];
         
         i = day;
         for(i; i < days.size(); i++) 
-            if(days[i] >= days[day] + 30)
-                break;
+            if(days[i] >= days[day] + 30) break;
         
         int thirtyDayTripCost = helper(days, costs, i) + costs[2];
         
         return DP[days[day]] = min(thirtyDayTripCost, min(sevenDayTripCost, oneDayTripCost));
+    }
+};
+
+
+//Bottom Up Soln:
+
+class Solution {
+public:
+    int mincostTickets(vector<int>& days, vector<int>& costs) {
+        int lastDay = days[days.size() - 1];
+        int DP[lastDay + 1];
+        
+        DP[0] = 0;
+        for(int i = 1, j = 0; i < lastDay + 1; i++) {
+            if(i == days[j]) {
+                j++;
+                DP[i] = min({costs[0] + DP[i - 1], costs[1] + DP[i - min(i, 7)], costs[2] + DP[i - min(i, 30)]});
+            }
+            else DP[i] = DP[i - 1];
+        }
+        
+        return DP[lastDay];
     }
 };
