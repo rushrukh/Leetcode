@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int maxDistToClosest(vector<int>& seats) {
+        int N = seats.size();
+        int leftOccupiedSeat = -1, rightOccupiedSeat = 0;
+        int ans = 0;
+        
+        for(int i = 0; i < seats.size(); i++) {
+            if(seats[i] == 1) {
+                leftOccupiedSeat = i;
+                rightOccupiedSeat = i + 1;
+            }
+            else {
+                while(rightOccupiedSeat < N && seats[rightOccupiedSeat] == 0) rightOccupiedSeat++;
+                int left = leftOccupiedSeat == -1 ? N : i - leftOccupiedSeat;
+                int right = rightOccupiedSeat == N ? INT_MAX : rightOccupiedSeat - i;
+                ans = max(ans, min(left, right));
+            }
+        }
+        return ans;
+    }
+};
