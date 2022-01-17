@@ -1,0 +1,8 @@
+class Solution {
+public:
+    int removePalindromeSub(string s) {
+        string r = s;
+        reverse(r.begin(), r.end());
+        return 2 - (s == r);
+    }
+};
