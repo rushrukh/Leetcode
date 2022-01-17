@@ -1,0 +1,27 @@
+class Solution {
+public:
+    bool wordPattern(string pattern, string s) {
+        unordered_map<char, string> umap;
+        string result, word;
+        
+        vector<string> words;
+        stringstream ss(s);
+        
+        while(ss >> word) words.push_back(word);
+
+        if(pattern.size() != words.size()) return false;
+
+        set<string> vocab;
+        
+        for(int i = 0; i < pattern.size(); i++) {
+            if(umap.find(pattern[i]) == umap.end() && vocab.find(words[i]) == vocab.end()) {
+                umap[pattern[i]] = words[i];
+                vocab.insert(words[i]);
+                result += pattern[i];
+            }
+            else if(umap[pattern[i]] == words[i]) result += pattern[i];
+        }
+        
+        return pattern == result;
+    }
+};
