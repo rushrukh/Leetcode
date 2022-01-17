@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int lastStoneWeightII(vector<int>& stones) {
+        int totalSum = 0;
+        for(auto x: stones) totalSum += x;
+        int halfSum = totalSum / 2;
+        vector<vector<int>> DP(stones.size() + 1, vector<int> (halfSum + 1, -1));
+        int remainder = knapSack(stones, 0, halfSum, DP);
+        return (totalSum - halfSum + remainder) - halfSum + remainder;
+    }
+    
+    int knapSack(vector<int>& stones, int idx, int halfSum, vector<vector<int>>& DP) {
+        if(idx == stones.size() || !halfSum) return halfSum;
+        if(DP[idx][halfSum] != -1) return DP[idx][halfSum];
+        if(stones[idx] <= halfSum) return DP[idx][halfSum] = min(knapSack(stones, idx + 1, halfSum - stones[idx], DP), knapSack(stones, idx + 1, halfSum, DP));
+        else return DP[idx][halfSum] = knapSack(stones, idx + 1, halfSum, DP);
+    }
+};
