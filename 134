@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
+        int startIndex = -1;
+        int tank = 0, surplus = 0;
+        
+        for(int i = 0; i < gas.size(); i++) {
+            if(gas[i] >= cost[i] && startIndex == -1) startIndex = i;
+            
+            tank += gas[i] - cost[i];
+            surplus += gas[i] - cost[i];
+            if(tank < 0 && surplus < 0) {
+                startIndex = -1;
+                surplus = 0;
+            }
+        }
+        return tank >= 0 ? startIndex : -1;
+    }
+};
