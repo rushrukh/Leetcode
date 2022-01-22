@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int DP[100001];
+    bool winnerSquareGame(int n) {
+        memset(DP, -1, sizeof(DP));
+        return helper(n);
+    }
+    int helper(int n) {
+        if(!n) return 0;
+        if(DP[n] != -1) return DP[n];
+
+        for(int i = 1; i*i <= n; i++) {
+            if(!helper(n - i*i)) return DP[n] = 1;
+        }
+        
+        return DP[n] = 0;
+    }
+};
