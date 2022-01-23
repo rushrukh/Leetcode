@@ -18,3 +18,23 @@ public:
         return answer;
     }
 };
+
+
+class Solution {
+public:
+    vector<int> sequentialDigits(int low, int high) {
+        string sample = "123456789";
+        vector<int> answer;
+        
+        int lowLength = to_string(low).length();
+        int highLength = to_string(high).length();
+        
+        for(int i = lowLength; i <= highLength; i++) {
+            for(int j = 0; j < 10 - i; j++) {
+                int num = stoi(sample.substr(j, i));
+                if(low <= num && num <= high) answer.push_back(num);
+            }
+        }
+        return answer;
+    }
+};
