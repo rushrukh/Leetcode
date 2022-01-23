@@ -1,0 +1,20 @@
+class Solution {
+public:
+    vector<int> sequentialDigits(int low, int high) {
+        queue<int> Q{{1, 2, 3, 4, 5, 6, 7, 8, 9}};
+        vector<int> answer;
+        
+        while(!Q.empty()) {
+            int curr = Q.front(); Q.pop();
+            if(curr > high) break;
+            if(low <= curr && curr <= high) answer.push_back(curr);
+            
+            int currDigit = curr % 10;
+            int nextInQueue = curr * 10 + currDigit + 1;
+            
+            if(currDigit < 9) Q.push(nextInQueue);
+        }
+        
+        return answer;
+    }
+};
