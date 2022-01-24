@@ -22,3 +22,20 @@ public:
         return true;
     }
 };
+
+class Solution {
+public:
+    bool detectCapitalUse(string word) {
+        int smallBlock = 0, capitalBlock = 0; 
+        bool firstLetterCap = false;
+        
+        for(int i = 0; i < word.size(); i++) {
+            if(!i && word[i] >= 'A' && word[i] <= 'Z') firstLetterCap = true;
+            
+            if(word[i] >= 'A' && word[i] <= 'Z') capitalBlock++;
+            else if(word[i] >= 'a' && word[i] <= 'z') smallBlock++;
+        }
+        
+        return smallBlock == word.size() ? true : capitalBlock == word.size() ? true : firstLetterCap  && smallBlock == word.size() - 1 ? true : false;
+    }
+};
