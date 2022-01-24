@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int minMeetingRooms(vector<vector<int>>& intervals) {
+        sort(intervals.begin(), intervals.end());
+        vector<int> start;
+        vector<int> end;
+        int startIndex = 0, endIndex = 0, room = 0;
+        
+        for(auto x: intervals) {
+            start.push_back(x[0]);
+            end.push_back(x[1]);
+        }
+        
+        sort(start.begin(), start.end());
+        sort(end.begin(), end.end());
+        
+        while(startIndex < intervals.size() && endIndex < intervals.size()) {
+            if(start[startIndex] < end[endIndex]) room++;
+            else endIndex++;
+            startIndex++;
+        }
+        
+        return room;
+    }
+};
