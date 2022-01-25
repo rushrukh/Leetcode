@@ -1,0 +1,36 @@
+class Solution {
+public:
+    bool validMountainArray(vector<int>& arr) {
+        if(arr.size() < 3) return false;
+        
+        //before index i, every arr[i] < arr[i + 1]
+        //after hitting i, every arr[i + 1] < arr[i]
+        //at any point if arr[i] == arr[i + 1] return false immediately
+        
+        //ideas
+        
+        //start iterating and keep an eye for the strictly increasing, probably use a increaseFlag. Iterate till the first decrease is found.
+        //Then start at index i, and keep and eye for strictly decreasing, probably use a decreaseFlag. Iterate till the end of the array.
+        //During the decrease iteration, if an increase is found, return false.
+        //At the end of both iteration, if any of the flags are false, return false, true if both are true;
+        
+        bool increaseFlag = false, decreaseFlag = false;
+        int cliffOfMountain = 0;
+        for(int i = 0; i < arr.size() - 1; i++) {
+            if(arr[i] == arr[i + 1]) return false;
+            if(arr[i] < arr[i + 1]) increaseFlag = true;
+            if(arr[i] > arr[i + 1]) {
+                cliffOfMountain = i;
+                break;
+            }
+        }
+        
+        for(int i = cliffOfMountain; i < arr.size() - 1; i++) {
+            if(arr[i] == arr[i + 1]) return false;
+            if(arr[i] < arr[i + 1]) return false;
+            if(arr[i] > arr[i + 1]) decreaseFlag = true;
+        }
+        
+        return increaseFlag && decreaseFlag;
+    }
+};
