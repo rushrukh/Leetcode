@@ -1,0 +1,19 @@
+class Solution {
+public:
+    vector<int> findBuildings(vector<int>& heights) {
+        vector<int> result;
+        
+        for(int i = 0; i < heights.size(); i++) {
+            if(result.empty()) result.push_back(i);
+            else {
+                if(heights[i] >= heights[result.back()]) 
+                    for(int j = result.size() - 1; j >= 0; j--) 
+                        if(heights[i] >= heights[result[j]]) result.pop_back();
+                    
+                result.push_back(i);
+            }
+        }
+        
+        return result;
+    }
+};
