@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int minAddToMakeValid(string s) {
+        int check = 0, count = 0;
+        
+        for(auto x: s) {
+            x == '(' ? check++ : check--;
+            if(check < 0) {
+                count++;
+                check = 0;
+            }
+        }
+        
+        count += abs(check);
+        return count;
+    }
+};
