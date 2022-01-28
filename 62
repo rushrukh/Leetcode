@@ -1,3 +1,5 @@
+//TC O(m*n), SC O(m*n)
+
 class Solution {
 public:
     int DP[101][101];
@@ -11,5 +13,21 @@ public:
         if(DP[i][j] != -1) return DP[i][j];
         
         return DP[i][j] = helper(m, n, i, j + 1) + helper(m, n, i + 1, j); 
+    }
+};
+
+
+class Solution {
+public:
+    int DP[101][101];
+    int uniquePaths(int m, int n) {
+        memset(DP, -1, sizeof(DP));
+        return checkPaths(m, n);
+    }
+    int checkPaths(int m, int n) {
+        if(m == 1 || n == 1) return 1;
+        if(DP[m][n] != -1) return DP[m][n];
+        
+        return DP[m][n] = checkPaths(m - 1, n) + checkPaths(m, n - 1); 
     }
 };
