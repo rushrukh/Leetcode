@@ -1,0 +1,23 @@
+class Solution {
+public:
+    #define M 1000000007
+    int DP[31][1001];
+    int numRollsToTarget(int n, int k, int target) {
+        memset(DP, -1, sizeof(DP));
+        return helper(n, k, target);
+    }
+    
+    int helper(int n, int k, int target) {
+        if(!target && !n) return 1;
+        if(!n || !target) return 0;
+        if(DP[n][target] != -1) return DP[n][target];
+        
+        int count = 0;
+        
+        for(int j = 1; j <= k; j++)
+            if(target - j >= 0) 
+                count = (count % M + helper(n - 1, k, target - j) % M) % M;    
+        
+        return DP[n][target] = count;
+    }
+};
