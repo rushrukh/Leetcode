@@ -1,0 +1,18 @@
+class Solution {
+public:
+    bool canPartition(vector<int>& nums) {
+        int sum = 0;
+        
+        for(auto& x: nums) sum += x;
+        if(sum % 2 == 1) return false;
+        vector<vector<int>> DP(nums.size(), (vector<int> (sum + 1, -1)));
+        return findPartition(DP, nums, sum / 2, 0, 0);
+    }
+    
+    bool findPartition(vector<vector<int>>& DP, vector<int>& nums, int target, int idx, int currSum) {
+        if(currSum == target) return true;
+        if(idx == nums.size()) return false;
+        if(DP[idx][currSum] != -1) return DP[idx][currSum];
+        return DP[idx][currSum] = findPartition(DP, nums, target, idx + 1, currSum + nums[idx]) || findPartition(DP, nums, target, idx + 1, currSum);
+    }
+};
