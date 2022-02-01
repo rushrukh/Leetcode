@@ -1,4 +1,4 @@
-//DP solution as build up for the next problems:
+//DP solution as build up for the next problems: TC O(N*2) SC O(N*2)
 
 class Solution {
 public:
@@ -16,18 +16,19 @@ public:
     }
 };
 
-//Regular solution:
+//Regular solution: TC O(N) SC O(1)
 
 class Solution {
 public:
     int maxProfit(vector<int>& prices) {
-        int mi = INT_MAX;
+        int mn = INT_MAX;
         int profit = 0;
+        
         for(int i = 0; i < prices.size(); i++) {
-            mi = min(mi, prices[i]);
-            profit = max(profit, prices[i] - mi);
-            
+            mn = min(mn, prices[i]);
+            profit = max(profit, prices[i] - mn);
         }
+        
         return profit;
     }
 };
