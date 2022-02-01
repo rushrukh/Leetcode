@@ -2,17 +2,19 @@ class Solution {
 public:
     int lastStoneWeightII(vector<int>& stones) {
         int totalSum = 0;
-        for(auto x: stones) totalSum += x;
-        int halfSum = totalSum / 2;
-        vector<vector<int>> DP(stones.size() + 1, vector<int> (halfSum + 1, -1));
-        int remainder = knapSack(stones, 0, halfSum, DP);
-        return (totalSum - halfSum + remainder) - halfSum + remainder;
+        for(auto& x: stones) totalSum += x;
+        int subsetSum = totalSum / 2;
+        
+        vector<vector<int>> DP (stones.size(), (vector<int> (subsetSum + 1, -1)));
+        int maximizedSum = findMaximizedSum(DP, stones, subsetSum, 0, 0);
+        
+        return (totalSum - maximizedSum) - maximizedSum;
     }
-    
-    int knapSack(vector<int>& stones, int idx, int halfSum, vector<vector<int>>& DP) {
-        if(idx == stones.size() || !halfSum) return halfSum;
-        if(DP[idx][halfSum] != -1) return DP[idx][halfSum];
-        if(stones[idx] <= halfSum) return DP[idx][halfSum] = min(knapSack(stones, idx + 1, halfSum - stones[idx], DP), knapSack(stones, idx + 1, halfSum, DP));
-        else return DP[idx][halfSum] = knapSack(stones, idx + 1, halfSum, DP);
+    int findMaximizedSum(vector<vector<int>>& DP, vector<int>& stones, int targetSum, int idx, int currSum) {
+        if(idx == stones.size()) return currSum;
+        if(DP[idx][currSum] != -1) return DP[idx][currSum];
+        
+        if(currSum + stones[idx] <= targetSum) return DP[idx][currSum] = max(findMaximizedSum(DP, stones, targetSum, idx + 1, currSum + stones[idx]), findMaximizedSum(DP, stones, targetSum, idx + 1, currSum));
+        else return DP[idx][currSum] = findMaximizedSum(DP, stones, targetSum, idx + 1, currSum);
     }
 };
