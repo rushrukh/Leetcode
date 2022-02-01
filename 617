@@ -9,35 +9,33 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+ 
+// Soln using the first tree: TC O(m), SC if the tree is skewed O(m), else O(log m) 
 class Solution {
 public:
-    void preOrder(TreeNode *t1, TreeNode *t2) {
+    TreeNode* mergeTrees(TreeNode* root1, TreeNode* root2) {
+        if(!root1) return root2;
+        preOrder(root1, root2);
         
-        if(t1 && t2) {
-            t1 -> val += t2 -> val;
-            
-            if(t1 -> left && t2 -> left)
-                preOrder(t1 -> left, t2 -> left);
-            
-            else if(!t1 -> left && t2 -> left) 
-                t1 -> left = t2 -> left;
-            
-            if(t1 -> right && t2 -> right)
-                preOrder(t1 -> right, t2 -> right);
-            
-            else if(!t1 -> right && t2 -> right) 
-                t1 -> right = t2 -> right;
-        }
-        
+        return root1;
     }
-    
-    TreeNode* mergeTrees(TreeNode* t1, TreeNode* t2) {
-        
-        if(!t1 && t2)
-            return t2;
-        
-        preOrder(t1, t2);
-        
-        return t1;
+    void preOrder(TreeNode* root1, TreeNode* root2) {
+        if(root1 && root2) {
+            root1 -> val += root2 -> val;
+            
+            if(root1 -> left && root2 -> left) {
+                preOrder(root1 -> left, root2 -> left);
+            }
+            else if(!root1 -> left && root2 -> left) {
+                root1 -> left = root2 -> left;
+            }
+            
+            if(root1 -> right && root2 -> right) {
+                preOrder(root1 -> right, root2 -> right);
+            }
+            else if(!root1 -> right && root2 -> right) {
+                root1 -> right = root2 -> right;
+            }
+        }
     }
 };
