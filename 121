@@ -3,16 +3,16 @@
 class Solution {
 public:
     int maxProfit(vector<int>& prices) {
-        int n = prices.size();
-        vector<vector<int>> v(n, (vector<int> (2, -1)));
-        return findProfit(prices, v, 0, 1, 1);
+        vector<vector<int>> DP(prices.size(), (vector<int>(2, -1)));
+        return helper(DP, prices, 0, 1, 1);
     }
-    int findProfit(vector<int>& prices, vector<vector<int>>& v, int i, int transaction, int buy) {
-        if(i >= prices.size() || transaction <= 0) return 0;
-        if(v[i][buy] != -1) return v[i][buy];
+    int helper(vector<vector<int>>& DP, vector<int>& prices, int index, int buy, int transaction) {
+        if(index == prices.size() || !transaction) return 0;
+        if(index == prices.size() - 1 && buy) return 0;
+        if(DP[index][buy] != -1) return DP[index][buy];
         
-        if(buy) return v[i][buy] = max( -prices[i] + findProfit(prices, v, i + 1, 1, 0), findProfit(prices, v, i + 1, 1, 1));
-        else return v[i][buy] = max(prices[i] + findProfit(prices, v, i + 1, 0, 1), findProfit(prices, v, i + 1, 1, 0));
+        if(buy) return DP[index][buy] = max(-prices[index] + helper(DP, prices, index + 1, 0, 1), helper(DP, prices, index + 1, 1, 1));
+        else return DP[index][buy] = max(prices[index] + helper(DP, prices, index + 1, 1, 0), helper(DP, prices, index + 1, 0, 1));
     }
 };
 
