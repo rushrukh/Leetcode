@@ -16,7 +16,7 @@ public:
     }
 };
 
-//Bottom Up Soln:
+//Bottom Up Soln: TC O(n^2) SC O(n^2)
 
 class Solution {
 public:
@@ -36,7 +36,7 @@ public:
     }
 };
 
-//Bottom Up In Place Soln:
+//Bottom Up In Place Soln: TC O(n^2) SC O(1)
 
 class Solution {
 public:
