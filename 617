@@ -93,3 +93,36 @@ public:
         return root1;
     }
 };
+
+
+// Soln using Stack (DFS):
+class Solution {
+public:
+    TreeNode* mergeTrees(TreeNode* root1, TreeNode* root2) {
+        if(!root1 || !root2) return root1 ? root1 : root2;
+        
+        stack<TreeNode*> s1; s1.push(root1);
+        stack<TreeNode*> s2; s2.push(root2);
+        
+        while(!s1.empty()) {
+            TreeNode* t1 = s1.top(); s1.pop();
+            TreeNode* t2 = s2.top(); s2.pop();
+            
+            t1 -> val += t2 -> val;
+            
+            if(t1 -> left && t2 -> left) {
+                s1.push(t1 -> left);
+                s2.push(t2 -> left);
+            }
+            else if(!t1 -> left && t2 -> left) t1 -> left = t2 -> left;
+            
+            if(t1 -> right && t2 -> right) {
+                s1.push(t1 -> right);
+                s2.push(t2 -> right);
+            }
+            else if(!t1 -> right && t2 -> right) t1 -> right = t2 -> right;
+        }
+        
+        return root1;
+    }
+};
