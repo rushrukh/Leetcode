@@ -23,19 +23,40 @@ public:
         if(root1 && root2) {
             root1 -> val += root2 -> val;
             
-            if(root1 -> left && root2 -> left) {
-                preOrder(root1 -> left, root2 -> left);
-            }
-            else if(!root1 -> left && root2 -> left) {
-                root1 -> left = root2 -> left;
-            }
+            if(root1 -> left && root2 -> left) preOrder(root1 -> left, root2 -> left);
+            else if(!root1 -> left && root2 -> left) root1 -> left = root2 -> left;
             
-            if(root1 -> right && root2 -> right) {
-                preOrder(root1 -> right, root2 -> right);
-            }
-            else if(!root1 -> right && root2 -> right) {
-                root1 -> right = root2 -> right;
-            }
+            if(root1 -> right && root2 -> right) preOrder(root1 -> right, root2 -> right);
+            
+            else if(!root1 -> right && root2 -> right) root1 -> right = root2 -> right;
         }
+    }
+};
+
+// Soln using a new tree: TC O(m), SC if the tree is skewed O(m), else O(log m) 
+class Solution {
+public:
+    TreeNode* mergeTrees(TreeNode* root1, TreeNode* root2) {
+        if(!root1 || !root2) return root1 ? root1 : root2;
+        
+        TreeNode* newRoot = NULL;
+        newRoot = preOrder(root1, root2, newRoot);
+        
+        return newRoot;
+    }
+    TreeNode* preOrder(TreeNode* root1, TreeNode* root2, TreeNode* newRoot) {
+        if(root1 && root2) {
+            newRoot = new TreeNode(root1 -> val + root2 -> val);
+            
+            if(root1 -> left && root2 -> left) newRoot -> left = preOrder(root1 -> left, root2 -> left, newRoot -> left);
+            else if(!root1 -> left && root2 -> left) newRoot -> left = root2 -> left;
+            else if(root1 -> left && !root2 -> left) newRoot -> left = root1 -> left;
+            
+            if(root1 -> right && root2 -> right) newRoot -> right = preOrder(root1 -> right, root2 -> right, newRoot -> right);
+            else if(!root1 -> right && root2 -> right) newRoot -> right = root2 -> right;
+            else if(root1 -> right && !root2 -> right) newRoot -> right = root1 -> right;
+        }
+        
+        return newRoot;
     }
 };
