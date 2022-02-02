@@ -60,3 +60,36 @@ public:
         return newRoot;
     }
 };
+
+
+// Soln using Queue (BFS):
+class Solution {
+public:
+    TreeNode* mergeTrees(TreeNode* root1, TreeNode* root2) {
+        if(!root1 || !root2) return root1 ? root1 : root2;
+        
+        queue<TreeNode*> Q1; Q1.push(root1);
+        queue<TreeNode*> Q2; Q2.push(root2);
+        
+        while(!Q1.empty()) {
+            TreeNode* t1 = Q1.front(); Q1.pop();
+            TreeNode* t2 = Q2.front(); Q2.pop();
+            
+            t1 -> val += t2 -> val;
+            
+            if(t1 -> left && t2 -> left) {
+                Q1.push(t1 -> left);
+                Q2.push(t2 -> left);
+            }
+            else if(!t1 -> left && t2 -> left) t1 -> left = t2 -> left;
+            
+            if(t1 -> right && t2 -> right) {
+                Q1.push(t1 -> right);
+                Q2.push(t2 -> right);
+            }
+            else if(!t1 -> right && t2 -> right) t1 -> right = t2 -> right;
+        }
+        
+        return root1;
+    }
+};
