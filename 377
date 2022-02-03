@@ -1,0 +1,16 @@
+//Top - Down Soln: TC O(N*T) and SC O(N)
+
+class Solution {
+public:
+    int combinationSum4(vector<int>& nums, int target) {
+        vector<int> DP(target, -1);
+        return findCombination(DP, nums, target, 0, 0);
+    }
+    int findCombination(vector<int>& DP, vector<int>& nums, int target, int currSum, int idx) {
+        if(currSum == target) return 1;
+        if(currSum > target || idx == nums.size()) return 0;
+        if(DP[currSum] != -1) return DP[currSum];
+        
+        return DP[currSum] = findCombination(DP, nums, target, currSum + nums[idx], 0) + findCombination(DP, nums, target, currSum, idx + 1);
+    }
+};
