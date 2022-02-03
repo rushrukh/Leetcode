@@ -1,7 +1,9 @@
+//TC O(N), SC O(N)
+
 class Solution {
 public:
     vector<int> twoSum(vector<int>& nums, int target) {
-        unordered_map<int, int>hash;
+        unordered_map<int, int> hash;
         
         for(int i = 0; i < nums.size(); i++)
             hash[nums[i]] = i;
@@ -10,6 +12,6 @@ public:
             if(hash.find(target - nums[i]) != hash.end() && i != hash[target - nums[i]])
                 return {i, hash[target - nums[i]]};
         
-        return {0, 0};
+        return {};
     }
 };
