@@ -1,0 +1,25 @@
+//HashMap Soln: TC O(N), SC O(N)
+
+class Solution {
+public:
+    int findMaxLength(vector<int>& nums) {
+        int maxLength = 0, counter = 0;
+        unordered_map<int, int> hash;
+        
+        for(int i = 0; i < nums.size(); i++) {
+            //check for two conditions
+            //if counter is 0, i could be a possible answer: becase we have seen equal number of zeros and ones at this point.
+            //another condition is: if same count is encountered at some point, the difference between those two indices is also contiguous subarray
+            
+            if(!nums[i]) counter--;
+            else counter++;
+            
+            if(hash.find(counter) != hash.end()) maxLength = max(maxLength, i - hash[counter]);
+            else hash[counter] = i;
+            
+            if(!counter) maxLength = max(maxLength, i + 1);
+        }
+        
+        return maxLength;
+    }
+};
