@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int maxSubArrayLen(vector<int>& nums, int k) {
+        unordered_map<int, int> hash;
+        int prefixSum = 0, maxLength = 0;
+        
+        for(int i = 0; i < nums.size(); i++) {
+            prefixSum += nums[i];
+            
+            if(hash.find(prefixSum) == hash.end()) 
+                hash[prefixSum] = i;
+            
+            if(hash.find(prefixSum - k) != hash.end()) 
+                maxLength = max(maxLength, i - hash[prefixSum - k]);
+            
+            if(prefixSum == k) 
+                maxLength = i + 1;
+        }
+        
+        return maxLength;
+    }
+};
