@@ -1,0 +1,35 @@
+//Priority Queue Soln: TC O(Nlogk), SC(k)
+
+class Solution {
+public:
+    int calcEuclideanDistance(vector<int>& coordinates) {
+        return coordinates[0] * coordinates[0] + coordinates[1] * coordinates[1];
+    }
+    vector<vector<int>> kClosest(vector<vector<int>>& points, int k) {
+        vector<vector<int>> result;
+        
+        priority_queue<pair<int, int>> Q;
+        
+        for(int i = 0; i < points.size(); i++) {
+            pair<int, int> currentEntry = {calcEuclideanDistance(points[i]), i};
+            
+            if(Q.size() < k) 
+                Q.push(currentEntry);
+            
+            else {
+                if(currentEntry.first < Q.top().first) {
+                    Q.pop();
+                    Q.push(currentEntry);
+                }
+            }
+        }
+        
+        while(!Q.empty()) {
+            int idx = Q.top().second;
+            Q.pop();
+            result.push_back({points[idx][0], points[idx][1]});
+        }
+        
+        return result;
+    }
+};
