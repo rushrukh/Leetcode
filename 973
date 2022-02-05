@@ -1,4 +1,21 @@
-//Priority Queue Soln: TC O(Nlogk), SC(k)
+//Sorting Soln: TC O(NlogN), SC(logN)
+
+class Solution {
+public:
+    int calcEuclideanDistance(vector<int>& coordinates) {
+        return coordinates[0] * coordinates[0] + coordinates[1] * coordinates[1];
+    }
+    vector<vector<int>> kClosest(vector<vector<int>>& points, int k) {
+        sort(points.begin(), points.end(), [&](vector<int>& a, vector<int>& b) {
+            return calcEuclideanDistance(a) < calcEuclideanDistance(b);
+        });
+        
+        return vector<vector<int>> (points.begin(), points.begin() + k);
+    }
+};
+
+
+//Priority Queue (Max-Heap) Soln: TC O(Nlogk), SC(k)
 
 class Solution {
 public:
