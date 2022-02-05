@@ -1,4 +1,4 @@
-//Sorting Soln: TC O(NlogN), SC(logN)
+//Sorting Soln: TC O(NlogN), SC O(logN)
 
 class Solution {
 public:
@@ -15,7 +15,7 @@ public:
 };
 
 
-//Priority Queue (Max-Heap) Soln: TC O(Nlogk), SC(k)
+//Priority Queue (Max-Heap) Soln: TC O(Nlogk), SC O(k)
 
 class Solution {
 public:
