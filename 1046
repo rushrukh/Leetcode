@@ -1,0 +1,20 @@
+// TC: O(NlogN), SC O(N)
+
+class Solution {
+public:
+    int lastStoneWeight(vector<int>& stones) {
+        priority_queue<int> pQ;
+        for(auto &x: stones) pQ.push(x);
+        
+        while(pQ.size() > 1) {
+            int stoneOne = pQ.top();
+            pQ.pop();
+            int stoneTwo = pQ.top();
+            pQ.pop();
+            
+            if(stoneOne - stoneTwo != 0) pQ.push(stoneOne - stoneTwo);
+        }
+        
+        return pQ.empty() ? 0 : pQ.top();
+    }
+};
