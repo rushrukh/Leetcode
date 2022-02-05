@@ -1,0 +1,25 @@
+// Max-Heap Soln: TC O(N logk) SC O(N)
+
+class Solution {
+public:
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        priority_queue<pair<int, ListNode*>> Q;
+        ListNode* head = NULL;
+        
+        for(auto x: lists) {
+            while(x) {
+                Q.push({x -> val, x});
+                x = x -> next;
+            }
+        }
+        
+        while(!Q.empty()) {
+            ListNode* tmp = Q.top().second;
+            Q.pop();
+            tmp -> next = head;
+            head = tmp;
+        }
+        
+        return head;
+    }
+};
