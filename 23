@@ -1,4 +1,4 @@
-
+// Naive max-heap soln: TC O(Nk log (Nk), SC O(Nk)
 
 class Solution {
 public:
@@ -21,5 +21,35 @@ public:
         }
         
         return head;
+    }
+};
+
+
+// Optimal Min-heap Soln: TC O(N log k), SC O(k)
+class Solution {
+public:
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        ListNode* head = new ListNode(0);
+        ListNode* dummyHead = head;
+        auto comp = [](ListNode* A, ListNode *B) {
+            return A -> val > B -> val;
+        };
+        priority_queue<ListNode*, vector<ListNode*>, decltype(comp)> Q(comp);
+        
+        for(auto x: lists) {
+            if(x) Q.push(x);
+        }
+        
+        while(!Q.empty()) {
+            ListNode* tmp = Q.top();
+            Q.pop();
+            
+            dummyHead -> next = tmp;
+            dummyHead = dummyHead -> next;
+            
+            if(tmp && tmp -> next) Q.push(tmp -> next);
+        }
+        
+        return head -> next;
     }
 };
