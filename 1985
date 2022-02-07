@@ -1,0 +1,18 @@
+// Min-Heap Soln: TC O(N logk) SC O(k)
+
+class Solution {
+public:
+    string kthLargestNumber(vector<string>& nums, int k) {
+        auto comp = [] (string& A, string& B) {
+            return A.length() == B.length() ? A > B : A.length() > B.length();
+        };
+        priority_queue<string, vector<string>, decltype(comp)> Q(comp);
+        
+        for(string &num: nums) {
+            Q.push(num);
+            if(Q.size() > k) Q.pop();
+        }
+        
+        return Q.top();
+    }
+};
