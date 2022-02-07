@@ -1,0 +1,17 @@
+// Min-Heap Soln: TC O(N logk), SC O(k)
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        priority_queue<int, vector<int>, greater<int>> Q;
+        
+        for(int &x: nums) {
+            if(Q.size() < k) Q.push(x);
+            else if(x > Q.top()) {
+                Q.pop();
+                Q.push(x);
+            } 
+        }
+        
+        return Q.top();
+    }
+};
