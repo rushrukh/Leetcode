@@ -1,3 +1,23 @@
+// Sort + Min Heap: TC O(N logN), SC O(N)
+class Solution {
+public:
+    int minMeetingRooms(vector<vector<int>>& intervals) {
+        sort(intervals.begin(), intervals.end());
+        priority_queue<int, vector<int>, greater<int>> Q;
+        
+        for(auto &interval: intervals) {
+            if(Q.empty()) Q.push(interval[1]);
+            else {
+                int tmp = Q.top();
+                if(interval[0] >= tmp) Q.pop();
+                Q.push(interval[1]);
+            }
+        }
+        return Q.size();
+    }
+};
+
+// Sorting Soln: TC O() SC O ()
 class Solution {
 public:
     int minMeetingRooms(vector<vector<int>>& intervals) {
