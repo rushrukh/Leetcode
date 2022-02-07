@@ -17,29 +17,30 @@ public:
     }
 };
 
-// Sorting Soln: TC O() SC O ()
+// Sorting Soln: TC O(N logN) SC O (N)
 class Solution {
 public:
     int minMeetingRooms(vector<vector<int>>& intervals) {
-        sort(intervals.begin(), intervals.end());
-        vector<int> start;
-        vector<int> end;
-        int startIndex = 0, endIndex = 0, room = 0;
-        
-        for(auto x: intervals) {
-            start.push_back(x[0]);
-            end.push_back(x[1]);
+        int count = 0, currStartTime = 0, currEndTime = 0;;
+        vector<int> startTime;
+        vector<int> endTime;
+        for(auto &interval: intervals) {
+            startTime.push_back(interval[0]);
+            endTime.push_back(interval[1]);
         }
         
-        sort(start.begin(), start.end());
-        sort(end.begin(), end.end());
+        sort(startTime.begin(), startTime.end());
+        sort(endTime.begin(), endTime.end());
         
-        while(startIndex < intervals.size() && endIndex < intervals.size()) {
-            if(start[startIndex] < end[endIndex]) room++;
-            else endIndex++;
-            startIndex++;
+        for(int i = 0; i < startTime.size(); i++) {
+            if(startTime[currStartTime] >= endTime[currEndTime]) {
+                ++currStartTime, ++currEndTime;
+                continue;
+            }
+            count++;
+            ++currStartTime;
         }
         
-        return room;
+        return count;
     }
 };
