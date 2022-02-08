@@ -1,0 +1,30 @@
+// Min-Heap Soln: TC O(N log k), SC O(N)
+
+class Solution {
+public:
+    vector<string> topKFrequent(vector<string>& words, int k) {
+        unordered_map<string, int> hash;
+        for(string &word: words) hash[word]++;
+        
+        auto comp = [] (pair<string, int>& A, pair<string, int>& B) {
+            if(A.second == B.second) return A.first < B.first;
+            return A.second > B.second;
+        };
+        priority_queue<pair<string, int>, vector<pair<string, int>>, decltype(comp)> Q(comp);
+        
+        for(auto x: hash) {
+            Q.push({x.first, x.second});
+            if(Q.size() > k) Q.pop();
+        }
+        
+        vector<string> ans;
+        
+        for(int i = 0; i < k; i++) {
+            ans.push_back(Q.top().first);
+            Q.pop();
+        }
+        
+        reverse(ans.begin(), ans.end());
+        return ans;
+    }
+};
