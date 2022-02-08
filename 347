@@ -4,22 +4,22 @@ class Solution {
 public:
     vector<int> topKFrequent(vector<int>& nums, int k) {
         unordered_map<int, int> hash;
-        auto comp = [&hash](int& A, int& B) {return hash[A] > hash[B];}; 
-        priority_queue<int, vector<int>, decltype(comp)> Q(comp);
-        for(int &x: nums)
-            hash[x]++;
+        for(int &num: nums) hash[num]++;
         
-        for(auto x: hash) {
+        auto comp = [&hash](int &A, int &B) { return hash[A] > hash[B];};
+        priority_queue<int, vector<int>, decltype(comp)> Q(comp);
+        
+        for(auto &x: hash) {
             Q.push(x.first);
             if(Q.size() > k) Q.pop();
         }
         
-        vector<int> result;
+        vector<int> ans;
         for(int i = 0; i < k; i++) {
-            result.push_back(Q.top());
+            ans.push_back(Q.top());
             Q.pop();
         }
         
-        return result;
+        return ans;
     }
 };
