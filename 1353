@@ -1,0 +1,26 @@
+// Sorting + Min-Heap Soln: TC O(N logN), SC O(N)
+
+class Solution {
+public:
+    int maxEvents(vector<vector<int>>& events) {
+        sort(events.begin(), events.end());
+        priority_queue<int, vector<int>, greater<int>> Q;
+        
+        int day = 1, result = 0, currEvent = 0, N = events.size();
+        for(day = 1; day <= 100000; day++) {
+            while(Q.size() && Q.top() < day) Q.pop();
+            
+            while(currEvent < N && events[currEvent][0] == day)
+                Q.push(events[currEvent++][1]);
+            
+            if(Q.size()) {
+                result++;
+                Q.pop();
+            }
+            
+            if(Q.empty() && currEvent > N) break;
+        }
+        
+        return result;
+    }
+};
