@@ -5,20 +5,19 @@ public:
         unordered_map<int, int> hash;
         for(int &num: nums) hash[num]++;
         
-        auto comp = [&hash](int &A, int &B) { return hash[A] > hash[B];};
-        priority_queue<int, vector<int>, decltype(comp)> Q(comp);
+        auto comp = [&hash](int A, int B) { return hash[A] > hash[B]; };
+        priority_queue<int, vector<int>, decltype (comp)> Q(comp);
         
-        for(auto &x: hash) {
+        for(auto x: hash) {
             Q.push(x.first);
             if(Q.size() > k) Q.pop();
         }
         
-        vector<int> ans;
+        vector<int> result;
         for(int i = 0; i < k; i++) {
-            ans.push_back(Q.top());
+            result.push_back(Q.top());
             Q.pop();
         }
-        
-        return ans;
+        return result;
     }
 };
