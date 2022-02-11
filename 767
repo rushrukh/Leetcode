@@ -1,0 +1,49 @@
+// Max Heap Soln: TC O(N logN), SC O(N)
+
+class Solution {
+public:
+    string reorganizeString(string s) {
+        unordered_map<char, int> hash;
+        int max_length = 0;
+        
+        for(char &x: s) {
+            hash[x]++;
+            max_length = max(max_length, hash[x]);
+        }
+        
+        if(max_length > ceil(s.size() / 2.0)) return "";
+           
+        auto comp = [&hash](char A, char B) { return hash[A] < hash[B];};
+        priority_queue<char, vector<char>, decltype(comp)> Q(comp);
+        
+        for(auto &x: hash) Q.push(x.first);
+        
+        string result;
+        
+        while(Q.size() > 1) {
+            char tmpFirst = Q.top(); Q.pop();
+            char tmpSecond = Q.top(); Q.pop();
+
+            if(!result.size()) {
+                result += tmpFirst;
+                result += tmpSecond;
+            }
+            else {
+                if(result[result.size() - 1] == tmpFirst) {
+                    result += tmpSecond;
+                    result += tmpFirst;
+                }
+                else {
+                    result += tmpFirst;
+                    result += tmpSecond;
+                }
+            }
+            
+            if(--hash[tmpFirst] > 0) Q.push(tmpFirst);
+            if(--hash[tmpSecond] > 0) Q.push(tmpSecond);
+        }
+        if(Q.size()) result += Q.top();
+        
+        return result;
+    }
+};
