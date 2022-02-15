@@ -1,32 +1,34 @@
+// Binary Search: TC O(N logM), SC O(1)
+
 class Solution {
 public:
     int shipWithinDays(vector<int>& weights, int days) {
-        int high = 0, low = INT_MIN, result = 0;
+        int low = *max_element(weights.begin(), weights.end());
+        int high = accumulate(weights.begin(), weights.end(), 0);
         
-        for(int& x: weights)
-            high += x, low = max(low, x);
-        
-        while(low <= high) {
+        while(low < high) {
             int mid = low + (high - low) / 2;
-            if(canBeShipped(weights, mid, days)) {
-                result = mid;
-                high = mid - 1;
-            }
+            if(canItShip(weights, days, mid)) high = mid;
             else low = mid + 1;
         }
         
-        return result;
+        return low;
     }
     
-    bool canBeShipped(vector<int>& weights, int mid, int days) {
-        int count = 1, sum = 0;
+    bool canItShip(vector<int>& weights, int givenDays, int capacity) {
+        int actualDays = 1, everydayWeight = 0;
         
-        for(int& x: weights) {
-            sum += x;
-            if(sum > mid) 
-                count++, sum = x;
+        for(int &weight: weights) {
+            everydayWeight += weight;
+            
+            if(everydayWeight > capacity) {
+                everydayWeight = weight;
+                actualDays++;
+            }
+            
+            if(actualDays > givenDays) break;
         }
         
-        return count <= days ? true : false;
+        return actualDays <= givenDays;
     }
 };
