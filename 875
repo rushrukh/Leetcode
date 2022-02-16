@@ -1,0 +1,39 @@
+//TC O(n logM), SC O(1)
+
+class Solution {
+public:
+    int minEatingSpeed(vector<int>& piles, int h) {
+        long long int low = 0; int high = INT_MIN;
+        
+        for(auto &pile: piles) {
+            low += pile;
+            high = max(high, pile);
+        }
+        
+        low /= h;
+        
+        while(low < high) {
+            int mid = low + (high - low) / 2;
+            if(speedCheck(piles, mid) <= h) high = mid;
+            else low = mid + 1;
+        }
+        
+        return low;
+    }
+    int speedCheck(vector<int>& piles, int speed) {
+        if(!speed) return INT_MAX;
+        
+        int hoursNeeded = 0;
+        for(auto &pile: piles)
+            hoursNeeded += (pile / speed) + ((pile % speed) != 0);
+        
+        return hoursNeeded;
+     }
+};
+
+// 4 11 20 23 30, h = 8
+// l = 4, h = 30, m = 17 - should take him 8h
+// l = 4, h = 17, m = 10 - should take him 11h
+// l = 11, h =17, m = 14 - should take him 9h
+// l = 15, h =17, m = 16 - should take him 8h
+// l = 15, h = 16, m = 15 - should take him 8h
