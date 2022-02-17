@@ -42,6 +42,7 @@ public:
             if(--hash[tmpFirst] > 0) Q.push(tmpFirst);
             if(--hash[tmpSecond] > 0) Q.push(tmpSecond);
         }
+        
         if(Q.size()) result += Q.top();
         
         return result;
