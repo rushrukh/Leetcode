@@ -1,0 +1,48 @@
+// TC:  O((a + b + c)log3), SC: O(1)
+
+class Solution {
+public:
+    string longestDiverseString(int a, int b, int c) {
+        string result;
+        unordered_map<char, int> hash;
+        if(a) hash.insert({'a', a});
+        if(b) hash.insert({'b', b});
+        if(c) hash.insert({'c', c});
+        
+        auto comp = [&hash] (char A, char B) {
+            return hash[A] < hash[B];
+        };
+        
+        priority_queue<char, vector<char>, decltype(comp)> Q(comp);
+        
+        for(auto x: hash)
+            Q.push(x.first);
+        
+        char prev1 = 'z', prev2 = 'y';
+        
+        while(!Q.empty()) {
+            char fromTop = Q.top(); Q.pop();
+            
+            if(fromTop == prev1 && fromTop == prev2) {
+                if(Q.empty()) return result;
+                char secondFromTop = Q.top(); Q.pop();
+                
+                result += secondFromTop;
+                prev2 = prev1;
+                prev1 = secondFromTop;
+                
+                if(--hash[secondFromTop] > 0) Q.push(secondFromTop);
+                Q.push(fromTop);
+            }
+            else {
+                result += fromTop;
+                prev2 = prev1;
+                prev1 = fromTop;
+                
+                if(--hash[fromTop] > 0) Q.push(fromTop);
+            }
+        }
+        
+        return result;
+    }
+};
