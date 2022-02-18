@@ -1,0 +1,49 @@
+// TC O(n log n), SC O(1)
+
+class Solution {
+public:
+    int minDays(vector<int>& bloomDay, int m, int k) {
+        if(m * k > bloomDay.size()) return -1;
+        
+        int low = INT_MAX, high = INT_MIN;
+        
+        for(int &day: bloomDay) {
+            low = min(low, day);
+            high = max(high, day);
+        }
+        
+        while(low < high) {
+            int mid = low + (high - low) / 2;
+            if(canMakeBouquet(bloomDay, m, k, mid)) high = mid;
+            else low = mid + 1;
+        }
+        
+        return low;
+    }
+    int canMakeBouquet(vector<int>& bloomDay, int m, int k, int day) {
+        // we need to find the number of days, i.e. bloomDay[i] it takes to make m bouquet
+        // each with number of flowers = k
+        
+        // how many flowers bloom in <= day?
+        // see adjacent flowers
+        // if adjacent flowers cant make bouquet, reset the number of flowers?
+        
+        int numberOfFlowers = 0, numberOfBouquets = 0;
+        
+        for(int i = 0; i < bloomDay.size(); i++) {
+            if(bloomDay[i] <= day) {
+                numberOfFlowers++;
+                
+                if(numberOfFlowers == k) {
+                    numberOfBouquets++;
+                    numberOfFlowers = 0;
+                }
+            }
+            else numberOfFlowers = 0;
+            
+            if(numberOfBouquets == m) break;
+        }
+        
+        return numberOfBouquets == m;
+    }
+};
