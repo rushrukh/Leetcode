@@ -1,0 +1,29 @@
+// TC O(N), SC O(1)
+
+class Solution {
+public:
+    int maxArea(vector<int>& height) {
+        // let's try two pointers.
+        // because looks like we are about to compare two values
+        // compare values with both end
+        // try moving the smaller pointer inwards.
+        // Why move smaller pointer?
+        // As we move inwwards, the width keeps reducing.
+        // The only way we can have a hope for larger are is in terms of height[i]
+        // The maximum height is limited by the min value of a pair.
+        // that's why we stick to the larger value in the pair.
+        
+        int left = 0, right = height.size() - 1, maxContainer = INT_MIN;
+        
+        while(left < right) {
+            maxContainer = max(maxContainer, min(height[left], height[right]) * (right - left));
+            
+            if(height[left] <= height[right]) left++;
+            else right--;
+        }
+        
+        return maxContainer;
+    }
+};
+
+
