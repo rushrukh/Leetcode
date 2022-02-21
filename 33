@@ -1,0 +1,46 @@
+// TC O(logN), SC O(1)
+
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        if(nums.size() == 1) return nums[0] == target ? 0 : -1; 
+        int low = 0, high = nums.size() - 1, pivotPoint = 0;
+        
+        
+        while(low < high) {
+            pivotPoint = low + (high - low) / 2;
+            
+            if(nums[pivotPoint] > nums[pivotPoint + 1]) {
+                pivotPoint++; 
+                break;
+            }
+            else {
+                if(nums[pivotPoint] > nums[low] && nums[pivotPoint] > nums[high]) low = pivotPoint + 1;
+                else high = pivotPoint;
+            }
+        }
+        
+        low = 0, high = nums.size() - 1; int searchIndex = -1;
+        
+        if(pivotPoint) {
+            if(nums[pivotPoint] == target) return pivotPoint;
+            else if(target > nums[pivotPoint] && target > nums[high]) high = pivotPoint - 1;
+            else low = pivotPoint + 1;
+        }
+        
+        while(low < high) {
+            int mid = low + (high - low) / 2;
+            
+            if(nums[mid] == target) {
+                searchIndex = mid;
+                break;
+            }
+            else {
+                if(nums[mid] > target) high = mid;
+                else low = mid + 1;
+            }
+        }
+        
+        return low < nums.size() && nums[low] == target ? low : searchIndex;
+    }
+};
