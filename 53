@@ -1,11 +1,15 @@
 class Solution {
 public:
     int maxSubArray(vector<int>& nums) {
-        int globalMax = nums[0];
-        int localMax = nums[0];
+        // we will keep track of the globalMax
+        // during each iteration, we will consider two things
+        // Adding the current element to the previous max vs current element itself, who is max?
         
-        for(int i = 1; i < nums.size(); i++) {
-            localMax = max(nums[i], nums[i] + localMax);
+        int globalMax = INT_MIN;
+        int localMax = 0;
+        
+        for(int &num: nums) {
+            localMax = max(num, num + localMax);
             globalMax = max(globalMax, localMax);
         }
         
