@@ -1,20 +1,22 @@
+// TC O(n), SC O(1)
+
 class Solution {
 public:
     vector<int> productExceptSelf(vector<int>& nums) {
-        int countZero = 0, product = 1;
+        // for every index, we can calculate answer and suffixProduct
+        // then multiply them to find the product.
         
-        for(int x: nums) {
-            if(!x) countZero++;
-            else product *= x;
+        vector<int> answer(nums.size(), 1);
+        
+        for(int i = 1; i < nums.size(); i++) 
+            answer[i] = answer[i - 1] * nums[i - 1];
+        
+        int suffixProduct = 1;
+        for(int i = answer.size() - 1; i >= 0; i--) {
+            answer[i] = answer[i] * suffixProduct;
+            suffixProduct *= nums[i];
         }
         
-        vector<int> ans (nums.size());
-        
-        for(int i = 0; i < nums.size(); i++) {
-            if(nums[i]) ans[i] = countZero? 0 : product/nums[i];
-            else ans[i] = countZero > 1 ? 0 : product;
-        }
-        
-        return ans;
+        return answer;
     }
 };
