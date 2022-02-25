@@ -3,10 +3,14 @@ class Solution {
 public:
     vector<int> topKFrequent(vector<int>& nums, int k) {
         unordered_map<int, int> hash;
+        
         for(int &num: nums) hash[num]++;
         
-        auto comp = [&hash](int A, int B) { return hash[A] > hash[B]; };
-        priority_queue<int, vector<int>, decltype (comp)> Q(comp);
+        auto comp = [&hash] (int X, int Y) {
+            return hash[X] > hash[Y];
+        };
+        
+        priority_queue<int, vector<int>, decltype(comp)> Q(comp);
         
         for(auto x: hash) {
             Q.push(x.first);
@@ -14,10 +18,12 @@ public:
         }
         
         vector<int> result;
-        for(int i = 0; i < k; i++) {
+        
+        while(!Q.empty()) {
             result.push_back(Q.top());
             Q.pop();
         }
+        
         return result;
     }
 };
