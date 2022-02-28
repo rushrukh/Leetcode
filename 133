@@ -1,0 +1,18 @@
+// DFS Soln: TC O(N + M) N = Number of Nodes, M = Number of Edges, SC O(N)
+
+class Solution {
+public:
+    unordered_map<Node*, Node*> visited;
+    Node* cloneGraph(Node* node) {
+        if(!node) return node;
+        if(visited.find(node) != visited.end()) return visited[node];
+        
+        Node* curr = new Node(node -> val);
+        visited[node] = curr;
+        for(int i = 0; i < node -> neighbors.size(); i++) {
+            Node* tmp = cloneGraph(node -> neighbors[i]);
+            curr -> neighbors.push_back(tmp);
+        }
+        return curr;
+    }
+};
