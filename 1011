@@ -7,28 +7,27 @@ public:
         int high = accumulate(weights.begin(), weights.end(), 0);
         
         while(low < high) {
-            int mid = low + (high - low) / 2;
+            int mid = low + (high - mid) / 2;
             if(canItShip(weights, days, mid)) high = mid;
             else low = mid + 1;
         }
         
         return low;
     }
-    
-    bool canItShip(vector<int>& weights, int givenDays, int capacity) {
-        int actualDays = 1, everydayWeight = 0;
+    int canItShip(vector<int>& weights, int days, int capacity) {
+        int loadOnBelt = 0, daysTaken = 1;
         
         for(int &weight: weights) {
-            everydayWeight += weight;
+            loadOnBelt += weight;
             
-            if(everydayWeight > capacity) {
-                everydayWeight = weight;
-                actualDays++;
+            if(loadOnBelt > capacity) {
+                daysTaken++;
+                loadOnBelt = weight;
             }
             
-            if(actualDays > givenDays) break;
+            if(daysTaken > days) break;
         }
         
-        return actualDays <= givenDays;
+        return daysTaken <= days;
     }
 };
