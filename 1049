@@ -18,3 +18,32 @@ public:
         else return DP[idx][currSum] = findMaximizedSum(DP, stones, targetSum, idx + 1, currSum);
     }
 };
+
+// Smashing two rocks gives two types of outcome
+// y - x = 0 if y == x
+// y - x = whatever, if y > x
+
+// Looks a lot like regular subtraction
+// If translated, here is what the problem asks:
+
+// You are given an array with some integers
+// you take some integers and form a group, and form another group with the rest of the elements
+// Now, you subtract the sum of these two groups
+// Here's the catch, the output of the subtraction has to be minimized
+// In other words, the result of the subtraction has to be the smallest possible result of all the subtraction result possible in the group
+
+
+// that being said
+// How can we minimize the result of subtraction?
+
+// well we know the total sum of the array to be some x;
+// we know that, the minimum val of subtraction is nothing but 0;
+// we achieve 0 as a result of subtraction, if both value partaking in the subtraction are equal.
+// that means both of them have of the half(x) | half(x) - half(x) = 0;
+
+
+// So, we can try to think about constructing one half, the other half would be just total_sum - the_half_we_will_construct
+// On what criteria should we find the half that we are talking about?
+
+// We should try to maximize the value for the half that we are taking care of, without exceeding half(total_sum);
+// That will give us maximum possible half.
