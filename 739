@@ -3,18 +3,18 @@
 class Solution {
 public:
     vector<int> dailyTemperatures(vector<int>& temperatures) {
-        vector<int> result (temperatures.size(), 0);
-        stack<int> S;
-        S.push(0);
+        vector<int> answer (temperatures.size(), 0);
+        stack<int> mStack;
+        mStack.push(0);
         
         for(int i = 1; i < temperatures.size(); i++) {
-            while(!S.empty() && temperatures[i] > temperatures[S.top()]) {
-                result[S.top()] = i - S.top();
-                S.pop();
+            while(!mStack.empty() && temperatures[i] > temperatures[mStack.top()]) {
+                answer[mStack.top()] = i - mStack.top();
+                mStack.pop();
             }
-            if(S.empty() || temperatures[i] <= temperatures[S.top()]) S.push(i);
+            mStack.push(i);
         }
         
-        return result;   
+        return answer;
     }
 };
