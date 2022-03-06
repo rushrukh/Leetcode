@@ -1,0 +1,28 @@
+// Monotic Stack Soln: TC O(N), SC O(N)
+
+class Solution {
+public:
+    vector<int> nextGreaterElements(vector<int>& nums) {
+        stack<int> S;
+        S.push(0);
+        vector<int> result(nums.size(), -1);
+        
+        for(int i = 1; i < nums.size(); i++) {
+            while(!S.empty() && nums[i] > nums[S.top()]) {
+                result[S.top()] = nums[i];
+                S.pop();
+            }
+            S.push(i);
+        }
+        
+        for(int i = 0; i < nums.size(); i++) {
+            while(!S.empty() && nums[i] > nums[S.top()]) {
+                result[S.top()] = nums[i];
+                S.pop();
+            }
+            S.push(i);
+        }
+        
+        return result;
+    }
+};
