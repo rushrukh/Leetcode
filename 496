@@ -23,3 +23,37 @@ public:
     }
 };
 
+
+// Monotonic Stack Soln: TC O(n), SC O(n)
+
+class Solution {
+public:
+    vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
+        stack<int> S;
+        S.push(0);
+        
+        vector<int> nextGreater(nums2.size(), -1);
+        vector<int> result;
+        
+        for(int i = 1; i < nums2.size(); i++) {
+            while(!S.empty() && nums2[i] > nums2[S.top()]) {
+                nextGreater[S.top()] = i;
+                S.pop();
+            }
+            S.push(i);
+        }
+        
+        unordered_map<int, int> hash;
+        
+        for(int i = 0; i < nums2.size(); i++) hash[nums2[i]] = i;
+        
+        for(int i = 0; i < nums1.size(); i++) {
+            if(hash.find(nums1[i]) != hash.end()) {
+                int tmp = nextGreater[hash[nums1[i]]] == -1 ? -1 : nums2[nextGreater[hash[nums1[i]]]];
+                result.push_back(tmp);
+            }
+        }
+        
+        return result;
+    }
+};
