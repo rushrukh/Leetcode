@@ -1,0 +1,25 @@
+// Brute Force Soln: TC O(m n), SC O(n)
+
+class Solution {
+public:
+    vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
+        unordered_map<int, int> hash;
+        vector<int> result;
+        
+        for(int i = 0; i < nums2.size(); i++) hash[nums2[i]] = i;
+        
+        for(int i = 0; i < nums1.size(); i++) 
+            if(hash.find(nums1[i]) != hash.end())
+                result.push_back(findNextGreater(nums2, hash[nums1[i]]));
+        
+        return result;
+    }
+    int findNextGreater(vector<int>& nums2, int idx) {
+        for(int i = idx + 1; i < nums2.size(); i++) 
+            if(nums2[i] > nums2[idx])
+                return nums2[i];
+        
+        return -1;
+    }
+};
+
