@@ -23,7 +23,6 @@ public:
     }
 };
 
-
 class Solution {
 public:
     TreeNode* bstFromPreorder(vector<int>& preorder) {
