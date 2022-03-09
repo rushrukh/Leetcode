@@ -1,23 +1,30 @@
 class Solution {
 public:
+    int DP[31][10000];
     int lastStoneWeightII(vector<int>& stones) {
-        int totalSum = 0;
-        for(auto& x: stones) totalSum += x;
-        int subsetSum = totalSum / 2;
+        int totalSum = accumulate(stones.begin(), stones.end(), 0);
+        int halfOfTotal = totalSum / 2;
+        memset(DP, -1, sizeof(DP));
+        int asCloseAsHalfWouldBe = calcMaxHalf(stones, 0, halfOfTotal);
         
-        vector<vector<int>> DP (stones.size(), (vector<int> (subsetSum + 1, -1)));
-        int maximizedSum = findMaximizedSum(DP, stones, subsetSum, 0, 0);
-        
-        return (totalSum - maximizedSum) - maximizedSum;
+        return totalSum + (2 * asCloseAsHalfWouldBe) - (2 * halfOfTotal);
+        // return asCloseAsHalfWouldBe;
     }
-    int findMaximizedSum(vector<vector<int>>& DP, vector<int>& stones, int targetSum, int idx, int currSum) {
-        if(idx == stones.size()) return currSum;
-        if(DP[idx][currSum] != -1) return DP[idx][currSum];
+    
+    int calcMaxHalf(vector<int>& stones, int idx, int halfOfTotal) {
+        // cases:
+        // idx == stones.size(), then we'll return
+        // else, we can either choose an element, or not choose
+        // That's it.
+        if(halfOfTotal < 0) return INT_MAX - 1;
+        if(idx == stones.size() || !halfOfTotal) return halfOfTotal;
+        if(DP[idx][halfOfTotal] != -1) return DP[idx][halfOfTotal];
         
-        if(currSum + stones[idx] <= targetSum) return DP[idx][currSum] = max(findMaximizedSum(DP, stones, targetSum, idx + 1, currSum + stones[idx]), findMaximizedSum(DP, stones, targetSum, idx + 1, currSum));
-        else return DP[idx][currSum] = findMaximizedSum(DP, stones, targetSum, idx + 1, currSum);
+        // we see if we can choose an element
+        return DP[idx][halfOfTotal] = min(calcMaxHalf(stones, idx + 1, halfOfTotal - stones[idx]), calcMaxHalf(stones, idx + 1, halfOfTotal));
     }
 };
+
 
 // Smashing two rocks gives two types of outcome
 // y - x = 0 if y == x
