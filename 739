@@ -1,20 +1,28 @@
-// Monotonic Stack: TC O(N), SC O(N)
+//TC O(N), SC O(N)
 
 class Solution {
 public:
-    vector<int> dailyTemperatures(vector<int>& temperatures) {
-        vector<int> answer (temperatures.size(), 0);
-        stack<int> mStack;
-        mStack.push(0);
+    vector<int> dailyTemperatures(vector<int>& temp) {
+        stack<int> S;
+        vector<int> waitingPeriod(temp.size(), 0);
         
-        for(int i = 1; i < temperatures.size(); i++) {
-            while(!mStack.empty() && temperatures[i] > temperatures[mStack.top()]) {
-                answer[mStack.top()] = i - mStack.top();
-                mStack.pop();
+        for(int i = 0; i < temp.size(); i++) {
+            while(!S.empty() && temp[S.top()] < temp[i]) {
+                waitingPeriod[S.top()] = i - S.top();
+                S.pop();
             }
-            mStack.push(i);
+            S.push(i);
         }
         
-        return answer;
+        return waitingPeriod;
     }
 };
+
+// for each index, which next index has the greater element?
+// difference of those two index
+
+// use decreasing monotonic stack
+// Intuition: we keep pushing values in the stack that are decreasing
+// with the hope that we will eventually see a greater element.
+// When we finally see a greater element, it will be the next greater element for
+// every item in the current stack
