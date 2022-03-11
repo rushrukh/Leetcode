@@ -1,0 +1,35 @@
+// TC O(N), SC O(N)
+
+class Solution {
+public:
+    int sumSubarrayMins(vector<int>& arr) {
+        stack<pair<int, int>> sLeft, sRight;
+        vector<int> left(arr.size()), right(arr.size());
+        
+        for(int i = 0; i < arr.size(); i++) {
+            left[i] = i + 1;
+            right[i] = arr.size() - i;
+        }
+        
+        for(int i = 0; i < arr.size(); i++) {
+            while(!sLeft.empty() && sLeft.top().first > arr[i]) {
+                sLeft.pop();
+            }
+            left[i] = sLeft.empty() ? i + 1 : i - sLeft.top().second;
+            sLeft.push({arr[i], i});
+            
+            while(!sRight.empty() && sRight.top().first > arr[i]) {
+                right[sRight.top().second] = i - sRight.top().second; 
+                sRight.pop();
+            }
+            sRight.push({arr[i], i});
+        }
+        
+        unsigned long long int result = 0, mod = 1e9 + 7;
+        
+        for(int i = 0; i < arr.size(); i++) 
+            result = (result + ((arr[i] % mod) * left[i] * right[i])) % mod;
+        
+        return result;
+    }
+};
