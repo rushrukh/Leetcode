@@ -12,8 +12,9 @@ public:
         }
         
         for(int i = 0; i < arr.size(); i++) {
-            while(!sLeft.empty() && sLeft.top().first > arr[i]) sLeft.pop();
-            
+            while(!sLeft.empty() && sLeft.top().first > arr[i]) {
+                sLeft.pop();
+            }
             left[i] = sLeft.empty() ? i + 1 : i - sLeft.top().second;
             sLeft.push({arr[i], i});
             
