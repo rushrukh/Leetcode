@@ -1,59 +1,34 @@
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode() : val(0), next(nullptr) {}
- *     ListNode(int x) : val(x), next(nullptr) {}
- *     ListNode(int x, ListNode *next) : val(x), next(next) {}
- * };
- */
+// TC O(N + M), SC O(N + M)
+
 class Solution {
 public:
     ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
-        if(!l1 && l2)
-            return l2;
-        if(l1 && !l2)
-            return l1;
-        if(!l1 && !l2)
-            return NULL;
+        if(!l2) return l1;
+        if(!l1) return l2;
         
-        ListNode *resultHead = NULL;
-        ListNode *currNode = resultHead;
+        ListNode* newHead = new ListNode();
+        ListNode* dummyHead = newHead;
         
         while(l1 && l2) {
-            ListNode *tmp = new ListNode;
-            int val = 0;
+            ListNode* tmp = new ListNode();
             
-            if(l1 -> val < l2 -> val) {
-                val = l1 -> val;
+            if(l1 -> val <= l2 -> val) {
+                tmp -> val = l1 -> val;
                 l1 = l1 -> next;
-            } 
+            }
             else {
-                val = l2 -> val;
+                tmp -> val = l2 -> val;
                 l2 = l2 -> next;
             }
             
-            tmp -> val = val;
-            tmp -> next = NULL;
-            
-            if(!resultHead) {
-                resultHead = tmp;
-                currNode = resultHead;
-            }
-            else {
-                currNode -> next = tmp;
-                currNode = tmp;
-            }
+            dummyHead -> next = tmp;
+            dummyHead = tmp;
         }
         
-        if(l1) {
-            currNode -> next = l1;
-        }
+        if(l1) dummyHead -> next = l1;
+        if(l2) dummyHead -> next = l2;
         
-        if(l2) {
-            currNode -> next = l2;
-        }
-        return resultHead;
+        return newHead -> next;
+        
     }
 };
