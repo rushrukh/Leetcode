@@ -5,15 +5,14 @@ public:
     ListNode* reverseList(ListNode* head) {
         if(!head) return head;
         
-        ListNode* prev = NULL;
-        ListNode* curr = head;
-        ListNode* next = head -> next;
+        ListNode* prev = NULL, *curr = head;
         
         while(curr) {
+            ListNode* next = curr -> next;
+            
             curr -> next = prev;
             prev = curr;
             curr = next;
-            next = curr ? curr -> next : NULL;
         }
         
         return prev;
