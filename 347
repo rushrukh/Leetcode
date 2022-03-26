@@ -1,25 +1,25 @@
 // Min-Heap + HashMap Soln: TC O(N logk) SC O(N + k)
+
 class Solution {
 public:
     vector<int> topKFrequent(vector<int>& nums, int k) {
         unordered_map<int, int> hash;
+        vector<int> result;
         
-        for(int &num: nums) hash[num]++;
+        for(int &num : nums) hash[num]++;
         
-        auto comp = [&hash] (int X, int Y) {
-            return hash[X] > hash[Y];
+        auto comp = [&hash](int x, int y) {
+            return hash[x] > hash[y];
         };
         
         priority_queue<int, vector<int>, decltype(comp)> Q(comp);
         
-        for(auto x: hash) {
+        for(auto &x: hash) {
             Q.push(x.first);
             if(Q.size() > k) Q.pop();
         }
         
-        vector<int> result;
-        
-        while(!Q.empty()) {
+        while(Q.size()) {
             result.push_back(Q.top());
             Q.pop();
         }
