@@ -2,45 +2,40 @@
 
 class Solution {
 public:
-    int search(vector<int>& nums, int target) {
-        if(nums.size() == 1) return nums[0] == target ? 0 : -1; 
-        int low = 0, high = nums.size() - 1, pivotPoint = 0;
+    int search(vector<int>& A, int target) {
+        if(A.size() == 1) return A[0] == target ? 0 : -1;
         
+        int l = 0, h = A.size() - 1, m = 0;
         
-        while(low < high) {
-            pivotPoint = low + (high - low) / 2;
+        while(l < h) {
+            m = l + (h - l) / 2;
             
-            if(nums[pivotPoint] > nums[pivotPoint + 1]) {
-                pivotPoint++; 
+            if(A[m] > A[m + 1]) {
+                ++m;
                 break;
             }
             else {
-                if(nums[pivotPoint] > nums[low] && nums[pivotPoint] > nums[high]) low = pivotPoint + 1;
-                else high = pivotPoint;
+                if(A[m] > A[h]) l = m + 1;
+                else h = m;
             }
         }
         
-        low = 0, high = nums.size() - 1; int searchIndex = -1;
+        int pivot = m;
         
-        if(pivotPoint) {
-            if(nums[pivotPoint] == target) return pivotPoint;
-            else if(target > nums[pivotPoint] && target > nums[high]) high = pivotPoint - 1;
-            else low = pivotPoint + 1;
-        }
+        l = 0, h = A.size() - 1, m = 0;
         
-        while(low < high) {
-            int mid = low + (high - low) / 2;
+        if(A[pivot] == target) return pivot;
+        else if(target > A[pivot] && target > A[h]) h = pivot - 1;
+        else l = pivot + 1;
+        
+        while(l < h) {
+            m = l + (h - l) / 2;
             
-            if(nums[mid] == target) {
-                searchIndex = mid;
-                break;
-            }
-            else {
-                if(nums[mid] > target) high = mid;
-                else low = mid + 1;
-            }
+            if(A[m] == target) return m;
+            else if(A[m] < target) l = m + 1;
+            else h = m;
         }
         
-        return low < nums.size() && nums[low] == target ? low : searchIndex;
+        return l < A.size() && A[l] == target ? l : -1;
     }
 };
