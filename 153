@@ -2,7 +2,7 @@
 
 class Solution {
 public:
-    int findMin(vector<int>& nums) {
+    int findMin(vector<int>& A) {
         // Simply put, the problem asks you to search for the pivot point.
         
         // First, let's try to sketch the complete algorithm
@@ -13,23 +13,18 @@ public:
         // if nums[mid] > nums[high] then we are on the left side of the pivot, need to move rightwards.
         // else if nums[mid] < nums[high] then we are on the right side of the pivot, need to move leftwards.
         
-        //let's quickly implement the binary search, and then think carefully about the edge cases with
-        // array size being 1, 2, 3 .. 
+        int left = 0, right = A.size() - 1;
         
-        if(nums.size() == 1) return nums[0];
-        int low = 0, high = nums.size() - 1, mid = 0;
-        
-        while(low < high) {
-            mid = low + (high - low) / 2;
+        while(left < right) {
+            int mid = left + (right - left) / 2;
             
-            if(nums[mid] > nums[mid + 1]) return nums[mid + 1];
+            if(A[mid] > A[mid + 1]) return A[mid + 1];
             else {
-                if(nums[mid] > nums[high]) low = mid + 1;
-                else high = mid;
+                if(A[mid] > A[right]) left = mid + 1;
+                else right = mid;
             }
         }
         
-        return nums[low];
+        return A[left];
     }
 };
-
