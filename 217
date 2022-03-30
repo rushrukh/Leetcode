@@ -1,16 +1,33 @@
+// TC O(N log N), SC O(1)
+
 class Solution {
 public:
     bool containsDuplicate(vector<int>& v) {
 
-        if(v.size() < 2)
-            return false;
+        if(v.size() < 2) return false;
         
         sort(v.begin(), v.end());
         
         for(int i = 0; i < v.size() - 1; i++)
-            if(v[i] == v[i + 1])
-                return true;
+            if(v[i] == v[i + 1]) return true;
                 
+        return false;
+    }
+};
+
+
+// TC O(N), SC O(N)
+
+class Solution {
+public:
+    bool containsDuplicate(vector<int>& nums) {
+        unordered_map<int, int> hash;
+        
+        for(int &num: nums) hash[num]++;
+        
+        for(auto x: hash)
+            if(x.second > 1) return true;
+        
         return false;
     }
 };
