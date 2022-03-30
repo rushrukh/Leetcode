@@ -7,14 +7,13 @@ public:
         // during each iteration, we will consider two things
         // Adding the current element to the previous max vs current element itself, who is max?
         
-        int globalMax = INT_MIN;
-        int localMax = 0;
+        int currMax = 0, globMax = INT_MIN;
         
         for(int &num: nums) {
-            localMax = max(num, num + localMax);
-            globalMax = max(globalMax, localMax);
+            currMax = max(currMax + num, num);
+            globMax = max(currMax, globMax);
         }
         
-        return globalMax;
+        return globMax;
     }
 };
