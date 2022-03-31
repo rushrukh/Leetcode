@@ -1,0 +1,21 @@
+// TC: Average O(log N), Worst Case O(N), SC O(1)
+
+class Solution {
+public:
+    int findMin(vector<int>& A) {
+        int low = 0, high = A.size() - 1;
+        
+        while(low < high) {
+            int mid = low + (high - low) / 2;
+            
+            if(A[mid] > A[mid + 1]) return A[mid + 1];
+            else {
+                if(A[mid] > A[high]) low = mid + 1;
+                else if(A[mid] < A[high]) high = mid;
+                else high--;
+            }
+        }
+        
+        return A[low];  
+    }
+};
