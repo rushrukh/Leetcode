@@ -5,26 +5,18 @@ public:
     int findMin(vector<int>& A) {
         // Simply put, the problem asks you to search for the pivot point.
         
-        // First, let's try to sketch the complete algorithm
+        int low = 0, high = A.size() - 1;
         
-        // Pivot point is i + 1 iff nums[i] > nums[i + 1]
-        // Else, nums[i] < nums[i + 1] is true for both side of the pivot point of the array.
-        // So, what determines if we are on the left side or the right side of the pivot point?
-        // if nums[mid] > nums[high] then we are on the left side of the pivot, need to move rightwards.
-        // else if nums[mid] < nums[high] then we are on the right side of the pivot, need to move leftwards.
-        
-        int left = 0, right = A.size() - 1;
-        
-        while(left < right) {
-            int mid = left + (right - left) / 2;
+        while(low < high) {
+            int mid = low + (high - low) / 2;
             
             if(A[mid] > A[mid + 1]) return A[mid + 1];
             else {
-                if(A[mid] > A[right]) left = mid + 1;
-                else right = mid;
+                if(A[mid] > A[high]) low = mid + 1;
+                else high = mid;
             }
         }
         
-        return A[left];
+        return A[low];
     }
 };
