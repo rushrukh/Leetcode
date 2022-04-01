@@ -3,7 +3,8 @@
 class Solution {
 public:
     int maxArea(vector<int>& height) {
-        // let's try two pointers, because looks like we are about to compare two values
+        // let's try two pointers.
+        // because looks like we are about to compare two values
         // compare values with both end
         // try moving the smaller pointer inwards.
         // Why move smaller pointer?
