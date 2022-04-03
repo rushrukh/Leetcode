@@ -1,3 +1,5 @@
+// TC O(R x C), SC O(R x C) - There is a constant space solution for this, doesn't need DFS stack.
+
 class Solution {
 public:
     int count = 0;
@@ -12,18 +14,18 @@ public:
         if(i < 0 || i >= grid.size() || j < 0 || j >= grid[0].size() || !grid[i][j]) return 0;
         if(grid[i][j] == -1) return 1;
         
-        grid[i][j] = -1;
         count += 4;
+        grid[i][j] = -1;
         
         int top = DFS(grid, i - 1, j);
         int bottom = DFS(grid, i + 1, j);
         int left = DFS(grid, i, j - 1);
         int right = DFS(grid, i, j + 1);
         
-        if(top == 1) count -= 1;
-        if(bottom == 1) count -= 1;
-        if(left == 1) count -= 1;
-        if(right == 1) count -= 1;
+        count = top ? count - 1 : count;
+        count = bottom ? count - 1 : count;
+        count = left ? count - 1 : count;
+        count = right ? count - 1 : count;
         
         return 1;
     }
