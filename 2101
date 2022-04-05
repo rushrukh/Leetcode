@@ -1,0 +1,36 @@
+class Solution {
+public:
+    int maximumDetonation(vector<vector<int>>& bombs) {
+        vector<vector<int>> AM(bombs.size());
+        int maxBomb = 0;
+        
+        for(int i = 0; i < bombs.size(); i++) 
+            for(int j = 0; j < bombs.size(); j++) 
+                if(i != j && checkDistance(bombs[i][0], bombs[i][1], bombs[j][0], bombs[j][1], bombs[i][2]))
+                    AM[i].push_back(j);
+        
+        for(int i = 0; i < bombs.size(); i++) {
+            vector<bool> visited(bombs.size(), false);
+            maxBomb = max(maxBomb, DFS(AM, visited, i));
+        }
+        
+        return maxBomb;
+    }
+    
+    bool checkDistance(long long x1, long long y1, long long x2, long long y2, long long r1) {
+        long long x = (x1 - x2) * (x1 - x2);
+        long long y = (y1 - y2) * (y1 - y2);
+        
+        return x + y <= r1 * r1;
+    }
+    
+    int DFS(vector<vector<int>>& AM, vector<bool>& visited, int i) {
+        visited[i] = true;
+        int count = 1;
+        
+        for(auto &bomb: AM[i])
+            if(!visited[bomb]) count += DFS(AM, visited, bomb);
+        
+        return count;
+    }
+};
