@@ -1,28 +1,32 @@
+// TC O(R x C), SC O(R x C)
+
 class Solution {
 public:
     int countSubIslands(vector<vector<int>>& grid1, vector<vector<int>>& grid2) {
-        int m = grid1.size(), n = grid1[0].size(), count = 0;
+        int islandCount = 0;
         
-        for(int i = 0; i < m; i++)
-            for(int j = 0; j < n; j++)
-                if(grid2[i][j] == 1) {
+        for(int i = 0; i < grid2.size(); i++) {
+            for(int j = 0; j < grid2[0].size(); j++) {
+                if(grid2[i][j]) {
                     int flag = 1;
-                    DFS(grid1, grid2, i, j, flag);
-                    if(flag == 1) count++;
+                    DFS(grid2, grid1, i, j, flag);
+                    
+                    if(flag) islandCount++;
                 }
-        return count;
+            }
+        }
+        
+        return islandCount;
     }
-    
-    void DFS(vector<vector<int>>& grid1, vector<vector<int>>& grid2, int i, int j, int& flag) {
-        if(i < 0 || i >= grid1.size() || j < 0 || j >= grid1[0].size() || grid2[i][j] == 0) return;
+    void DFS(vector<vector<int>>& grid2, vector<vector<int>>& grid1, int i, int j, int& flag) {
+        if(i < 0 || i >= grid2.size() || j < 0 || j >= grid2[0].size() || !grid2[i][j]) return;
         
         if(grid1[i][j] != grid2[i][j]) flag = 0;
         grid2[i][j] = 0;
         
-        DFS(grid1, grid2, i - 1, j, flag);
-        DFS(grid1, grid2, i + 1, j, flag);
-        DFS(grid1, grid2, i, j - 1, flag);
-        DFS(grid1, grid2, i, j + 1, flag);
-        
+        DFS(grid2, grid1, i - 1, j, flag);
+        DFS(grid2, grid1, i + 1, j, flag);
+        DFS(grid2, grid1, i, j - 1, flag);
+        DFS(grid2, grid1, i, j + 1, flag);
     }
 };
