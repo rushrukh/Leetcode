@@ -1,0 +1,42 @@
+// TC O(R x C), SC O(R x C)
+
+// The IDEA: for islands of same shape, say we make an array of integers where if seen 1, we insert 1, else 0.
+// Turns out: if two islands are of same shape, both their array will have exactly same pattern of 1s and 0s. 
+// Who would have guessed that! 
+
+class Solution {
+public:
+    int numDistinctIslands(vector<vector<int>>& grid) {
+        int islandCount = 0;
+        vector<int> pattern;
+        vector<vector<int>> seenPatterns;
+        
+        for(int i = 0; i < grid.size(); i++) {
+            for(int j = 0; j < grid[0].size(); j++) {
+                if(grid[i][j]) {
+                    DFS(grid, pattern, i, j);
+                    if(find(seenPatterns.begin(), seenPatterns.end(), pattern) == seenPatterns.end()) {
+                        islandCount++;
+                        seenPatterns.push_back(pattern);
+                    }
+                    pattern.clear();
+                }
+            }
+        }
+        
+        return islandCount;
+    }
+    void DFS(vector<vector<int>>& grid, vector<int>& pattern, int i, int j) {
+        if(i < 0 || i >= grid.size() || j < 0 || j >= grid[0].size() || !grid[i][j]) {
+            pattern.push_back(0);
+            return;
+        }
+        grid[i][j] = 0;
+        pattern.push_back(1);
+        
+        DFS(grid, pattern, i - 1, j);
+        DFS(grid, pattern, i + 1, j);
+        DFS(grid, pattern, i, j - 1);
+        DFS(grid, pattern, i, j + 1);
+    }
+};
