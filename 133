@@ -1,5 +1,6 @@
 // DFS Soln: TC O(N + M) N = Number of Nodes, M = Number of Edges, SC O(N)
 
+
 class Solution {
 public:
     unordered_map<Node*, Node*> visited;
@@ -16,3 +17,8 @@ public:
         return curr;
     }
 };
+
+// starting with the head node
+// will create a new node
+// assign to new node, head nodes value
+// then for each neighbor of headnode, will recursively call cloneGraph 
