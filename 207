@@ -1,0 +1,43 @@
+// TC O(N + E), SC O(N + E)
+
+class Solution {
+public:
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        vector<vector<int>> adjList (numCourses);
+        
+        for(auto& x: prerequisites)
+            adjList[x[0]].push_back(x[1]);
+        
+        unordered_set<int> visited;
+        
+        for(int i = 0; i < adjList.size(); i++) {
+            bool result = DFS(adjList, visited, i);
+            if(!result) return false;
+        }
+        
+        return true;
+    }
+    
+    bool DFS(vector<vector<int>>& adjList, unordered_set<int>& visited, int course) {
+        if(visited.find(course) != visited.end()) return false;
+        if(!adjList[course].size()) return true;
+        
+        visited.insert(course);
+        
+        for(int i = 0; i < adjList[course].size(); i++) {
+            bool tmp = DFS(adjList, visited, adjList[course][i]);
+            if(!tmp) return tmp;
+        }
+        
+        adjList[course].clear();
+        visited.erase(visited.find(course));
+        
+        return true;
+    }
+};
+
+// 1. Create Adjacency List: there will be n items in the list. Each one of those will have the prerequisite courses listed.
+// 2. We will visit all the courses.
+// 3. For each course, we will visit all its prerequisites.
+// 4. Before that, we will check if the course that we are now visiting, has it already been visited?
+// If yes, that means we are in a cycle, return false;
