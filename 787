@@ -33,3 +33,35 @@ public:
         return -1;
     }
 };
+
+
+// Recursion + Memoization Soln: TC O(V * k), SC O(2 * V * k ) 
+class Solution {
+public:
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
+        vector<vector<pair<int,int>>> adjList(n);
+        vector<vector<int>> DP(n + 1, vector<int>(flights.size() + 1, -1));
+        
+        //adjList[src] = [{destination, cost}];
+        for(auto& flight: flights)
+            adjList[flight[0]].push_back({flight[1], flight[2]});
+        
+        int cheapestPrice = DFS(adjList, DP, src, k, dst);
+        return cheapestPrice == INT_MAX ? -1 : cheapestPrice;
+    }
+    
+    int DFS(vector<vector<pair<int,int>>>& adjList, vector<vector<int>>& DP, int node, int stop, int dst) {
+        if(node == dst) return 0;
+        if(stop < 0) return INT_MAX;
+        if(DP[node][stop] > -1) return DP[node][stop];
+        
+        int minPrice = INT_MAX;
+        for(int i = 0; i < adjList[node].size(); i++) {
+            int price = DFS(adjList, DP, adjList[node][i].first, stop - 1, dst);
+            price = price == INT_MAX ? INT_MAX : price + adjList[node][i].second;
+            minPrice = min(minPrice, price);
+        }
+        
+        return DP[node][stop] = minPrice;
+    }
+};
