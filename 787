@@ -65,3 +65,24 @@ public:
         return DP[node][stop] = minPrice;
     }
 };
+
+
+// Bellman Ford Solution: TC O(k * E), SC O(V)
+
+class Solution {
+public:
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
+        vector<int> distancePrev(n, INT_MAX), distanceNew(n, INT_MAX);
+        distancePrev[src] = 0, distanceNew[src] = 0;
+       
+        for(int i = 0; i < k + 1; i++) {
+            for(int j = 0; j < flights.size(); j++) {
+                int dU = distancePrev[flights[j][0]], dV = distancePrev[flights[j][1]], dW = flights[j][2];
+                if(dU == INT_MAX) continue;
+                if(dU + dW <= distanceNew[flights[j][1]]) distanceNew[flights[j][1]] = dU + dW;
+            }
+            distancePrev = distanceNew;
+        }
+        return distanceNew[dst] == INT_MAX ? -1 : distanceNew[dst];
+    }
+};
