@@ -1,0 +1,30 @@
+// TC O(N), SC O(1)
+
+/* The knows API is defined for you.
+      bool knows(int a, int b); */
+
+class Solution {
+public:
+    int findCelebrity(int n) {
+        // if knows(a, b), then a cannot be a celebrity. He knows someone.
+        // if !knows(a, b), then b cannot be a celebrity. There is someone who doesn't know him.
+        
+        // Eliminate celebrity candidates. This is the key step. We eliminate all the nodes, except one as candidate
+        // in O(N) time. 
+        
+        int currCelebrity = 0;
+        
+        for(int i = 0; i < n; i++) {
+            if(currCelebrity == i) continue;
+            if(knows(currCelebrity, i)) currCelebrity = i;
+        }
+        
+        for(int i = 0; i < n; i++) {
+            if(currCelebrity == i) continue;
+            if(!knows(i, currCelebrity) || knows(currCelebrity, i)) return -1;
+            
+        }
+        
+        return currCelebrity;
+    }
+};
