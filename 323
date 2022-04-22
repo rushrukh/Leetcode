@@ -4,13 +4,14 @@ class Solution {
 public:
     int countComponents(int n, vector<vector<int>>& edges) {
         vector<vector<int>> adjList(n);
-        vector<bool> visited (n, false);
-        int result = 0;
         
         for(auto edge: edges) {
             adjList[edge[0]].push_back(edge[1]);
             adjList[edge[1]].push_back(edge[0]);
         }
+        
+        vector<bool> visited (n, false);
+        int result = 0;
         
         for(int i = 0; i < n; i++) {
             if(!visited[i]) {
@@ -25,7 +26,7 @@ public:
     void DFS(vector<vector<int>>& adjList, int currentNode, vector<bool>& visited) {
         visited[currentNode] = true;
         
-        for(int i = 0; i < adjList[currentNode].size(); i++)
+        for(int i = 0; i < adjList[currentNode].size(); i++) 
             if(!visited[adjList[currentNode][i]])
                 DFS(adjList, adjList[currentNode][i], visited);
     }
