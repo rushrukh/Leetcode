@@ -36,11 +36,11 @@ class Solution {
 public:
     int maxDepth(Node* root) {
         if(!root) return 0;
-        
         int result = 0;
         
-        for(int i = 0; i < root -> children.size(); i++)
+        for(int i = 0; i < root -> children.size(); i++) {
             result = max(result, maxDepth(root -> children[i]));
+        }
         
         return result + 1;
     }
