@@ -3,13 +3,12 @@
 class Solution {
 public:
     bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
-        vector<vector<int>> adjList (numCourses);
+        vector<vector<int>> adjList(numCourses);
         
-        for(auto& x: prerequisites)
-            adjList[x[0]].push_back(x[1]);
+        for(int i = 0; i < prerequisites.size(); i++) 
+            adjList[prerequisites[i][0]].push_back(prerequisites[i][1]);
         
-        unordered_set<int> visited;
-        
+        vector<bool> visited(numCourses, false);
         for(int i = 0; i < adjList.size(); i++) {
             bool result = DFS(adjList, visited, i);
             if(!result) return false;
@@ -17,20 +16,16 @@ public:
         
         return true;
     }
-    
-    bool DFS(vector<vector<int>>& adjList, unordered_set<int>& visited, int course) {
-        if(visited.find(course) != visited.end()) return false;
-        if(!adjList[course].size()) return true;
+    bool DFS(vector<vector<int>>& adjList, vector<bool>& visited, int currNode) {
+        if(!adjList[currNode].size()) return true;      //returning if adjList is empty - takes care of false cycle in the graph.
+        if(visited[currNode]) return false;
+        visited[currNode] = true;
         
-        visited.insert(course);
-        
-        for(int i = 0; i < adjList[course].size(); i++) {
-            bool tmp = DFS(adjList, visited, adjList[course][i]);
-            if(!tmp) return tmp;
+        for(int i = 0; i < adjList[currNode].size(); i++) {
+            bool result = DFS(adjList, visited, adjList[currNode][i]);
+            if(!result) return false;
         }
-        
-        adjList[course].clear();
-        visited.erase(visited.find(course));
+        adjList[currNode].clear();
         
         return true;
     }
