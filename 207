@@ -1,12 +1,13 @@
 // TC O(N + E), SC O(N + E)
 
-class Solution {
+ class Solution {
 public:
     bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
         vector<vector<int>> adjList(numCourses);
         
-        for(int i = 0; i < prerequisites.size(); i++) 
+        for(int i = 0; i < prerequisites.size(); i++) {
             adjList[prerequisites[i][0]].push_back(prerequisites[i][1]);
+        }
         
         vector<bool> visited(numCourses, false);
         for(int i = 0; i < adjList.size(); i++) {
@@ -17,7 +18,7 @@ public:
         return true;
     }
     bool DFS(vector<vector<int>>& adjList, vector<bool>& visited, int currNode) {
-        if(!adjList[currNode].size()) return true;      //returning if adjList is empty - takes care of false cycle in the graph.
+        if(!adjList[currNode].size()) return true;
         if(visited[currNode]) return false;
         visited[currNode] = true;
         
@@ -31,8 +32,11 @@ public:
     }
 };
 
+
+
 // 1. Create Adjacency List: there will be n items in the list. Each one of those will have the prerequisite courses listed.
+
 // 2. We will visit all the courses.
 // 3. For each course, we will visit all its prerequisites.
 // 4. Before that, we will check if the course that we are now visiting, has it already been visited?
-// If yes, that means we are in a cycle, return false;
+//    If yes, that means we are in a cycle, return false;
