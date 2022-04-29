@@ -3,18 +3,17 @@
 class Solution {
 public:
     int subarraySum(vector<int>& nums, int k) {
-        unordered_map<int, int> runningSumCount;
-        runningSumCount[0] = 1;
-        int runningSum = 0, subArrayCount = 0;
+        unordered_map<int, int> hash;
+        hash[0] = 1;
+        int sum = 0, subarrayCount = 0;
         
-        for(int i = 0; i < nums.size(); i++) {
-            runningSum += nums[i];
-            
-            if(runningSumCount[runningSum - k] > 0) 
-                subArrayCount += runningSumCount[runningSum - k];
-            
-            runningSumCount[runningSum]++;
+        for(auto &num: nums) {
+            sum += num;
+            if(hash[sum - k] > 0) {
+                subarrayCount += hash[sum - k];
+            }
+            hash[sum]++;
         }
-        return subArrayCount;
+        return subarrayCount;
     }
 };
