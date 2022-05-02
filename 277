@@ -9,8 +9,7 @@ public:
         // if knows(a, b), then a cannot be a celebrity. He knows someone.
         // if !knows(a, b), then b cannot be a celebrity. There is someone who doesn't know him.
         
-        // Eliminate celebrity candidates. This is the key step. We eliminate all the nodes, except one as candidate
-        // in O(N) time. 
+        // Eliminate celebrity candidates:
         
         int currCelebrity = 0;
         
