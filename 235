@@ -1,31 +1,15 @@
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- * };
- */
+// TC O(h), SC O(N)
 
 class Solution {
 public:
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        int larger = max(p -> val, q -> val);
-        int smaller = min(p -> val, q -> val);
+        if(!root || root == p || root == q) return root;
         
-        if(root -> val == larger || root -> val == smaller) {
-            return root;
-        }
-        if(larger > root -> val && smaller < root -> val) {
-            return root;
-        }
-        if(larger < root -> val) 
-            return lowestCommonAncestor(root -> left, p, q);
+        int maxVal = max(p -> val, q -> val);
+        int minVal = min(p -> val, q -> val);
         
-        if(smaller > (root -> val)) 
-            return lowestCommonAncestor(root -> right, p, q);
-        
-        return root;
+        if(minVal < root -> val && root -> val < maxVal) return root;
+        else if (minVal > root -> val) return lowestCommonAncestor(root -> right, p, q);
+        else return lowestCommonAncestor(root -> left, p, q);
     }
 };
