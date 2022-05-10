@@ -1,4 +1,4 @@
-// TC O(h), SC O(N)
+// TC O(h), SC O(N) (Due to recursion stack, the iterative solution has SC of O(1)
 
 class Solution {
 public:
@@ -11,5 +11,24 @@ public:
         if(minVal < root -> val && root -> val < maxVal) return root;
         else if (minVal > root -> val) return lowestCommonAncestor(root -> right, p, q);
         else return lowestCommonAncestor(root -> left, p, q);
+    }
+};
+
+// TC O(h), SC O(1) (Iterative Solution)
+
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        TreeNode* tmp = root;
+        int maxVal = max(p -> val, q -> val);
+        int minVal = min(p -> val, q -> val);
+        
+        while(tmp) {
+            if(tmp == p || tmp == q || (minVal < tmp -> val && tmp -> val < maxVal)) return tmp;
+            else if(minVal > tmp -> val) tmp = tmp -> right;
+            else tmp = tmp -> left;
+        }
+        
+        return NULL;
     }
 };
