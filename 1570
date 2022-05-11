@@ -44,7 +44,7 @@ public:
 
 // Hash solution is good, but it may result in a ton of hashing operations. A better approach is to use array of pairs (idx, val).
 // TC: O(N) for creating the hashmap where N is the size of the vector, O(L) for the dot product where L is the number of non-zero elements
-// SC: O(L) for storing the hashmap
+// SC: O(L) for storing the pairs
 
 class SparseVector {
 public:
@@ -72,3 +72,45 @@ public:
     }
 };
 
+
+// TC: O(min(m, n) * log(max(m, n))), SC: O(L) where L is the number of non-zero elements
+
+class SparseVector {
+public:
+    vector<pair<int,int>> pairs;
+    SparseVector(vector<int> &nums) {
+        for (int i = 0; i < nums.size(); i++)
+            if (nums[i]) 
+                pairs.push_back({i, nums[i]});
+    }
+    
+    // Return the dotProduct of two sparse vectors
+    int dotProduct(SparseVector& vec) {
+        vector<pair<int, int>> smaller, larger;
+        if(pairs.size() < vec.pairs.size()) {
+            smaller = pairs;
+            larger = vec.pairs;
+        }
+        else {
+            smaller = vec.pairs;
+            larger = pairs;
+        }
+        
+        int result = 0;
+        for(auto sPair: smaller) {
+            int left = 0, right = larger.size() - 1;
+            
+            while(left <= right) {
+                int mid = left + (right - left) / 2;
+                if(larger[mid].first == sPair.first) {
+                    result += sPair.second * larger[mid].second;
+                    break;
+                }
+                else if(sPair.first < larger[mid].first) right = mid - 1;
+                else left = mid + 1;
+            }
+        }
+        
+        return result;
+    }
+};
