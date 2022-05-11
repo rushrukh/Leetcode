@@ -40,3 +40,35 @@ public:
         return result;
     }
 };
+
+
+// Hash solution is good, but it may result in a ton of hashing operations. A better approach is to use array of pairs (idx, val).
+// TC: O(N) for creating the hashmap where N is the size of the vector, O(L) for the dot product where L is the number of non-zero elements
+// SC: O(L) for storing the hashmap
+
+class SparseVector {
+public:
+    vector<pair<int,int>> pairs;
+    SparseVector(vector<int> &nums) {
+        for (int i = 0; i < nums.size(); i++)
+            if (nums[i]) 
+                pairs.push_back({i, nums[i]});
+    }
+    
+    // Return the dotProduct of two sparse vectors
+    int dotProduct(SparseVector& vec) {
+        int p = 0, q = 0, result = 0;
+        
+        while(p < pairs.size() && q < vec.pairs.size()) {
+            if (pairs[p].first == vec.pairs[q].first) {
+                result += pairs[p].second * vec.pairs[q].second;
+                p++; q++;
+            }
+            else if (pairs[p].first < vec.pairs[q].first) p++;
+            else q++;
+        }
+        
+        return result;
+    }
+};
+
