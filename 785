@@ -1,0 +1,49 @@
+// TC O(V + E), SC O(V) - to store the colors [BFS Implementation]
+
+class Solution {
+public:
+    bool isBipartite(vector<vector<int>>& graph) {
+        vector<int> color (graph.size(), -1);
+        queue<int> Q;
+        Q.push(0);
+        
+        for(int x = 0; x < graph.size(); x++) {
+            if(color[x] == -1) {
+                color[x] = 0;
+                Q.push(x);
+                while(!Q.empty()) {
+                    int node = Q.front();
+                    Q.pop();
+
+                    for(int i = 0; i < graph[node].size(); i++) {
+                        if(color[graph[node][i]] == -1) {
+                            color[graph[node][i]] = color[node] ^ 1;
+                            Q.push(graph[node][i]);
+                        }
+                        else {
+                            if(color[graph[node][i]] == color[node]) return false;
+                        }
+                    }
+                }
+            }
+            
+        }
+        
+        return true;
+    }
+};
+
+// 0 - blue
+// 1 - red
+// take one node
+//      if no color assigned, assign 0
+//          then visit it's neighbors one by one, assign them color to be 1            
+//      else take its color
+//          then visit it's neighbors one by one, assign them the opposite color
+
+//  while visiting adjacent nodes for one guy, keep a check to see if the neighbor already has a color
+//  if the color is opposite to the main guy, good work, keep it up
+//  else, woah return false
+
+// use a queue to decide what to visit next
+// use color array to decide if the node has been visited already.
