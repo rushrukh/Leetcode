@@ -33,6 +33,41 @@ public:
     }
 };
 
+// Iterative Stack Solution:
+
+class Solution {
+public:
+    bool isBipartite(vector<vector<int>>& graph) {
+        vector<int> color (graph.size(), -1);
+        stack<int> stk;
+        
+        for(int x = 0; x < graph.size(); x++) {
+            if(color[x] == -1) {
+                color[x] = 0;
+                stk.push(x);
+                while(!stk.empty()) {
+                    int node = stk.top();
+                    stk.pop();
+
+                    for(int i = 0; i < graph[node].size(); i++) {
+                        if(color[graph[node][i]] == -1) {
+                            color[graph[node][i]] = color[node] ^ 1;
+                            stk.push(graph[node][i]);
+                        }
+                        else {
+                            if(color[graph[node][i]] == color[node]) return false;
+                        }
+                    }
+                }
+            }
+            
+        }
+        
+        return true;
+    }
+};
+
+
 // 0 - blue
 // 1 - red
 // take one node
