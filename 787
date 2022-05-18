@@ -86,3 +86,45 @@ public:
         return distanceNew[dst] == INT_MAX ? -1 : distanceNew[dst];
     }
 };
+
+
+// BFS Solution: TC O(E * k), SC O(V^2) because of adjacency matrice
+
+class Solution {
+public:
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {   
+        vector<vector<pair<int,int>>> adjList (n);
+        vector<int> minDistance(n, INT_MAX);
+        
+        for(auto &flight: flights) adjList[flight[0]].push_back({flight[1], flight[2]});
+        
+        queue<vector<int>> Q;
+        Q.push({src, 0, 0}); // node, distance from src, number of stops;
+        minDistance[src] = 0;
+        
+        while(!Q.empty()) {
+            int qSize = Q.size();
+            int level = 0;
+            for(int x = 0; x < Q.size() && level < k + 1; x++) {
+                int currentCity = Q.front()[0];
+                int dU = Q.front()[1];
+                int stops = Q.front()[2];
+
+                minDistance[currentCity] = dU < minDistance[currentCity] ? dU : minDistance[currentCity];
+
+                Q.pop();
+
+                if(stops < k + 1) {
+                    for(int i = 0; i < adjList[currentCity].size(); i++) {
+                        if(dU + adjList[currentCity][i].second < minDistance[adjList[currentCity][i].first])
+                            Q.push({adjList[currentCity][i].first, adjList[currentCity][i].second + dU, stops + 1});
+                    }
+                }
+                
+                level++;
+            }
+        }
+        
+        return minDistance[dst] == INT_MAX ? -1 : minDistance[dst];
+    }
+};
