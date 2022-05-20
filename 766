@@ -12,3 +12,24 @@ public:
 };
 
 // Follow-up 1: only one row of matrix can be loaded into memory
+
+// TC: O(M * N) - we visit every idx once. SC: O(M) - storing the rows.
+
+class Solution {
+public:
+    bool isToeplitzMatrix(vector<vector<int>>& matrix) {
+        deque<int> Q;
+        
+        for(int i = 0; i < matrix[0].size(); i++)
+            Q.push_back(matrix[0][i]);
+        
+        for(int i = 1; i < matrix.size(); i++) {
+            Q.pop_back();
+            Q.push_front(matrix[i][0]);
+            
+            for(int j = 1; j < matrix[0].size(); j++)
+                if(Q[j] != matrix[i][j]) return false;
+        }
+        return true;
+    }
+};
