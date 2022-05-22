@@ -1,0 +1,39 @@
+// TC: O(N), SC: O(1)
+
+class Solution {
+public:
+    bool validWordAbbreviation(string word, string abbr) {
+        if(word.size() < abbr.size()) return false;
+        int i = 0, j = 0, substr = 1;
+        
+        while(i < word.size()) {
+            if(word[i] == abbr[j]) {
+                i++; j++;
+                continue;
+            }
+            else if((word[i] != abbr[j] && 'a' <= abbr[j] && abbr[j] <= 'z') || j >= abbr.size()) return false;
+            else {
+                substr = 0;
+                if(abbr[j] == '0') return false;
+                
+                while('0' <= abbr[j] && abbr[j] <= '9') {
+                    cout << abbr[j] << " " << word[i] << endl;
+                    substr *= 10;
+                    substr += int(abbr[j] - '0');
+                    j++;
+                }
+            }
+            
+            if(substr > 0) {
+                if(substr + i > word.size()) return false;
+                
+                i += substr;
+                substr = 0;
+            }
+        }
+        
+        if(i < word.size() || j < abbr.size()) return false;
+        return true;
+    }
+};
+
