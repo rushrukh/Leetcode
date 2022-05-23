@@ -17,7 +17,6 @@ public:
                 if(abbr[j] == '0') return false;
                 
                 while('0' <= abbr[j] && abbr[j] <= '9') {
-                    cout << abbr[j] << " " << word[i] << endl;
                     substr *= 10;
                     substr += int(abbr[j] - '0');
                     j++;
@@ -36,4 +35,3 @@ public:
         return true;
     }
 };
-
