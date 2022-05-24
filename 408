@@ -35,3 +35,28 @@ public:
         return true;
     }
 };
+
+
+// TC O(N), SC O(1): Better Code
+
+class Solution {
+public:
+    bool validWordAbbreviation(string word, string abbr) {
+        int i = 0, j = 0;
+        
+        while(i < word.size() && j < abbr.size()) {
+            if (word[i] != abbr[j] && (abbr[j] <= '0' || abbr[j] > '9')) return false;
+            else if (abbr[j] > '0' && abbr[j] <= '9') {
+                int startIndex = j;
+                while (abbr[j] >= '0' && abbr[j] <= '9') j++;
+                int abbreviationLength = stoi(abbr.substr(startIndex, j - startIndex));
+                i += abbreviationLength;
+            }
+            else {
+                i++; j++;
+            }
+        }
+        
+        return i == word.size() && j == abbr.size();
+    }
+};
