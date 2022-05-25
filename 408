@@ -48,8 +48,11 @@ public:
             if (word[i] != abbr[j] && (abbr[j] <= '0' || abbr[j] > '9')) return false;
             else if (abbr[j] > '0' && abbr[j] <= '9') {
                 int startIndex = j;
+                
                 while (abbr[j] >= '0' && abbr[j] <= '9') j++;
+                
                 int abbreviationLength = stoi(abbr.substr(startIndex, j - startIndex));
+                
                 i += abbreviationLength;
             }
             else {
