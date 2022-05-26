@@ -18,3 +18,30 @@ public:
         return prefix_sum.size() - 1;
     }
 };
+
+// TC O(N), O(logN) for pickIndex, SC O(N)
+
+class Solution {
+public:
+    vector<int> prefix_sum;
+    Solution(vector<int>& index_probabilities) {
+        for(auto idx_probability: index_probabilities)
+            prefix_sum.push_back(prefix_sum.empty() ? idx_probability : idx_probability + prefix_sum.back());
+    }
+    
+    int pickIndex() {
+        float random_number = (float) rand() / RAND_MAX;
+        float target = random_number * prefix_sum.back();
+        
+        int low = 0, high = prefix_sum.size();
+        
+        while(low < high) {
+            int mid = low + (high - low) / 2;
+            
+            if(target > prefix_sum[mid]) low = mid + 1;
+            else high = mid;
+        }
+        
+        return low;
+    }
+};
