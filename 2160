@@ -1,4 +1,4 @@
-// TC O(n logn), SC O(1)
+// TC O(n logn), SC O(1) || works with only 4 digit numbers
 
 class Solution {
 public:
@@ -7,5 +7,33 @@ public:
         sort(num_str.begin(), num_str.end());
         
         return ((num_str[0] - '0') * 10) + (num_str[3] - '0') + ((num_str[1] - '0') * 10) + (num_str[2] - '0');
+    }
+};
+
+
+// TC O(n logn), SC O(1) || works with any number of digit numbers
+
+class Solution {
+public:
+    int minimumSum(int num) {
+        string num_str = to_string(num);
+        sort(num_str.begin(), num_str.end(), greater<int>());
+        
+        int position = 0, result = 0;
+        bool even_iteration = false;
+        
+        for(int i = 0; i < num_str.length(); i++) {
+            result += (num_str[i] - '0') * pow(10, position);
+            
+            if(even_iteration) {
+                even_iteration = false;
+                position++;
+            }
+            else {
+                even_iteration = true;
+            }
+        }
+        
+        return result;
     }
 };
