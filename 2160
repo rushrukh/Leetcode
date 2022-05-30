@@ -1,0 +1,11 @@
+// TC O(n logn), SC O(1)
+
+class Solution {
+public:
+    int minimumSum(int num) {
+        string num_str = to_string(num);
+        sort(num_str.begin(), num_str.end());
+        
+        return ((num_str[0] - '0') * 10) + (num_str[3] - '0') + ((num_str[1] - '0') * 10) + (num_str[2] - '0');
+    }
+};
