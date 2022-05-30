@@ -1,0 +1,49 @@
+// TC O(N), SC O(N)
+
+class Solution {
+public:
+    int calculate(string s) {
+        stack<int> S;
+        int current_number = 0;
+        char operation = '+';
+
+        for(int i = 0; i < s.length(); i++) {
+            char current_char = s[i];
+            
+            if(isdigit(current_char)) {
+                current_number = current_number * 10 + (current_char - '0');
+            }
+            if(!isdigit(current_char) && !iswspace(current_char) || i == s.length() - 1) {
+                if(operation == '+') {
+                    S.push(current_number);
+                }
+                else if(operation == '-') {
+                    S.push(-(current_number));
+                }
+                else if(operation == '*') {
+                    int operand_one = S.top();
+                    S.pop();
+                    S.push(operand_one * current_number);
+                }
+                else if(operation == '/'){
+                    int operand_one = S.top();
+                    S.pop();
+                    S.push(operand_one / current_number);
+                }
+                
+                operation = current_char;
+                current_number = 0;
+            }
+            
+        }
+
+        int result = 0;
+        
+        while(!S.empty()) {
+            result += S.top();
+            S.pop();
+        }
+        
+        return result;
+    }
+};
