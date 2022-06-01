@@ -1,0 +1,28 @@
+// SC O(N), TC O(N)
+
+class Solution {
+public:
+    string customSortString(string order, string s) {
+        int hash[26] = {0};
+        string result = "";
+        
+        for(auto &x: s)
+            hash[x - 'a']++;
+        
+        for(auto &x: order) {
+            while(hash[x - 'a'] > 0) {
+                result += x;
+                hash[x - 'a']--;
+            }
+        }
+        
+        for(int i = 0; i < 26; i++) {
+            while(hash[i] > 0) {
+                result += 'a' + i;
+                hash[i]--;
+            }
+        }
+            
+        return result;
+    }
+};
