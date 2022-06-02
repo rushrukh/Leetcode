@@ -4,37 +4,40 @@ class Solution {
 public:
     string simplifyPath(string path) {
         vector<string> components;
-        string tmp = "", result = "";
         stack<string> S;
+        string tmp = "", result = "";
         
-        for(auto x: path) {
-            if(x == '/' && tmp != "") {
+        for(auto &c: path) {
+            if(c == '/') {
                 components.push_back(tmp);
                 tmp = "";
             }
-            else if(x != '/') tmp.push_back(x);
-        }
-        if(tmp.size()) components.push_back(tmp);
-        
-        for(auto component: components) {
-            if(component == "..") {
-                if(!S.empty()) 
-                    S.pop();
+            else {
+                tmp += c;
             }
-            
-            else if(component == "." || component == "" || component == " ") 
-                continue;
-            
-            else 
-                S.push(component);
-            
+        }
+        
+        if(tmp.size()) components.push_back(tmp);
+
+        for(auto &component: components) {
+            if(component == "..") {
+              if(!S.empty()) S.pop();
+            } 
+            else if(component == "." || component == "") continue;
+            else S.push(component);
         }
         
         while(!S.empty()) {
-            result = '/' + S.top() + result;
+            cout << S.top() << endl;
+            result = "/" + S.top() + result;
             S.pop();
         }
         
-        return result.size() == 0 ? "/" : result;     
+        return result.size() == 0 ? "/" : result;
     }
 };
+
+// Edge Cases:
+// 1. The last component may not be stored if the original string does not end with a '/'
+// 2. We pop the stack once if we see "..". What if the stack is empty?
+// 3. Think why we need a stack
