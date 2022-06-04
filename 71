@@ -40,4 +40,3 @@ public:
 // Edge Cases:
 // 1. The last component may not be stored if the original string does not end with a '/'
 // 2. We pop the stack once if we see "..". What if the stack is empty?
-// 3. Think why we need a stack
