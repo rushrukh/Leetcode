@@ -4,6 +4,7 @@ class Solution {
 public:
     Node *first = NULL, *last = NULL;
     Node* treeToDoublyList(Node* root) {
+        if(!root) return root;
         Node* tmp = treeToDoublyListHelper(root);
         first -> left = last;
         last -> right = first;
@@ -14,10 +15,8 @@ public:
         if(!root) return root;
         treeToDoublyListHelper(root -> left);
         
-        
-        if(!root -> left && !root -> right && !first) {
+        if(!first)
             first = root;
-        }
         
         if(last) {
             root -> left = last;
