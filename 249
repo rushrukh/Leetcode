@@ -2,29 +2,30 @@
 
 class Solution {
 public:
-    char shift_char(char c, int number_of_shifts) {
-        return (c - 'a' - number_of_shifts + 26) % 26 + 'a';
+    char shift_char(char c, int shift_key) {
+        return (c - 'a' + 26 - shift_key) % 26 + 'a';
     }
-    int calc_number_of_shifts (char c) {
+    int get_shift_key(char c) {
         return c - 'a';
     }
     vector<vector<string>> groupStrings(vector<string>& strings) {
         unordered_map<string, vector<string>> hash;
         vector<vector<string>> result;
         
-        for(auto &str: strings) {
-            int number_of_shifts = calc_number_of_shifts(str[0]);
-            string tmp = "";
-            for(auto c: str) {
-                tmp += shift_char(c, number_of_shifts);
+        for(string &str: strings) {
+            int shift_key = get_shift_key(str[0]);
+            cout << "shift_key: " << shift_key << endl;
+            string hashed_str = "";
+            for(char &c: str) {
+                hashed_str += shift_char(c, shift_key);
             }
             
-            hash[tmp].push_back(str);
+            cout << hashed_str << endl;
+            hash[hashed_str].push_back(str);
         }
         
-        for(auto vec: hash) {
+        for(auto &vec: hash)
             result.push_back(vec.second);
-        }
         
         return result;
     }
