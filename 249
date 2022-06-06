@@ -1,0 +1,31 @@
+// TC O(N + k), SC O(N + k)
+
+class Solution {
+public:
+    char shift_char(char c, int number_of_shifts) {
+        return (c - 'a' - number_of_shifts + 26) % 26 + 'a';
+    }
+    int calc_number_of_shifts (char c) {
+        return c - 'a';
+    }
+    vector<vector<string>> groupStrings(vector<string>& strings) {
+        unordered_map<string, vector<string>> hash;
+        vector<vector<string>> result;
+        
+        for(auto &str: strings) {
+            int number_of_shifts = calc_number_of_shifts(str[0]);
+            string tmp = "";
+            for(auto c: str) {
+                tmp += shift_char(c, number_of_shifts);
+            }
+            
+            hash[tmp].push_back(str);
+        }
+        
+        for(auto vec: hash) {
+            result.push_back(vec.second);
+        }
+        
+        return result;
+    }
+};
