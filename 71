@@ -9,26 +9,33 @@ public:
         
         for(auto &c: path) {
             if(c == '/') {
-                components.push_back(tmp);
+                if(tmp != "") components.push_back(tmp);
                 tmp = "";
             }
             else {
-                tmp += c;
+                tmp += c;        
             }
         }
         
-        if(tmp.size()) components.push_back(tmp);
-
+        if(tmp != "") {
+            components.push_back(tmp);
+        }
+        
         for(auto &component: components) {
             if(component == "..") {
-              if(!S.empty()) S.pop();
-            } 
-            else if(component == "." || component == "") continue;
-            else S.push(component);
+                if(!S.empty()) {
+                    S.pop();
+                }
+            }
+            else if(component == ".") {
+                continue;
+            }
+            else {
+                S.push(component);
+            }
         }
         
         while(!S.empty()) {
-            cout << S.top() << endl;
             result = "/" + S.top() + result;
             S.pop();
         }
