@@ -36,9 +36,9 @@ public:
     Node* treeToDoublyList(Node* root) {
         if(!root) return root;
         
-        Node* head = new Node();
-        Node* prev = head;
-        Node* curr = root;
+        Node *curr = root;
+        Node *head = new Node();
+        Node *prev = head;
         
         while(curr) {
             if(!curr -> left) {
@@ -48,12 +48,13 @@ public:
                 curr = curr -> right;
             }
             else {
-                Node *inorder_predecessor = curr -> left;
-                while(inorder_predecessor -> right)
-                    inorder_predecessor = inorder_predecessor -> right;
+                Node *predecessor = curr -> left;
+                while(predecessor -> right)
+                    predecessor = predecessor -> right;
                 
-                if(!inorder_predecessor -> right) {
-                    inorder_predecessor -> right = curr;
+                if(!predecessor -> right) {
+                    predecessor -> right = curr;
+                    
                     Node *tmp = curr -> left;
                     curr -> left = NULL;
                     curr = tmp;
@@ -62,8 +63,9 @@ public:
         }
         
         head = head -> right;
-        prev -> right = head;
         head -> left = prev;
+        prev -> right = head;
+        
         return head;
     }
 };
