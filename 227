@@ -3,41 +3,37 @@
 class Solution {
 public:
     int calculate(string s) {
-        stack<int> S;
-        int current_number = 0;
+        int current = 0, result = 0;
         char operation = '+';
-
-        for(int i = 0; i < s.length(); i++) {
-            char current_char = s[i];
-            
-            if(isdigit(current_char)) {
-                current_number = current_number * 10 + (current_char - '0');
+        stack<int> S;
+        
+        for(int i = 0; i < s.size(); i++) {
+            if(isdigit(s[i])) {
+                current *= 10;
+                current += s[i] - '0';
             }
-            if(!isdigit(current_char) && !iswspace(current_char) || i == s.length() - 1) {
+            if(!isdigit(s[i]) && !isspace(s[i]) || i == s.size() - 1) {
                 if(operation == '+') {
-                    S.push(current_number);
+                    S.push(current);           
                 }
                 else if(operation == '-') {
-                    S.push(-(current_number));
+                    S.push(-current);
                 }
                 else if(operation == '*') {
-                    int operand_one = S.top();
+                    int first = S.top();
                     S.pop();
-                    S.push(operand_one * current_number);
+                    S.push(first * current);
                 }
-                else if(operation == '/'){
-                    int operand_one = S.top();
+                else if(operation == '/') {
+                    int first = S.top();
                     S.pop();
-                    S.push(operand_one / current_number);
+                    S.push(first / current);
                 }
                 
-                operation = current_char;
-                current_number = 0;
+                current = 0;
+                operation = s[i];
             }
-            
         }
-
-        int result = 0;
         
         while(!S.empty()) {
             result += S.top();
