@@ -5,27 +5,27 @@ public:
     Node *first = NULL, *last = NULL;
     Node* treeToDoublyList(Node* root) {
         if(!root) return root;
-        Node* tmp = treeToDoublyListHelper(root);
+        
+        helper(root);
         first -> left = last;
         last -> right = first;
         
         return first;
     }
-    Node* treeToDoublyListHelper(Node* root) {
-        if(!root) return root;
-        treeToDoublyListHelper(root -> left);
+    
+    void helper(Node* root) {
+        if(!root) return;
+        helper(root -> left);
         
-        if(!first)
-            first = root;
+        if(!first) first = root;
         
         if(last) {
-            root -> left = last;
             last -> right = root;
+            root -> left = last;
         }
-        last = root;
         
-        treeToDoublyListHelper(root -> right);
-        return first;
+        last = root;
+        helper(root -> right);
     }
 };
 
