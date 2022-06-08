@@ -1,0 +1,37 @@
+// TC O(N), SC O(N)
+
+class Solution {
+public:
+    int shortestPathBinaryMatrix(vector<vector<int>>& grid) {
+        int m = grid.size(), n = grid[0].size(), result = INT_MAX;
+        if(grid[0][0]|| grid[m - 1][n - 1]) return -1;
+        
+        vector<pair<int,int>> directions = {{-1,-1}, {-1,0}, {-1,1}, {0,-1}, {0,1}, {1,-1}, {1,0}, {1,1}};
+        vector<vector<bool>> visited (m, vector<bool> (n, false));
+        queue<vector<int>> Q;
+        Q.push({0, 0, 0});
+        visited[0][0] = true;
+        
+        while(!Q.empty()) {
+            int i = Q.front()[0], j = Q.front()[1], length = Q.front()[2];
+            Q.pop();
+            visited[i][j] = true;
+            length++;
+            
+            if(i == m - 1 && j == n - 1) {
+                result = min(result, length);
+                return result;
+            }
+
+            for(auto &direction: directions) {
+                int x = direction.first, y = direction.second;
+                if(i + x < m && i + x >= 0 && j + y < n && j + y >= 0 && !grid[i + x][j + y] && !visited[i + x][j + y]) {
+                    Q.push({i + x, j + y, length});
+                    visited[i + x][j + y] = true;
+                }
+            }
+        }
+        
+        return result == INT_MAX ? -1 : result;
+    }
+};
