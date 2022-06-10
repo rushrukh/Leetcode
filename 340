@@ -1,0 +1,52 @@
+// TC O(Nk), SC O(1)
+
+class Solution {
+public:
+    int lengthOfLongestSubstringKDistinct(string s, int k) {
+        int left = 0, right = 0, n = s.size(), num_chars = 0, length = INT_MIN;
+        vector<int> hash (26, -1);
+        
+        while(right < n) {
+            if(hash[s[right] - 'a'] > -1) {
+                // seen this character before, hence just updating it's rightmost occurrence in the hash
+                hash[s[right] - 'a'] = right;
+            }
+            else {
+                // haven't seen this character before, hence considering two cases.
+                
+                // 1. considering the new character does not make us exceed k
+                if(num_chars < k) {
+                    hash[s[right] - 'a'] = right;
+                    num_chars++;
+                }
+                
+                // 2. exceeds k, we need to discard one character from the window and add a new one
+                else {
+                    // Finding the char in s where all of its occurrences end as left as possible.
+                    int min_idx = 0, min_val = INT_MAX;
+                    for(int i = 0; i < 26; i++) {
+                        if(hash[i] > -1) {
+                            if(hash[i] < min_val) {
+                                min_val = hash[i];
+                                min_idx = i;
+                            }
+                        }
+                    }
+                    
+                    // We shift the left pointer after that index to shrink the window.
+                    left = min_val + 1;
+                    // Get rid of the old character in the hash
+                    hash[min_idx] = -1; 
+                    // Add the new character in the hash
+                    hash[s[right] - 'a'] = right;
+                }
+            }
+
+            // at each iteration, we track the max length possible. 
+            length = max(length, right - left + 1);
+            right++;
+        }
+        
+        return length;
+    }
+};
