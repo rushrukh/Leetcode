@@ -1,0 +1,53 @@
+// TC O(N), SC O(1)
+
+class Solution {
+public:
+    int totalFruit(vector<int>& fruits) {
+        int max_trees = INT_MIN, left = 0, right = 0;
+        unordered_map<int, int> hash;
+        
+        while(right < fruits.size()) {
+            // see if the fruit is in hash
+            if(hash.find(fruits[right]) != hash.end()) {
+                // fruit exists in one of the baskets
+                // update the idx of the fruit in the hash (we track the rightmost idx)
+                hash[fruits[right]] = right;
+            }
+            else {
+                // fruit does not exist in either of the baskets
+                // Two possible cases:
+                // 1. We have space in the basket
+                // 2. We don't have space in the basket
+                
+                if(hash.size() < 2) {
+                    // basket size is either 0 or 1, we can have one more type of fruit
+                    hash[fruits[right]] = right;
+                }
+                else {
+                    // basket size is 2. We don't have any empty basket for this new type of fruit
+                    // That means we have to clear one basket
+                    // Ideally, we want to clear the basket which has fruit
+                    // that exists towards the left end of the array. That means, the idx in the hash
+                    // will be minimum for that fruit.
+                    
+                    int fruit_type = 0, fruit_index = INT_MAX;
+                    for(auto &pair: hash) {
+                        if(pair.second < fruit_index) {
+                            fruit_index = pair.second; // use it to set new left marker for the sliding window
+                            fruit_type = pair.first; // use it to remove that entry from hash, hash is our basket.
+                        }
+                    }
+                    
+                    left = fruit_index + 1;
+                    hash.erase(fruit_type);
+                    hash[fruits[right]] = right;
+                }
+            }
+            
+            max_trees = max(max_trees, right - left + 1);
+            right++;
+        }
+        
+        return max_trees;
+    }
+};
