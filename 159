@@ -1,0 +1,50 @@
+// TC O(N), SC O(1)
+
+class Solution {
+public:
+    int lengthOfLongestSubstringTwoDistinct(string s) {
+        int left = 0, right = 0, length = INT_MIN;
+        unordered_map<char, int> hash;
+        
+        while(right < s.size()) {
+            if(hash.find(s[right]) != hash.end()) {
+                // alphabet exists in the current window
+                // update the idx as we track the rightmost idx for each character
+                hash[s[right]] = right;
+            }
+            else {
+                // alphabet does not exist in the current window
+                // Two possible cases:
+                // 1. There is space in the window to hold one more character
+                // 2. There is not space in the window
+                
+                if(hash.size() < 2) {
+                    // we can add one more character to the window
+                    hash[s[right]] = right;
+                }
+                else {
+                    // window already has two different characters
+                    // we will search for one and remove it
+                    
+                    char to_remove;
+                    int new_left_idx = INT_MAX;
+                    for(auto &pair: hash) {
+                        if(pair.second < new_left_idx) {
+                            new_left_idx = pair.second;
+                            to_remove = pair.first;
+                        }
+                    }
+                    
+                    left = new_left_idx + 1;
+                    hash.erase(to_remove);
+                    hash[s[right]] = right;
+                }
+            }
+            
+            length = max(length, right - left + 1);
+            right++;
+        }
+        
+        return length;
+    }
+};
