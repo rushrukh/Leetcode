@@ -17,3 +17,41 @@ public:
         return min_length == INT_MAX ? 0 : min_length;
     }
 };
+
+// TC O(n logn), SC O(1)
+
+class Solution {
+public:
+    int minSubArrayLen(int target, vector<int>& nums) {
+        int left = 0, min_length = INT_MAX, sum = 0;
+        vector<int> prefix_sum (nums.size() + 1, 0);
+        
+        for(int i = 0; i < nums.size(); i++) {
+            prefix_sum[i + 1] = prefix_sum[i] + nums[i];
+        }
+        
+        for(int i = 0; i < nums.size(); i++) {
+            min_length = min(min_length, search_len(prefix_sum, i + 1, nums.size(), prefix_sum[i], target));
+        }
+        
+        return min_length == INT_MAX ? 0 : min_length;
+    }
+    
+    int search_len(vector<int> &prefix_sum, int low, int high, int buffer, int target) {
+        int left = low, min_length = INT_MAX;
+        
+        while(low <= high) {
+            int mid = low + (high - low) / 2;
+            
+            if(prefix_sum[mid] - buffer < target) {
+                low = mid + 1;
+            }
+            else {
+                min_length = min(min_length, mid - left + 1);
+                high = mid - 1;
+            }
+        }
+        
+        return min_length;
+    }
+};
