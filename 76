@@ -1,0 +1,38 @@
+// TC O(M * N), SC O(M + N)
+
+class Solution {
+public:
+    string minWindow(string s, string t) {
+        if(s.size() < t.size()) return "";
+        unordered_map<char, int> t_map, s_map;
+        int left = 0, min_length = INT_MAX, min_left = INT_MAX, min_right = INT_MAX;
+        string min_string = "";
+        
+        for (int i = 0; i < t.size(); i++) {
+            t_map[t[i]]++;
+        }
+            
+        for (int right = 0; right < s.length(); right++) {
+            s_map[s[right]]++;
+            
+            while (matches(s_map, t_map)) {
+                if (right - left + 1 < min_length) {
+                    min_length = right - left + 1;
+                    min_left = left;
+                    min_right = right;
+                }
+                
+                s_map[s[left]]--;
+                left++;
+            }
+        }
+        
+        return min_right == INT_MAX ? "" : s.substr(min_left, min_right - min_left + 1);
+    }
+    bool matches(unordered_map<char, int>& s_map, unordered_map<char, int>& t_map) {
+        for(auto &pair: t_map)
+            if(s_map.find(pair.first) == s_map.end() || s_map[pair.first] < pair.second)
+                return false;
+        return true;
+    }
+};
