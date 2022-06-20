@@ -19,3 +19,35 @@ public:
         return result;
     }
 };
+
+class Solution {
+public:
+    vector<int> findAnagrams(string s, string p) {
+        if(p.size() > s.size()) return {};
+        vector<int> s_map (26, 0), p_map (26, 0), result;
+        
+        for(int i = 0; i < p.length(); i++) {
+            p_map[p[i] - 'a']++;
+            s_map[s[i] - 'a']++;
+        }
+        
+        for(int i = 0; i < s.length() - p.length(); i++) {
+            if(match_hash(s_map, p_map))
+                result.push_back(i);
+            s_map[s[i] - 'a']--;
+            s_map[s[i + p.length()] - 'a']++;
+        }
+        
+        if(match_hash(s_map, p_map))
+            result.push_back(s.length() - p.length());
+        
+        return result;
+    }
+    
+    bool match_hash(vector<int>& A, vector<int>& B) {
+        for(int i = 0; i < 26; i++)
+            if(A[i] != B[i])
+                return false;
+        return true;
+    }
+};
