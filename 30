@@ -27,43 +27,34 @@ Space Complexity: O(a) for the hash.
 
 class Solution {
 public:
-    unordered_map<string, int> hash;
-    int one_word_length = 0;
-    int number_of_words = 0;
-    int pattern_length = 0;
     vector<int> findSubstring(string s, vector<string>& words) {
-        one_word_length = words[0].size();
-        number_of_words = words.size();
-        pattern_length = one_word_length * number_of_words;
+        int n = s.length(), words_length = words.size(), word_length = words[0].size();
+        int pattern_length = words_length * word_length;
         vector<int> result;
+        unordered_map<string, int> hash;
         
         for(auto &word: words)
             hash[word]++;
         
-        for(int i = 0; i < s.size() - pattern_length + 1; i++) {
-            if(has_valid_substring(s, i))
+        for(int i = 0; i < n - pattern_length + 1; i++) {
+            if(is_valid(s, i, hash, words_length, word_length))
                 result.push_back(i);
         }
         
         return result;
     }
-    
-    bool has_valid_substring(string &s, int starting_index) {
-        unordered_map<string, int> temp_hash = hash;
-        int found_words = 0;
-        
-        for(int i = 0; i < number_of_words; i++) {
-            string current_word = s.substr(starting_index, one_word_length);
-            if(temp_hash.find(current_word) != temp_hash.end() && temp_hash[current_word] > 0) {
-                temp_hash[current_word]--;
-                found_words++;
-                starting_index += one_word_length;
+    bool is_valid(string &s, int starting_index, unordered_map<string, int> hash, int &words_length, int &word_length) {
+        for(int i = 0; i < words_length; i++) {
+            string curr_str = s.substr(starting_index, word_length);
+            if(hash.find(curr_str) != hash.end() && hash[curr_str] > 0) {
+                hash[curr_str]--;
+                starting_index += word_length;
             }
             else {
                 return false;
             }
         }
         
-        return found_words == number_of_words;
+        return true;
     }
 };
