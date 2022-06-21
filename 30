@@ -1,0 +1,69 @@
+/*
+
+Time Complexity:
+
+n = s.length()
+a = words.length()
+b = words[0].length()
+p = a * b
+
+Helper Function Time Complexity Analysis:
+  - We run a loop for a times.
+  - In each of those iterations, we create a substring of length b. 
+  - In total, we do operations in O(a * b).
+  - Rest of the operatiosn are O(1).
+  
+Hence, helper function is O(a * b).
+
+Main Function Time Complexity Analysis:
+  - We loop through the string s a total of n - (a * b) times.
+  - In each of those iterations, we call the helper function.
+  - In total, we do operations in O((n - ab) * ab)
+  - We can say the upper bound is O(n * a * b)
+  
+  
+Space Complexity: O(a) for the hash.
+*/
+
+class Solution {
+public:
+    unordered_map<string, int> hash;
+    int one_word_length = 0;
+    int number_of_words = 0;
+    int pattern_length = 0;
+    vector<int> findSubstring(string s, vector<string>& words) {
+        one_word_length = words[0].size();
+        number_of_words = words.size();
+        pattern_length = one_word_length * number_of_words;
+        vector<int> result;
+        
+        for(auto &word: words)
+            hash[word]++;
+        
+        for(int i = 0; i < s.size() - pattern_length + 1; i++) {
+            if(has_valid_substring(s, i))
+                result.push_back(i);
+        }
+        
+        return result;
+    }
+    
+    bool has_valid_substring(string &s, int starting_index) {
+        unordered_map<string, int> temp_hash = hash;
+        int found_words = 0;
+        
+        for(int i = 0; i < number_of_words; i++) {
+            string current_word = s.substr(starting_index, one_word_length);
+            if(temp_hash.find(current_word) != temp_hash.end() && temp_hash[current_word] > 0) {
+                temp_hash[current_word]--;
+                found_words++;
+                starting_index += one_word_length;
+            }
+            else {
+                return false;
+            }
+        }
+        
+        return found_words == number_of_words;
+    }
+};
