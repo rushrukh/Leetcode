@@ -58,3 +58,77 @@ public:
         return true;
     }
 };
+
+
+/*
+
+Time Complexity:
+
+n = s.length()
+a = words.length()
+b = words[0].length()
+p = a * b
+
+Helper Function Time Complexity Analysis:
+  - We run a loop for n/b times: O(n/b).
+  - In each of those iterations, we create a substring of length b: O(b). 
+  - In total, we do operations in O(n/b * b): O(n)
+  - Rest of the operatiosn are O(1).
+  
+Hence, helper function is O(n).
+
+Main Function Time Complexity Analysis:
+  - We call the helper function b times: O(b * n) => O(nb)
+  - We create a hash of all the words: O(a)
+  - We can say the upper bound is O(a + nb)
+  
+  
+Space Complexity: O(a) for the hash.
+*/
+
+
+class Solution {
+public:
+    vector<int> result;
+    unordered_map<string, int> hash;
+    int word_length = 0, words_length = 0, pattern_length = 0;
+    vector<int> findSubstring(string s, vector<string>& words) {
+        word_length = words[0].size(); 
+        words_length = words.size();
+        pattern_length = word_length * words_length;
+        
+        for(string &word: words)
+            hash[word]++;
+        
+        for(int i = 0; i < word_length; i++) {
+            valid_substr(s, i);
+        }
+        
+        return result;
+    }
+    void valid_substr(string &s, int starting_index) {
+        int left = starting_index, right = starting_index;
+        unordered_map<string, int> tmp_hash;
+        
+        while(right < s.length() - word_length + 1) {
+            string curr_str = s.substr(right, word_length);
+            
+            if(hash.find(curr_str) != hash.end()) {
+                tmp_hash[curr_str]++;
+            }
+            right += word_length;
+            
+            if(right - left == pattern_length) {
+                if(hash == tmp_hash) {
+                    result.push_back(left);
+                }
+                
+                string old_str = s.substr(left, word_length);
+                if(tmp_hash.find(old_str) != tmp_hash.end() && tmp_hash[old_str] > 0)
+                    tmp_hash[old_str]--;
+                
+                left += word_length;
+            }
+        }        
+    }
+};
