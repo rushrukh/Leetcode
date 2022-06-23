@@ -40,7 +40,7 @@ public:
                     
                     left = fruit_index + 1;
                     hash.erase(fruit_type);
-                    hash[fruits[right]] = right;
+                    hash[fruits[right]] = right; // remember to update the hash with the new fruit!
                 }
             }
             
