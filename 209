@@ -23,19 +23,21 @@ public:
 class Solution {
 public:
     int minSubArrayLen(int target, vector<int>& nums) {
-        int min_length = INT_MAX;
-        vector<int> prefix_sum (nums.size() + 1, 0);
+        int n = nums.size(), min_length = INT_MAX;
+        vector<int> prefix_sum (n + 1, 0);
         
-        for(int i = 0; i < nums.size(); i++)
+        for (int i = 0; i < n; i++) {
             prefix_sum[i + 1] = prefix_sum[i] + nums[i];
+        }
         
-        for(int i = 0; i < nums.size(); i++)
-            min_length = min(min_length, search_length(prefix_sum, i + 1, prefix_sum[i], target));
+        for(int i = 0; i < n; i++) {
+            min_length = min(min_length, search_length(prefix_sum, i + 1, target, prefix_sum[i], n));
+        }
         
         return min_length == INT_MAX ? 0 : min_length;
     }
-    int search_length(vector<int>& prefix_sum, int low, int buffer, int target) {
-        int left = low, right = prefix_sum.size() - 1, min_length = INT_MAX;
+    int search_length(vector<int> &prefix_sum, int starting_index, int target, int buffer, int n) {
+        int left = starting_index, right = n, min_length = INT_MAX;
         
         while(left <= right) {
             int mid = left + (right - left) / 2;
@@ -44,7 +46,7 @@ public:
                 left = mid + 1;
             }
             else {
-                min_length = min(min_length, mid - low + 1);
+                min_length = min(min_length, mid - starting_index + 1);
                 right = mid - 1;
             }
         }
