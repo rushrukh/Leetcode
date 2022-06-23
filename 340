@@ -3,8 +3,7 @@
 class Solution {
 public:
     int lengthOfLongestSubstringKDistinct(string s, int k) {
-        if(!k) return 0;
-        
+        if(k == 0) return 0;
         int left = 0, right = 0, max_len = INT_MIN;
         unordered_map<char, int> hash;
         
@@ -17,25 +16,27 @@ public:
                     hash[s[right]] = right;
                 }
                 else {
-                    int leftmost_char_idx = INT_MAX;
-                    char leftmost_char;
-                    
+                    // we will have to find the char and it's index we will be getting rid of
+                    int min_index = INT_MAX;
+                    char min_index_char;
+                
                     for(auto &pair: hash) {
-                        if(pair.second < leftmost_char_idx) {
-                            leftmost_char_idx = pair.second;
-                            leftmost_char = pair.first;
+                        if(pair.second < min_index) {
+                            min_index = pair.second;
+                            min_index_char = pair.first;
                         }
                     }
                     
-                    left = leftmost_char_idx + 1;
-                    hash.erase(leftmost_char);
+                    hash.erase(min_index_char);
                     hash[s[right]] = right;
+                    left = min_index + 1;
                 }
             }
+            
             max_len = max(max_len, right - left + 1);
             right++;
         }
         
-        return max_len;
+        return max_len == INT_MIN ? 0 : max_len;
     }
 };
