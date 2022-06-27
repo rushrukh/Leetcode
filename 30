@@ -88,16 +88,23 @@ Space Complexity: O(a) for the hash.
 
 class Solution {
 public:
-    int word_length = 0, words_length = 0, pattern_length = 0, s_length = 0;
-    vector<int> result;
+    int word_length = 0, words_length = 0, s_length = 0;
     unordered_map<string, int> hash;
+    vector<int> result;
     vector<int> findSubstring(string s, vector<string>& words) {
         word_length = words[0].size(), words_length = words.size(), s_length = s.size();
-        pattern_length = word_length * words_length;
         
         for(string &word: words)
             hash[word]++;
         
+        // we hop the string one word_length, from the first word, to the next and so on.
+        // word_length = 3. If we start from 0, we do 0, 3, 6, 9 ..
+        // We miss 1, 2, 4, 5, ..
+        // So, we start from 0, 1, 2 for word_length
+        // Thus we will cover all indices
+        // 0, 3, 6, 9
+        // 1, 4, 7, 10
+        // 2, 5, 8, 11
         for(int i = 0; i < word_length; i++) {
             find_substr(s, i);
         }
@@ -112,11 +119,11 @@ public:
         while(right < s_length - word_length + 1) {
             string curr_str = s.substr(right, word_length);
             
-            if(hash.find(curr_str) != hash.end() && hash[curr_str] > 0) {
+            if(hash.find(curr_str) != hash.end()) {
                 if(tmp_hash.find(curr_str) == tmp_hash.end() || tmp_hash[curr_str] < hash[curr_str]) {
                     tmp_hash[curr_str]++;
-                    right += word_length;
                     n++;
+                    right += word_length;
                 }
                 else {
                     tmp_hash[s.substr(left, word_length)]--;
@@ -134,10 +141,9 @@ public:
             if(n == words_length) {
                 result.push_back(left);
                 tmp_hash[s.substr(left, word_length)]--;
-                left += word_length;
                 n--;
+                left += word_length;
             }
-                
         }
     }
 };
