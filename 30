@@ -86,49 +86,58 @@ Main Function Time Complexity Analysis:
 Space Complexity: O(a) for the hash.
 */
 
-
 class Solution {
 public:
+    int word_length = 0, words_length = 0, pattern_length = 0, s_length = 0;
     vector<int> result;
     unordered_map<string, int> hash;
-    int word_length = 0, words_length = 0, pattern_length = 0;
     vector<int> findSubstring(string s, vector<string>& words) {
-        word_length = words[0].size(); 
-        words_length = words.size();
+        word_length = words[0].size(), words_length = words.size(), s_length = s.size();
         pattern_length = word_length * words_length;
         
         for(string &word: words)
             hash[word]++;
         
         for(int i = 0; i < word_length; i++) {
-            valid_substr(s, i);
+            find_substr(s, i);
         }
         
         return result;
     }
-    void valid_substr(string &s, int starting_index) {
-        int left = starting_index, right = starting_index;
+    
+    void find_substr(string &s, int starting_index) {
         unordered_map<string, int> tmp_hash;
+        int n = 0, left = starting_index, right = starting_index;
         
-        while(right < s.length() - word_length + 1) {
+        while(right < s_length - word_length + 1) {
             string curr_str = s.substr(right, word_length);
             
-            if(hash.find(curr_str) != hash.end()) {
-                tmp_hash[curr_str]++;
-            }
-            right += word_length;
-            
-            if(right - left == pattern_length) {
-                if(hash == tmp_hash) {
-                    result.push_back(left);
+            if(hash.find(curr_str) != hash.end() && hash[curr_str] > 0) {
+                if(tmp_hash.find(curr_str) == tmp_hash.end() || tmp_hash[curr_str] < hash[curr_str]) {
+                    tmp_hash[curr_str]++;
+                    right += word_length;
+                    n++;
                 }
-                
-                string old_str = s.substr(left, word_length);
-                if(tmp_hash.find(old_str) != tmp_hash.end() && tmp_hash[old_str] > 0)
-                    tmp_hash[old_str]--;
-                
-                left += word_length;
+                else {
+                    tmp_hash[s.substr(left, word_length)]--;
+                    n--;
+                    left += word_length;
+                }
             }
-        }        
+            else {
+                right += word_length;
+                left = right;
+                n = 0;
+                tmp_hash.clear();
+            }
+            
+            if(n == words_length) {
+                result.push_back(left);
+                tmp_hash[s.substr(left, word_length)]--;
+                left += word_length;
+                n--;
+            }
+                
+        }
     }
 };
