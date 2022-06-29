@@ -36,3 +36,42 @@ public:
         return true;
     }
 };
+
+
+// TC O(S + T), SC O(T)
+
+class Solution {
+public:
+    string minWindow(string s, string t) {
+        int s_length = s.size(), t_length = t.size(), left = 0, min_left = INT_MAX, min_length = INT_MAX, count = 0;
+        unordered_map<char, int> hash;
+        
+        for(char &c: t)
+            hash[c]++;
+        
+        for(int right = 0; right < s_length; right++) {
+            if(hash.find(s[right]) != hash.end()) {
+                hash[s[right]]--;
+                if(hash[s[right]] > -1)
+                    count++;
+                
+                while(count == t_length && left <= right) {
+                    if(right - left + 1 < min_length) {
+                        min_length = right - left + 1;
+                        min_left = left;
+                    }
+                    
+                    if(hash.find(s[left]) != hash.end()) {
+                        hash[s[left]]++;
+                        if(hash[s[left]] > 0)
+                            count--;
+                    }
+                    
+                    left++;
+                }
+            }
+        }
+        
+        return min_length == INT_MAX ? "" : s.substr(min_left, min_length);
+    }
+};
