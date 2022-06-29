@@ -23,31 +23,26 @@ public:
 class Solution {
 public:
     vector<int> findAnagrams(string s, string p) {
-        if(p.size() > s.size()) return {};
+        int s_length = s.length(), p_length = p.length();
+        if(p_length > s_length) return {};
         vector<int> s_map (26, 0), p_map (26, 0), result;
-        
-        for(int i = 0; i < p.length(); i++) {
+
+        for(int i = 0; i < p_length; i++) {
             p_map[p[i] - 'a']++;
             s_map[s[i] - 'a']++;
         }
         
-        for(int i = 0; i < s.length() - p.length(); i++) {
-            if(match_hash(s_map, p_map))
+        for(int i = 0; i < s_length - p_length; i++) {
+            if(s_map == p_map)
                 result.push_back(i);
+            
             s_map[s[i] - 'a']--;
-            s_map[s[i + p.length()] - 'a']++;
+            s_map[s[i + p_length] - 'a']++;
         }
         
-        if(match_hash(s_map, p_map))
-            result.push_back(s.length() - p.length());
+        if(s_map == p_map) 
+            result.push_back(s_length - p_length);
         
         return result;
-    }
-    
-    bool match_hash(vector<int>& A, vector<int>& B) {
-        for(int i = 0; i < 26; i++)
-            if(A[i] != B[i])
-                return false;
-        return true;
     }
 };
