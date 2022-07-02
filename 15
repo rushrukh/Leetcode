@@ -1,23 +1,29 @@
-//Two Pointer Soln: TC O(N^2) SC O(1)
+// TC O(n^2), SC O(1)
 
 class Solution {
 public:
     vector<vector<int>> threeSum(vector<int>& nums) {
         if(nums.size() < 3) return {};
-        sort(nums.begin(), nums.end());
         vector<vector<int>> result;
+        sort(nums.begin(), nums.end());
         
-        for(int i = 0; i < nums.size() && nums[i] <= 0; i++) {
-            int low = i + 1, high = nums.size() - 1;
+        for(int i = 0; i < nums.size() - 2 && nums[i] <= 0; i++) {
+            int left = i + 1, right = nums.size() - 1;
             
             if(i == 0 || nums[i] != nums[i - 1]) {
-                while(low < high) {
-                    if(nums[low] + nums[i] + nums[high] > 0) high--;
-                    else if(nums[low] + nums[i] + nums[high] < 0) low++;
+                while(left < right) {
+                    if(nums[i] + nums[left] + nums[right] == 0) {
+                        result.push_back({nums[i], nums[left++], nums[right--]});
+                        while(left < right && nums[left] == nums[left - 1]) {
+                                left++;
+                        }
+                    }
+                    else if(nums[i] + nums[left] + nums[right] > 0) {
+                        right--;
+                    }
                     else {
-                        result.push_back({nums[i], nums[low++], nums[high--]});
-                        while(low < high && nums[low] == nums[low - 1]) low++;
-                    }        
+                        left++;
+                    }
                 }
             }
         }
@@ -26,3 +32,10 @@ public:
     }
 };
 
+// Basic implementation is: use two pointer approach to find a pair to make a triplet with the first value nums[i]
+// But edge cases are pain in the ass:
+// 1. Must avoid duplicate values:
+//      - In case of i, duplicate values appear
+//      - In case of left/right, duplicate values appear (taking care of one of left/right gets rid of the other one)
+// 2. To use two pointers and move pointers based on total sum found, we need the array to be sorted.
+// 3. Since the target is to get 0, if nums[i] itself is > 0, can we ever get a 0 sum in a sorted array? hehe
