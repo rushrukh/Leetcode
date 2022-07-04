@@ -39,3 +39,38 @@ public:
 //      - In case of left/right, duplicate values appear (taking care of one of left/right gets rid of the other one)
 // 2. To use two pointers and move pointers based on total sum found, we need the array to be sorted.
 // 3. Since the target is to get 0, if nums[i] itself is > 0, can we ever get a 0 sum in a sorted array? hehe
+
+
+// TC O(n^2), SC O(n)
+
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        vector<vector<int>> result;
+        int n = nums.size();
+        
+        unordered_map<int, int> hash;
+        
+        for(int i = 0; i < n; i++)
+            hash[nums[i]] = i;
+        
+        for(int i = 0; i < n - 2 && nums[i] <= 0; i++) {
+            int j = i + 1;
+            
+            if(i == 0 || nums[i] != nums[i - 1]) {
+                while(j < n - 1) {
+                    int target = -nums[i] - nums[j];
+                    if(hash.find(target) != hash.end() && hash[target] > j) {
+                        result.push_back({nums[i], nums[j], target});
+                    }
+                    j++;
+                    while(j < n - 1 && nums[j] == nums[j - 1])
+                        j++;
+                }
+            }
+        }
+        
+        return result;
+    }
+};
