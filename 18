@@ -1,0 +1,55 @@
+// TC: O(N^3), SC: O(n)
+
+class Solution {
+public:
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        sort(nums.begin(), nums.end());
+        return k_sum(nums, 4, 0, target);
+    }
+    vector<vector<int>> k_sum(vector<int>& nums, int k, int starting_index, long long target) {
+        vector<vector<int>> result;
+        if(starting_index == nums.size() || nums.size() < k)
+            return result;
+        
+        if(k == 2) {
+            return two_sum(nums, starting_index, target);
+        }
+        
+        // for each number in the nums, see if it can pair with two other numbers to get to target;
+        // ignore same nums[i] to get rid of duplicate answers;
+        
+        for(int i = starting_index; i < nums.size() - k + 1; i++) {
+            if(i == starting_index || nums[i] != nums[i - 1]) { // will check this for potential bugs wrt starting_index
+                for(auto &tmp: k_sum(nums, k - 1, i + 1, target - nums[i])) {
+                    result.push_back({nums[i]});
+                    result.back().insert(end(result.back()), tmp.begin(), tmp.end());
+                }
+            }
+        }
+        
+        return result;
+    }
+    vector<vector<int>> two_sum(vector<int>& nums, int starting_index, long long target) {
+        vector<vector<int>> result;
+        int left = starting_index, right = nums.size() - 1;
+        
+        while(left < right) {
+            if(nums[left] + nums[right] == target) {
+                result.push_back({nums[left++], nums[right--]});
+                
+                while(left < nums.size() && nums[left] == nums[left - 1]) { // not using left < nums.size() results in memory access error
+                    left++;
+                }
+                // must ignore same numbers for at least left pointer
+            }
+            else if(nums[left] + nums[right] < target) {
+                left++;
+            }
+            else {
+                right--;
+            }
+        }
+        
+        return result;
+    }
+};
