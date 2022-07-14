@@ -1,0 +1,66 @@
+// TC O(N^3), SC O(1) - This brute force solution gets TLE
+
+class Solution {
+public:
+    int findUnsortedSubarray(vector<int>& nums) {
+        int result = nums.size();
+        
+        for(int i = 0; i < nums.size(); i++) {
+            for(int j = i; j <= nums.size(); j++) {
+                int min_val = INT_MAX, max_val = INT_MIN, prev = INT_MIN;
+                
+                for(int k = i; k < j; k++) {
+                    min_val = min(min_val, nums[k]);
+                    max_val = max(max_val, nums[k]);
+                }
+                
+                // if there is an integer before the subarray that is bigger than the min
+                // or there is an integer after the subarray that is smaller than the max
+                // we don't have the right subarray that includes the "unsorted portion" yet, it is worthless to try and calculate the shortest size
+                
+                if((i > 0 && nums[i - 1] > min_val) || (j < nums.size() && nums[j] < max_val))
+                    continue;
+                
+                int k = 0;
+                
+                // we are trying to make sure that the subarray before i is sorted and all nice.
+                // if it is not sorted, that means we don't have the right subarray that includes the "unsorted portion"
+                // Hence, worthless to calculate the shortest size
+                // Otherwise, if the subarray before i is sorted, after this loop k == i;
+                while(k < i && prev <= nums[k]) {
+                    prev = nums[k];
+                    k++;
+                }
+                
+                // k is supposed to become i after the previous loop
+                // it may happen that, it doesn't become i
+                // because, maybe we are considering the last possible subarray of index 1, where i = nums.size() - 1
+                // Now, if it happens that there is unsorted subarray before i
+                // Then k wont be i, right?
+                // That means we have an unsorted array even before i.
+                // In that case, should we even move forward? No, that's right.
+                // k was supposed to be i in an answer, since it isn't, the subarray before i is not sorted, hence we go back;
+                if(k != i)
+                    continue;
+                
+                // If the execution comes to this part, that means
+                // The subarray before i is sorted, and k has become i
+                // Now, we want to ignore whatever happens between i and j. 
+                // We are interested in knowing if everything after j is sorted
+                
+                k = j;
+                while(k < nums.size() && prev <= nums[k]) {
+                    prev = nums[k];
+                    k++;
+                }
+                
+                if(nums.size() == k) {
+                    // This means that, everything after j is sorted (also everything before i was sorted as well)
+                    result = min(result, j - i);
+                }
+            }
+        }
+        
+        return result;
+    }
+};
