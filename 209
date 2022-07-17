@@ -3,20 +3,53 @@
 class Solution {
 public:
     int minSubArrayLen(int target, vector<int>& nums) {
-        int left = 0, min_length = INT_MAX, sum = 0;
+        int sum = 0, min_length = INT_MAX, left = 0, right = 0, n = nums.size();
         
-        for(int right = 0; right < nums.size(); right++) {
+        while(right < n) {
             sum += nums[right];
             
             while(sum >= target) {
                 min_length = min(min_length, right - left + 1);
                 sum -= nums[left++];
             }
+            
+            right++;
         }
         
-        return min_length == INT_MAX ? 0: min_length;
+        return min_length == INT_MAX ? 0 : min_length;
     }
 };
+
+// Brute Force:
+// - Traverse the array
+// - For each index, do the following:
+// - Run another loop
+// - keep adding all the values
+// - at each step see if it is >= target
+// - if so, store the length and break. We have found the minimum size subarray from the particular i.
+// - Next, we look at i + 1;
+
+
+// [1, 2, 3, 4, 5, 100], target = 100
+// Optimization:
+// - say we have seen idx 0 - 5, it was the min subarray length from idx 0.
+// - cool. Brute force says, start over from index 1.
+// - really? Do we have to start over?
+// - Think of this scenario, starting from idx 1 - 5, it is also the min subarray length from idx 1.
+// - That means, we had the sum of nums[0] + nums[1] + nums[2] + nums[3] + nums[4] + nums[5]
+// - We discarded the entire thing and then calculated nums[1] + nums[2] + nums[3] + nums[4] + nums[5]
+// - What we could have done is, (nums[0] + nums[1] + nums[2] + nums[3] + nums[4] + nums[5]) - nums[0] to get the new sum.
+
+
+// Idea - 
+// 1. Take two pointers left, and right
+// 2. Save the sum, keep increasing right until the sum < target
+// 3. As soon as the sum >= target, stop. 
+// 4. This is the min subarray length from that idx.
+// 5. Store it
+// 6. Now, subtract nums[left] from the left, and keep increasing left so long as sum >= target
+// 7. At each of those step, we are bound to get a new min length, store that
+// 8. that's it.
 
 // TC O(n logn), SC O(1)
 
