@@ -48,6 +48,6 @@ public:
             right++;
         }
         
-        return max_trees;
+        return max_trees == INT_MIN ? 0 : max_trees;
     }
 };
