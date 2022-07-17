@@ -40,3 +40,14 @@ public:
         return max_len == INT_MIN ? 0 : max_len;
     }
 };
+
+// we are allowed at most k distinct alphabets.
+// - We will traverse the string
+// - for each character:
+// - 1. We see if it is already in our seen characters
+// - 2. if yes, then we don't have to do anything, we can surely add this to our substring
+// - 3. if it is not in the list, then there are two cases
+// - 4. We have space in our list of k. Then we simply add it to the list, and also add it to our substring
+// - 5. We don't have space in our list of k. Hmm, problem
+// - 6. We will have to get rid of a character from our list to make room for a new character.
+// - 7. In the subarray that we are considering currently, to maximize the length, we should get rid of the character that ended first.
