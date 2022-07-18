@@ -45,6 +45,6 @@ public:
             right++;
         }
         
-        return length;
+        return length == INT_MIN ? 0 : length;
     }
 };
