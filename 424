@@ -3,24 +3,24 @@
 class Solution {
 public:
     int characterReplacement(string s, int k) {
-        int left = 0, right = 0, max_freq = INT_MIN, max_length = INT_MIN;
+        int left = 0, right = 0, max_len = INT_MIN, max_freq = INT_MIN;
         unordered_map<char, int> hash;
         
-        while(right < s.size()) {
+        for(right; right < s.size(); right++) {
             hash[s[right]]++;
             max_freq = max(max_freq, hash[s[right]]);
             
-            if(right - left + 1 - max_freq <= k) {
-                max_length = max(max_length, right - left + 1);
-                right++;
-            }
-            else {
+            if(right - left + 1 - max_freq > k) {
+                // We have exceeded the allowed replacements
                 hash[s[left]]--;
                 left++;
-                hash[s[right]]--;
             }
+            
+            max_len = max(max_len, right - left + 1);
         }
         
-        return max_length;
+        return max_len == INT_MIN ? 0 : max_len;
     }
 };
+
+// Idea: window_length - max_frequency > k => window invalid
