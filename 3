@@ -3,17 +3,15 @@
 class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
-        int max_len = INT_MIN, left = 0, right = 0, n = s.length();
         unordered_map<char, int> hash;
+        int left = 0, max_len = INT_MIN;
         
-        while(right < n) {
+        for(int right = 0; right < s.size(); right++) {
             if(hash.find(s[right]) != hash.end() && hash[s[right]] >= left) {
                 left = hash[s[right]] + 1;
             }
-            
-            hash[s[right]] = right;
             max_len = max(max_len, right - left + 1);
-            right++;
+            hash[s[right]] = right;
         }
         
         return max_len == INT_MIN ? 0 : max_len;
