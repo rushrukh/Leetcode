@@ -1,33 +1,34 @@
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
- * };
- */
+// TC O(N), SC O(1) : Floyd's Cycle Detection
+// If there is a cycle, we find it when slow == fast.
+// Now, from head and slow, if we move one step at a time, they meet at the beginning of the loop.
+
 class Solution {
 public:
     ListNode *detectCycle(ListNode *head) {
-        if(!head || !head -> next || !head -> next -> next) return NULL;
+        ListNode *intersect = helper(head);
+        if(!intersect)
+            return NULL;
         
-        ListNode* slow = head, * fast = head;
+        while(head != intersect) {
+            head = head -> next;
+            intersect = intersect -> next;
+        }
         
-        while(fast -> next && fast -> next -> next) {
+        return intersect;
+    }
+    
+    ListNode *helper(ListNode *head) {
+        ListNode *slow = head, *fast = head;
+        
+        while(fast) {
             slow = slow -> next;
+            if(!fast -> next)
+                break;
             fast = fast -> next -> next;
-            
-            if(slow == fast) break;
+            if(fast == slow)
+                return slow;
         }
         
-        if(slow != fast) return NULL;
-        slow = head;
-        
-        while(slow != fast) {
-            slow = slow -> next;
-            fast = fast -> next;
-        }
-        
-        return slow;
+        return NULL;
     }
 };
