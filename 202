@@ -3,16 +3,16 @@ public:
     bool isHappy(int n) {
         int sum = 0;
         
-        while(n) {
+        while(n > 0) {
             sum += (n % 10) * (n % 10);
             n /= 10;
             
-            if(n == 0 && (sum / 10 != 0)) {
+            if(n == 0 && sum > 9) {
                 n = sum;
                 sum = 0;
             }
         }
         
-        return (sum == 1 || sum == 7) ? true : false;
+        return sum == 1 || sum == 7;
     }
 };
