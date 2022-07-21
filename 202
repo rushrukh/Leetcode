@@ -16,3 +16,31 @@ public:
         return sum == 1 || sum == 7;
     }
 };
+
+// Floyd's Cycle Detection:
+
+class Solution {
+public:
+    bool isHappy(int n) {
+        int slow = n, fast = next_guy(n);
+
+        while(fast != 1 && fast != slow) {
+            slow = next_guy(slow);
+            fast = next_guy(fast);
+            fast = next_guy(fast);
+        }
+        
+        return fast == 1;
+        
+    }
+    int next_guy(int n) {
+        int sum = 0;
+        
+        while(n) {
+            sum += (n % 10) * (n % 10);
+            n /= 10;
+        }
+        
+        return sum;
+    }
+};
