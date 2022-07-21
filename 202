@@ -18,6 +18,7 @@ public:
 };
 
 // Floyd's Cycle Detection:
+// TC O(logN), SC O(1)
 
 class Solution {
 public:
