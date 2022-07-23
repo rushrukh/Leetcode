@@ -11,7 +11,8 @@ public:
             tmp = tmp -> next;            
         }
         
-        for(int i = 0; i < count / 2; i++) head = head -> next;
+        for(int i = 0; i < count / 2; i++) 
+            head = head -> next;
         
         return head;
     }
