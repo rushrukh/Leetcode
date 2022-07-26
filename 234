@@ -10,63 +10,58 @@
  */
 class Solution {
 public:
-    ListNode *reverseLL(ListNode *head) {
-        ListNode *prev, *curr, *next;
-        prev = curr = NULL;
-        next = head;
-        while(next) {
-            prev = curr;
-            curr = next;
-            next = next -> next;
-            curr -> next = prev;
-        }
-        return curr;
-    }
-    bool isPalindrome(ListNode* head) {  
+    bool isPalindrome(ListNode* head) {
+        int count = 0, half_count = 0;
+        ListNode *first_node = head, *second_head = NULL, *prev = NULL;
         
-        if(!head || !head -> next)
+        while(first_node) {
+            count++;
+            first_node = first_node -> next;
+        }
+        
+        if(count == 1)
             return true;
         
-        ListNode *firstHead = head;
+        first_node = head;
         
-        int count = 0;
-        
-        while(firstHead) {
-            count++;
-            firstHead = firstHead -> next;
+        while(half_count < (count / 2)) {
+            half_count++;
+            prev = first_node;
+            first_node = first_node -> next;
         }
-        
-        ListNode *secondHead = NULL;
-        firstHead = head;
-       
-        if(count % 2 == 1) {
-            for(int i = 0; i < count / 2 - 1; i++)
-                firstHead = firstHead -> next;
-            
-            secondHead = firstHead -> next -> next;
-            firstHead -> next = NULL;
+
+        if(count % 2 == 0) {
+            prev -> next = NULL;
+            second_head = reverseLL(first_node);
+            cout << second_head -> val << endl;
         }
         else {
-            for(int i = 0; i < count / 2 - 1; i++)
-                firstHead = firstHead -> next;
-            
-            secondHead = firstHead -> next;
-            firstHead -> next = NULL;
+            ListNode *new_node = new ListNode(first_node -> val);
+            prev -> next = new_node;
+            second_head = reverseLL(first_node);
         }
         
-        firstHead = head;
-        secondHead = reverseLL(secondHead);
-        
-        while(firstHead && secondHead) {
-            
-            if(firstHead -> val != secondHead -> val)
+        while(head) {
+            if(head -> val != second_head -> val)
                 return false;
-            
-            else {
-                firstHead = firstHead -> next;
-                secondHead = secondHead -> next;
-            }
+            head = head -> next;
+            second_head = second_head -> next;
         }
+        
         return true;
+    }
+    
+    ListNode* reverseLL(ListNode* head) {
+        ListNode *prev = NULL, *curr_head = head, *next_node = NULL;
+        
+        while(curr_head) {
+            next_node = curr_head -> next;
+            curr_head -> next = prev;
+            
+            prev = curr_head;
+            curr_head = next_node;
+        }
+        
+        return prev;
     }
 };
