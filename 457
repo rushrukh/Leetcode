@@ -10,32 +10,29 @@ public:
             int slow = i, fast = i, curr_sign = nums[i] > 0;
             
             while(true) {
-                slow = get_next_index(nums, slow, nums[slow], curr_sign);
-                if(slow == -1)
-                    break;
-                
-                fast = get_next_index(nums, fast, nums[fast], curr_sign);
-                if(fast == -1)
-                    break;
-                fast = get_next_index(nums, fast, nums[fast], curr_sign);
-                if(fast == -1)
-                    break;
-                
-                if(slow == fast)
-                    return true;
+                slow = next_index(nums, slow, nums[slow], curr_sign);
+                if(slow == -1) break;
+
+                fast = next_index(nums, fast, nums[fast], curr_sign);
+                if(fast == -1) break;
+
+                fast = next_index(nums, fast, nums[fast], curr_sign);
+                if(fast == -1) break;
+
+                if(fast == slow) return true;
             }
         }
         
         return false;
     }
-    int get_next_index(vector<int>& nums, int i, int value, int curr_sign) {
-        int next_index = (i + value) % length;
-        
+    int next_index(vector<int> & nums, int idx, int shift, int curr_sign) {
+        int next_index = (idx + shift) % length;
         next_index = next_index < 0 ? next_index + length : next_index;
         int new_sign = nums[next_index] > 0;
         
         if(new_sign != curr_sign)
             return -1;
-        return next_index == i ? -1 : next_index;
+        
+        return next_index == idx ? -1 : next_index;
     }
 };
