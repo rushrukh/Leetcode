@@ -3,22 +3,26 @@
 class Solution {
 public:
     bool checkInclusion(string s1, string s2) {
-        if(s1.size() > s2.size()) return false;
-        vector<int> s1_map (26, 0), s2_map (26, 0);
+        int s1_size = s1.size(), s2_size = s2.size(), left = 0;
+        if(s1_size > s2_size)
+            return false;
         
-        for(int i = 0; i < s1.size(); i++) {
-            s1_map[s1[i] - 'a']++;
-            s2_map[s2[i] - 'a']++;
+        vector<int> s1_hash(26, 0), s2_hash(26, 0);
+        
+        for(int i = 0; i < s1_size; i++) {
+            s1_hash[s1[i] - 'a']++;
+            s2_hash[s2[i] - 'a']++;
         }
         
-        for(int i = 0; i < s2.size() - s1.size(); i++) {
-            if(s1_map == s2_map)
+        for(int right = 0; right < s2_size - s1_size; right++) {
+            if(s1_hash == s2_hash)
                 return true;
             
-            s2_map[s2[i] - 'a']--;
-            s2_map[s2[i + s1.size()] - 'a']++;
+            s2_hash[s2[right + s1_size] - 'a']++;
+            s2_hash[s2[left] - 'a']--;
+            left++;
         }
         
-        return s1_map == s2_map;
+        return s1_hash == s2_hash;
     }
 };
