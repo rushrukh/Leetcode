@@ -43,22 +43,26 @@ public:
 class Solution {
 public:
     string minWindow(string s, string t) {
-        int s_length = s.size(), t_length = t.size(), left = 0, min_left = INT_MAX, min_length = INT_MAX, count = 0;
+        int min_length = INT_MAX, min_left = 0, min_right = 0, left = 0, t_size = t.length(), s_size = s.length(), count = 0;
         unordered_map<char, int> hash;
         
-        for(char &c: t)
+        for(auto &c: t)
             hash[c]++;
         
-        for(int right = 0; right < s_length; right++) {
+        for(int right = 0; right < s_size; right++) {
+            // if s[right] doesn't belong to hash, we don't have any work.
             if(hash.find(s[right]) != hash.end()) {
+                // update the hash
                 hash[s[right]]--;
                 if(hash[s[right]] > -1)
                     count++;
                 
-                while(count == t_length && left <= right) {
+                while(count == t_size) {
+                    // this is a valid substring
                     if(right - left + 1 < min_length) {
                         min_length = right - left + 1;
                         min_left = left;
+                        min_right = right;
                     }
                     
                     if(hash.find(s[left]) != hash.end()) {
@@ -72,6 +76,6 @@ public:
             }
         }
         
-        return min_length == INT_MAX ? "" : s.substr(min_left, min_length);
+        return min_length == INT_MAX ? "" : s.substr(min_left, min_length);	
     }
 };
