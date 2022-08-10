@@ -73,7 +73,7 @@ Helper Function Time Complexity Analysis:
   - We run a loop for n/b times: O(n/b).
   - In each of those iterations, we create a substring of length b: O(b). 
   - In total, we do operations in O(n/b * b): O(n)
-  - Rest of the operatiosn are O(1).
+  - Rest of the operations are O(1).
   
 Hence, helper function is O(n).
 
