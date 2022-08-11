@@ -3,9 +3,9 @@
 class Solution {
 public:
     int removeDuplicates(vector<int>& nums) {
-        int left = 0;
+        int left = 0, right = 0;
         
-        for(int right = 1; right < nums.size(); right++) {
+        for(right = 0; right < nums.size(); right++) {
             if(nums[left] != nums[right]) {
                 nums[++left] = nums[right];
             }
