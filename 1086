@@ -1,0 +1,33 @@
+// TC O(NlogN), SC O(N)
+
+class Solution {
+public:
+    vector<vector<int>> highFive(vector<vector<int>>& items) {
+        vector<vector<int>> scores (items.size()); // S: O(N)
+        vector<vector<int>> result;
+        
+        for(int i = 0; i < items.size(); i++) { // TC: O(N)
+            scores[items[i][0]].push_back(items[i][1]);
+        }
+        
+        for(int i = 0; i < scores.size(); i++) { // TC: O(N log N)
+            sort(scores[i].begin(), scores[i].end(), greater<int>());
+        }
+        
+        for(int i = 0; i < scores.size(); i++) {
+            int score = 0;
+            if(scores[i].size()) {
+                int n = scores[i].size();
+                n = min(n, 5);
+                for(int j = 0; j < n; j++) {
+                    score += scores[i][j];
+                }
+                score /= 5;
+                result.push_back({i, score});
+            }
+                
+        }
+        
+        return result;
+    }
+};
