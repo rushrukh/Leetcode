@@ -1,16 +1,16 @@
-// TC O(N), SC O(N)
+// TC O(N), SC O(1)
 
 class Solution {
 public:
     int numPairsDivisibleBy60(vector<int>& time) {
-        vector<int> remainderHash(60, 0);
         int result = 0;
+        vector<int> hash(60, 0);
         
-        for(int& t: time) {
-            result += remainderHash[(60 - (t % 60)) % 60];
-            remainderHash[t % 60]++;
+        for(int i = 0; i < time.size(); i++) {
+            result += hash[(60 - (time[i] % 60)) % 60];
+            hash[(time[i] % 60) % 60]++;
         }
-        
+
         return result;
     }
 };
