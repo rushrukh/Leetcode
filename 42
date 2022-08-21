@@ -1,0 +1,53 @@
+// Brute Force: TC O(N^2), SC O(1)
+
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        int result = 0; 
+        
+        // loop through each element
+        for(int i = 0; i < height.size(); i++) {
+            int left_max = INT_MIN, right_max = INT_MIN;
+            
+            // find left_max
+            for(int left = i; left >= 0; left--) {
+                left_max = max(left_max, height[left]);
+            }
+            
+            // find right_max
+            for(int right = i; right < height.size(); right++) {
+                right_max = max(right_max, height[right]);
+            }
+            
+            int x = min(left_max, right_max) - height[i];
+            result += x > 0 ? x : 0;
+        }
+        
+        return result;
+    }
+};
+
+// DP: TC O(N), SC O(N)
+
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        int size = height.size(), result = 0;
+        vector<int> left(size, 0), right(size, 0);
+        left[0] = height[0], right[size - 1] = height[size - 1];
+        
+        for(int i = 1; i < size; i++) {
+            left[i] = max(left[i - 1], height[i]);
+        }
+        
+        for(int i = size - 2; i >= 0; i--) {
+            right[i] = max(right[i + 1], height[i]);
+        }
+        
+        for(int i = 1; i < size; i++) {
+            result += min(left[i], right[i]) - height[i];
+        }
+        
+        return result;
+    }
+};
