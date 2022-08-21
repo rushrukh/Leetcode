@@ -51,3 +51,57 @@ public:
         return result;
     }
 };
+
+
+// TC O(N), SC O(1)
+
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        int left = 0, right = height.size() - 1, left_max = height[0], right_max = height[height.size() - 1], result = 0;
+        
+        while(left < right) {
+            // first we check if left wall is smaller or right wall
+            if(height[left] < height[right]) {
+                 // left wall may have to do something with containing water
+                //  okay since left wall is smaller
+                //  it is either the biggest wall seen on left so far
+                //  or it will contain some water
+                if(height[left] >= left_max) {
+                    // sadly this is the biggest wall, hence no water
+                    left_max = height[left];
+                }
+                else {
+                    // yay we have seen bigger walls on the left side before
+                    // time to pour some water to this index
+                    // How much water? well, left_max - height[left] amount of water
+                    // How are we certain that it wont cause an issue? Well
+                    // if the left_max wall was bigger than anything on the right
+                    // we wouldn't have entered this block
+                    // we have only updated left_max with a new left big wall
+                    // after we made sure that there is a bigger wall on the right side than this
+                    result += left_max - height[left];
+                }
+                
+                left++;
+            }
+            else {
+                // right wall may have to do something with containing water
+                
+                if(height[right] >= right_max) {
+                    // sadly this is the biggest wall, hence no water
+                    right_max = height[right];
+                }
+                else {
+                    // yay we have seen a bigger wall on the right before
+                    // time to pour in some water to this index
+                    result += right_max - height[right];
+                }
+                
+                right--;
+            }
+        }
+        
+        return result;
+    }
+};
