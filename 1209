@@ -35,3 +35,31 @@ public:
         return result;
     }
 };
+
+
+// TC O(N), SC O(N)
+
+class Solution {
+public:
+    string removeDuplicates(string s, int k) {
+        int j = 0;
+        stack<int> stk;
+        
+        for(int i = 0; i < s.size(); i++, j++) {
+            s[j] = s[i];
+            
+            if(j == 0 || s[j] != s[j - 1]) {
+                stk.push(1);
+            }
+            else {
+                stk.top()++;
+                if(stk.top() == k) {
+                    stk.pop();
+                    j -= k;
+                }
+            }
+        }
+        
+        return s.substr(0, j);
+    }
+};
