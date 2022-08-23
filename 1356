@@ -1,0 +1,27 @@
+// TC (NlogN), SC O(1)
+
+class Solution {
+public:
+    vector<int> sortByBits(vector<int>& arr) {
+        sort(arr.begin(), arr.end(), [&](const int &x, const int &y) {
+            int x_1 = calc_ones(x);
+            int y_1 = calc_ones(y);
+
+            return x_1 == y_1 ? x < y : x_1 < y_1;
+        });
+        
+        return arr;
+    }
+    int calc_ones(int num) {
+        int count = 0, x = num;
+        
+        while(num) {
+            if(num & 1)
+                count++;
+            
+            num = num >> 1;
+        }
+        
+        return count;
+    }
+};
