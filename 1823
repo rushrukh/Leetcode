@@ -1,0 +1,26 @@
+// Queue Solution, TC: O(N * k), SC O(N)
+
+class Solution {
+public:
+    int findTheWinner(int n, int k) {
+        queue<int> q;
+        
+        for(int i = 1; i <= n; i++) {
+            q.push(i);
+        }
+        
+        while(q.size() > 1) {
+            int x = k;
+            while(x > 0) {
+                int tmp = q.front();
+                q.pop();
+                x--;
+                
+                if(x > 0)
+                    q.push(tmp);
+            }
+        }
+        
+        return q.front();
+    }
+};
