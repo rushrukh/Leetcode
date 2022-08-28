@@ -1,0 +1,40 @@
+// TC O(N), SC O(1)
+
+class Solution {
+public:
+    int compress(vector<char>& chars) {
+        int old_length = chars.size(), curr = 0, next = 0, here = 0;
+        
+        while(next <= old_length) {
+            if(next == old_length || chars[curr] != chars[next]) {
+                chars[here++] = chars[curr];
+                
+                if(next - curr < 10) {
+                    if(next - curr > 1)
+                        chars[here++] = char(int('0') + next - curr);
+                }
+                else {
+                    int tmp = next - curr;
+                    string rev = "";
+                    while(tmp > 0) {
+                        rev += char(int('0') + (tmp % 10));
+                        tmp /= 10;
+                    }
+                    
+                    for(int i = rev.size() - 1; i >= 0; i--) {
+                        chars[here++] = rev[i];
+                    }
+                }
+                
+                curr = next;
+                if(next == old_length)
+                    break;
+            }
+            else {
+                next++;
+            }
+        }
+        
+        return here;
+    }
+};
