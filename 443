@@ -38,3 +38,27 @@ public:
         return here;
     }
 };
+
+
+// Clean Solution: TC O(N) SC O(1)
+class Solution {
+public:
+    int compress(vector<char>& chars) {
+        int i = 0;
+        
+        for(int j = 1, counter = 1; j <= chars.size(); j++, counter++) {
+            if(j == chars.size() || chars[j] != chars[j - 1]) {
+                chars[i++] = chars[j - 1];
+                
+                if(counter > 1) {
+                    for(char &ch: to_string(counter)) {
+                        chars[i++] = ch;
+                    }
+                }
+                counter = 0;
+            }
+        }
+        
+        return i;
+    }
+};
