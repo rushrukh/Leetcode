@@ -26,3 +26,44 @@ public:
         return variance;
     }
 };
+
+
+// TC O(26 * 26 * N), SC O(1)
+
+class Solution {
+public:
+    int largestVariance(string s) {
+        int result = 0;
+        for(char high_freq_char = 'a'; high_freq_char <= 'z'; high_freq_char++) {
+            for(char low_freq_char = 'a'; low_freq_char <= 'z'; low_freq_char++) {
+                if(high_freq_char == low_freq_char)
+                    continue;
+
+                int high_freq = 0, low_freq = 0;
+                int low_freq_abandoned = false;
+
+                for(const char &ch: s) {
+                    if(ch == high_freq_char) high_freq++;
+                    if(ch == low_freq_char) low_freq++;
+
+                    if(low_freq > 0) {
+                        result = max(result, high_freq - low_freq);
+                    }
+                    else {
+                        if(low_freq_abandoned) {
+                            result = max(result, high_freq - 1);
+                        }
+                    }
+
+                    if(low_freq > high_freq) {
+                        high_freq = 0;
+                        low_freq = 0;
+                        low_freq_abandoned = true;
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+};
