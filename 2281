@@ -1,0 +1,55 @@
+// TC O(N), SC O(N)
+
+typedef long long int ll;
+const int mod = 1e9 + 7;
+
+class Solution {
+public:
+    int totalStrength(vector<int>& s) {
+        int n = s.size();
+        vector<int> prev(n, -1), next(n, n);
+        
+        stack<int> stk;
+        for(int i = 0; i < n; i++) {
+            while(!stk.empty() && s[stk.top()] > s[i])
+                stk.pop();
+            
+            prev[i] = stk.empty() ? -1 : stk.top();
+            stk.push(i);
+        }
+        
+        stk = {};
+        for(int i = n - 1; i >= 0; i--) {
+            while(!stk.empty() && s[stk.top()] >= s[i])
+                stk.pop();
+            next[i] = stk.empty() ? n : stk.top();
+            stk.push(i);
+        }
+        
+        vector<ll> prefix(n + 2, 0), prefix_prefix(n + 2, 0);
+        
+        for(int i = 0; i < n; i++) {
+            prefix[i + 1] = (prefix[i] + s[i]) % mod;
+        }
+        
+        for(int i = 0; i <= n; i++) {
+            prefix_prefix[i + 1] = (prefix_prefix[i] + prefix[i]) % mod;
+        }
+        
+        ll ans = 0;
+        
+        for(int i = 0; i < n; i++) {
+//             int prv = prev[i] + 1, nxt = next[i];
+//             ll pos = (prefix_prefix[nxt] - prefix_prefix[i] + mod) % mod, neg = (prefix_prefix[i] - prefix_prefix[prv] + mod) % mod;
+//             ll before = i - prev[i], after = nxt - i;
+            
+//             ll total = ((pos * before) % mod - (neg * after) % mod + mod) % mod;
+//             ans = (ans + (total * s[i]) % mod) % mod;
+            
+            ans += ((prefix_prefix[next[i] + 1] - prefix_prefix[i + 1]) * (i - prev[i]) % mod + mod * 2 - (prefix_prefix[i + 1] - prefix_prefix[prev[i] + 1]) * (next[i] - i) % mod) % mod * s[i] % mod;
+            ans %= mod;
+        }
+        
+        return ans;
+    }
+};
