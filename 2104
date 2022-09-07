@@ -1,0 +1,53 @@
+// TC O(N), SC O(N)
+
+class Solution {
+public:
+    long long subArrayRanges(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> pse(n, -1), nse(n, n), pge(n, -1), nge(n, n);
+        stack<int> stk;
+        
+        for(int i = 0; i < n; i++) {
+            while(!stk.empty() && nums[stk.top()] > nums[i])
+                stk.pop();
+            pse[i] = stk.empty() ? -1 : stk.top();
+            stk.push(i);
+        }
+        
+        stk = {};
+        for(int i = n - 1; i >= 0; i--) {
+            while(!stk.empty() && nums[stk.top()] >= nums[i])
+                stk.pop();
+            nse[i] = stk.empty() ? n : stk.top();
+            stk.push(i);
+        }
+        
+        stk = {};
+        for(int i = 0; i < n; i++) {
+            while(!stk.empty() && nums[stk.top()] < nums[i])
+                stk.pop();
+            pge[i] = stk.empty() ? -1 : stk.top();
+            stk.push(i);
+        }
+        
+        stk = {};
+        for(int i = n - 1; i >= 0; i--) {
+            while(!stk.empty() && nums[stk.top()] <= nums[i])
+                stk.pop();
+            nge[i] = stk.empty() ? n : stk.top();
+            stk.push(i);
+        }
+        
+        long long sum = 0;
+        
+        for(int i = 0; i < n; i++) {
+            long long min_prev = i - pse[i], min_next = nse[i] - i;
+            long long max_prev = i - pge[i], max_next = nge[i] - i;
+            sum += (max_prev * max_next - min_prev * min_next) * nums[i];
+        }
+        
+        return sum;
+    }
+};
+
+// an array of size n has n(n + 1)/2 sub-arrays.
