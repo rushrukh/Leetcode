@@ -1,0 +1,21 @@
+// TC O(NlogN), SC O(n)
+
+class Solution {
+public:
+    int twoSumLessThanK(vector<int>& nums, int k) {
+        sort(nums.begin(), nums.end());
+        
+        int left = 0, right = nums.size() - 1, result = INT_MIN;
+        
+        while(left < right) {
+            if(nums[left] + nums[right] >= k) {
+                right--;
+            }
+            else {
+                result = max(result, nums[left++] + nums[right]);
+            }
+        }
+        
+        return result == INT_MIN ? -1 : result;
+    }
+};
