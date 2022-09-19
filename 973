@@ -16,37 +16,46 @@ public:
 
 class Solution {
 public:
-    int calcEuclideanDistance(vector<int>& coordinates) {
-        return coordinates[0] * coordinates[0] + coordinates[1] * coordinates[1];
+    int calc_distance(vector<int> &point) {
+        return point[0] * point[0] + point[1] * point[1];
     }
     vector<vector<int>> kClosest(vector<vector<int>>& points, int k) {
+        // max_heap is maintained by the distance, but we also need the idx for the ans;
+        priority_queue<pair<int,int>> Q;
         vector<vector<int>> result;
         
-        priority_queue<pair<int, int>> Q;
-        
         for(int i = 0; i < points.size(); i++) {
-            pair<int, int> currentEntry = {calcEuclideanDistance(points[i]), i};
+            pair<int, int> current_point = {calc_distance(points[i]), i};
             
-            if(Q.size() < k) 
-                Q.push(currentEntry);
-            
+            if(Q.size() < k)
+                Q.push(current_point);
             else {
-                if(currentEntry.first < Q.top().first) {
+                if(current_point.first < Q.top().first) {
                     Q.pop();
-                    Q.push(currentEntry);
+                    Q.push(current_point);
                 }
             }
         }
         
         while(!Q.empty()) {
-            int idx = Q.top().second;
+            int p = Q.top().second;
             Q.pop();
-            result.push_back({points[idx][0], points[idx][1]});
+            result.push_back(points[p]);
         }
         
         return result;
     }
 };
+
+// Max-heap keeps the max value at the top.
+// say k = 3
+// we have 3 values pushed into max_heap
+// now, we are at the 4th element.
+// Say, 4th element's euclidean distance is smaller.
+// it is a good element for the result
+// then someone needs to go out of the queue right?
+// which one goes out? the biggest one
+// Nice, unlike min_heap, we have it at the top of the queue.
 
 
 // Binary Search Soln: TC O(N) SC O(N)
