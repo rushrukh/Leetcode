@@ -37,3 +37,47 @@ public:
         }
     }
 };
+
+// TC O(N), SC O(N)
+
+class Solution {
+public:
+    int orangesRotting(vector<vector<int>>& grid) {
+        int row = grid.size(), col = grid[0].size(), minute = 0, fresh = 0;
+        vector<vector<int>> direction = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        queue<pair<int, int>> Q;
+        
+        for(int i = 0; i < row; i++) {
+            for(int j = 0; j < col; j++) {
+                if(grid[i][j] == 2)
+                    Q.push({i, j});
+                else if(grid[i][j] == 1)
+                    fresh++;
+            }
+        }
+        
+        while(!Q.empty()) {
+            int n = Q.size();
+            cout << "size: " << n << endl;
+            minute++;
+            for(int i = 0; i < n; i++) {
+                int r = Q.front().first, c = Q.front().second;
+                Q.pop();
+                
+                for(int d = 0; d < direction.size(); d++) {
+                    int new_r = r + direction[d][0], new_c = c + direction[d][1];
+                    if(new_r < 0 || new_r >= row || new_c < 0 || new_c >= col)
+                        continue;
+                    if(grid[new_r][new_c] == 1) {
+                        grid[new_r][new_c] = 2;
+                        fresh--;
+                        Q.push({r + direction[d][0], c + direction[d][1]});
+                    }
+
+                }
+            }
+        }
+        
+        return fresh == 0 ? minute - 1 > 0 ? minute - 1 : 0 : -1;
+    }
+};
