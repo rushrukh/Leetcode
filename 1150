@@ -1,0 +1,20 @@
+// TC O(log N), SC O(1)
+
+class Solution {
+public:
+    bool isMajorityElement(vector<int>& nums, int target) {
+        int left = 0, right = nums.size() - 1, n = nums.size();
+        
+        while(left <= right) {
+            int mid = left + (right - left) / 2;
+            
+            if(nums[mid] >= target) {
+                right = mid - 1;
+            }
+            else
+                left = mid + 1;
+        }
+        
+        return (left + n / 2 < n) && (nums[left + n / 2] == target);
+    }
+};
