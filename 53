@@ -1,11 +1,12 @@
 // TC O(N), SC O(1)
+
 class Solution {
 public:
     int maxSubArray(vector<int>& nums) {
         int max_sum = INT_MIN, curr_sum = 0;
         
-        for(int i = 0; i < nums.size(); i++) {
-            curr_sum = max(curr_sum + nums[i], nums[i]);
+        for(int &x: nums) {
+            curr_sum = max(x, curr_sum + x);
             max_sum = max(max_sum, curr_sum);
         }
         
