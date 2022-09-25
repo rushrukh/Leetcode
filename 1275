@@ -1,0 +1,64 @@
+// TC O(m * n), SC O(n)
+
+class Solution {
+public:
+    string tictactoe(vector<vector<int>>& moves) {
+        vector<vector<int>> board(3, vector<int> (3, 0));
+        int player = 1;
+        
+        for(auto &move: moves) {
+            board[move[0]][move[1]] = player;
+            
+            if(check_col(player, move[1], board) || 
+              check_row(player, move[0], board) ||
+              check_diagonal(player, board) ||
+              check_opposite_diagonal(player, board)) {
+                if(player == 1)
+                    return "A";
+                else
+                    return "B";
+            }
+            
+            player *= -1;
+        }
+        
+        return moves.size() == 9 ? "Draw" : "Pending";
+        
+    }
+    bool check_col(int player, int col, vector<vector<int>> &board) {
+        for(int i = 0; i < 3; i++) {
+            if(board[i][col] != player || board[i][col] == 0)
+                return false;
+        }
+        return true;
+    }
+    
+    bool check_row(int player, int row, vector<vector<int>> &board) {
+        for(int i = 0; i < 3; i++) {
+            if(board[row][i] != player || board[row][i] == 0)
+                return false;
+        }
+        return true;
+    }
+    
+    bool check_diagonal(int player, vector<vector<int>> &board) {
+        for(int i = 0; i < 3; i++) {
+            if(board[i][i] != player || board[i][i] == 0)
+                return false;
+        }
+        return true;
+    }
+    
+    bool check_opposite_diagonal(int player, vector<vector<int>> &board) {
+        int row = 0, col = 2;
+        
+        for(int i = 0; i < 3; i++) {
+            if(board[row][col] != player || board[row][col] == 0)
+                return false;
+            
+            row++;
+            col--;
+        }
+        return true;
+    }
+};
