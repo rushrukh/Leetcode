@@ -1,0 +1,27 @@
+// TC O(N), SC O(1)
+class Solution {
+public:
+    int minimumKeypresses(string s) {
+        vector<int> hash(26, 0);
+        int count = 0, position = 1, result = 0;
+        
+        for(char &x: s) {
+            hash[x - 'a']++;
+        }
+        
+        sort(hash.begin(), hash.end(), greater<int>());
+        
+        for(int i = 0; i < 26; i++) {
+            if(hash[i] > 0) {
+                if(count && count % 9 == 0) {
+                    position++;
+                }
+                
+                result += position * hash[i];
+                count++;
+            }
+        }
+        
+        return result;
+    }
+};
