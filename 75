@@ -18,3 +18,30 @@ public:
         }
     }
 };
+
+// TC O(N), SC O(1)
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        int red = -1, blue = nums.size(), curr = 0;
+        
+        while(red + 1 < nums.size() && nums[red + 1] == 0)
+            red++;
+        
+        while(blue - 1 >= 0 && nums[blue - 1] == 2)
+            blue--;
+        
+        curr = red + 1;
+        
+        while(curr < blue) {
+            if(nums[curr] == 2) {
+                swap(nums[--blue], nums[curr]);
+            }
+            else if(nums[curr] == 0) {
+                swap(nums[++red], nums[curr++]);
+            }
+            else
+                curr++;
+        }
+    }
+};
