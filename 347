@@ -6,20 +6,23 @@ public:
         unordered_map<int, int> hash;
         vector<int> result;
         
-        for(int &num : nums) hash[num]++;
+        for(int &num: nums)
+            hash[num]++;
         
-        auto comp = [&hash](int x, int y) {
-            return hash[x] > hash[y];
+        auto comp = [&hash](int &i, int &j) {
+            return hash[i] > hash[j];  
         };
         
         priority_queue<int, vector<int>, decltype(comp)> Q(comp);
         
         for(auto &x: hash) {
             Q.push(x.first);
-            if(Q.size() > k) Q.pop();
+            
+            if(Q.size() > k)
+                Q.pop();
         }
         
-        while(Q.size()) {
+        while(!Q.empty()) {
             result.push_back(Q.top());
             Q.pop();
         }
