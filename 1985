@@ -3,14 +3,19 @@
 class Solution {
 public:
     string kthLargestNumber(vector<string>& nums, int k) {
-        auto comp = [] (string& A, string& B) {
-            return A.length() == B.length() ? A > B : A.length() > B.length();
+        
+        auto comp = [] (string &A, string &B) {
+            // A > B means that, between these two elements, it needs swapping in min-heap.
+            return A.size() == B.size() ? A > B : A.size() > B.size();
         };
+        
         priority_queue<string, vector<string>, decltype(comp)> Q(comp);
         
         for(string &num: nums) {
             Q.push(num);
-            if(Q.size() > k) Q.pop();
+            
+            if(Q.size() > k)
+                Q.pop();
         }
         
         return Q.top();
