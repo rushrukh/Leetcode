@@ -1,35 +1,23 @@
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
+// TC O(N), SC O(N)
+
 class Solution {
 public:
+    int prev = INT_MAX, min_dif = INT_MAX;
     int getMinimumDifference(TreeNode* root) {
-        int minDifference = INT_MAX;
-        TreeNode* prev = NULL;
         
-        inOrder(root, prev, minDifference);
-        
-        return minDifference;
+        inorder(root);
+        return min_dif;
     }
     
-    void inOrder(TreeNode* root, TreeNode* &prev, int & minDifference) {
-        if(!root) return;
+    void inorder(TreeNode* root) {
+        if(!root)
+            return;
         
-        inOrder(root -> left, prev, minDifference);
+        inorder(root -> left);
         
-        if(prev)
-            minDifference = min(abs(prev -> val - root -> val), minDifference);
+        min_dif = min(min_dif, abs(prev - root -> val));
+        prev = root -> val;
         
-        prev = root;
-        
-        inOrder(root -> right, prev, minDifference);
+        inorder(root -> right);
     }
 };
