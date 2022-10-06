@@ -37,7 +37,7 @@ public:
 class Solution {
 public:
     vector<int> unique;
-    map<int, int> hash;
+    unordered_map<int, int> hash;
     vector<int> topKFrequent(vector<int>& nums, int k) {
         for(int &num: nums)
             hash[num]++;
@@ -60,7 +60,8 @@ public:
         if(left == right)
             return;
         
-        int pivot_index = left + rand() % (right - left + 1);
+        int pivot_index = right;
+        // int pivot_index = left + rand() % (right - left + 1);
         pivot_index = partition(left, right, pivot_index);
         
         if(pivot_index == k)
@@ -72,12 +73,14 @@ public:
     }
     
     int partition(int left, int right, int pivot_index) {
+        // this is important
+        int pivot_frequency = hash[unique[pivot_index]];
         // swap pivot with right
         swap(unique[right], unique[pivot_index]);
         int store_index = left;
         
         for(int i = left; i <= right; i++) {
-            if(hash[unique[i]] < hash[unique[pivot_index]]) {
+            if(hash[unique[i]] < pivot_frequency) {
                 swap(unique[i], unique[store_index++]);
             }
         }
@@ -86,3 +89,13 @@ public:
         return store_index;
     }
 };
+
+
+/*
+
+- create hash
+- Call quickselect
+- inside quickselect call partition
+- return n - k to n elements
+
+*/
