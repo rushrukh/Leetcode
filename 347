@@ -30,3 +30,59 @@ public:
         return result;
     }
 };
+
+
+// QuickSelect TC O(N), SC O(N)
+
+class Solution {
+public:
+    vector<int> unique;
+    map<int, int> hash;
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        for(int &num: nums)
+            hash[num]++;
+        
+        int n = hash.size();
+        
+        for(pair<int, int> p: hash)
+            unique.push_back(p.first);
+        
+        quickselect(0, n - 1, n - k);
+        vector<int> result(k);
+        copy(unique.begin() + n - k, unique.end(), result.begin());
+        
+        return result;
+    }
+    
+    void quickselect(int left, int right, int k) {
+        
+        // only one element, nothing to sort;
+        if(left == right)
+            return;
+        
+        int pivot_index = left + rand() % (right - left + 1);
+        pivot_index = partition(left, right, pivot_index);
+        
+        if(pivot_index == k)
+            return;
+        else if(k < pivot_index)
+            quickselect(left, pivot_index - 1, k);
+        else
+            quickselect(pivot_index + 1, right, k);
+    }
+    
+    int partition(int left, int right, int pivot_index) {
+        // swap pivot with right
+        swap(unique[right], unique[pivot_index]);
+        int store_index = left;
+        
+        for(int i = left; i <= right; i++) {
+            if(hash[unique[i]] < hash[unique[pivot_index]]) {
+                swap(unique[i], unique[store_index++]);
+            }
+        }
+        swap(unique[store_index], unique[right]);
+        
+        return store_index;
+    }
+};
