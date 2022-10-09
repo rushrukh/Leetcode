@@ -36,66 +36,52 @@ public:
 
 class Solution {
 public:
+    int n = 0;
     vector<int> unique;
     unordered_map<int, int> hash;
     vector<int> topKFrequent(vector<int>& nums, int k) {
+        vector<int> result(k, 0);
+        
         for(int &num: nums)
             hash[num]++;
         
-        int n = hash.size();
-        
-        for(pair<int, int> p: hash)
+        for(auto &p: hash)
             unique.push_back(p.first);
         
+        n = unique.size();
         quickselect(0, n - 1, n - k);
-        vector<int> result(k);
+        
         copy(unique.begin() + n - k, unique.end(), result.begin());
         
         return result;
     }
     
     void quickselect(int left, int right, int k) {
-        
-        // only one element, nothing to sort;
+        // base case: if array size is 1, nothing to do
         if(left == right)
             return;
         
-        int pivot_index = right;
-        // int pivot_index = left + rand() % (right - left + 1);
-        pivot_index = partition(left, right, pivot_index);
+        int p = left + rand() % (right - left + 1);
+        int pivot = partition(left, right, p); // think about parameters
         
-        if(pivot_index == k)
+        if(pivot == k)
             return;
-        else if(k < pivot_index)
-            quickselect(left, pivot_index - 1, k);
+        else if(pivot < k)
+            quickselect(pivot + 1, right, k);
         else
-            quickselect(pivot_index + 1, right, k);
+            quickselect(left, pivot - 1, k);
     }
     
-    int partition(int left, int right, int pivot_index) {
-        // this is important
-        int pivot_frequency = hash[unique[pivot_index]];
-        // swap pivot with right
-        swap(unique[right], unique[pivot_index]);
-        int store_index = left;
+    int partition(int left, int right, int p) {
+        int pivot_freq = hash[unique[p]], store_index = left;
+        swap(unique[p], unique[right]);
         
-        for(int i = left; i <= right; i++) {
-            if(hash[unique[i]] < pivot_frequency) {
+        for(int i = left; i < right; i++) {
+            if(hash[unique[i]] <= pivot_freq)
                 swap(unique[i], unique[store_index++]);
-            }
         }
-        swap(unique[store_index], unique[right]);
+        swap(unique[right], unique[store_index]);
         
         return store_index;
     }
 };
-
-
-/*
-
-- create hash
-- Call quickselect
-- inside quickselect call partition
-- return n - k to n elements
-
-*/
