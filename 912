@@ -1,0 +1,65 @@
+// 1. STL sort, TC O(NlogN)
+
+class Solution {
+public:
+    vector<int> sortArray(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        return nums;
+    }
+};
+
+// 2. STL stable sort, TC O(NlogN)
+
+class Solution {
+public:
+    vector<int> sortArray(vector<int>& nums) {
+        stable_sort(nums.begin(), nums.end());
+        return nums;
+    }
+};
+
+// 3. Mergesort: TC O(NlogN), SC O(N)
+
+class Solution {
+public:
+    vector<int> sortArray(vector<int>& nums) {
+        int low = 0, high = nums.size() - 1;
+        mergesort(nums, low, high);
+        
+        return nums;
+    }
+    
+    void mergesort(vector<int>& nums, int low, int high) {
+        if(low == high)
+            return;
+        
+        int mid = low + (high - low) / 2;
+        mergesort(nums, low, mid);
+        mergesort(nums, mid + 1, high);
+        
+        merge(nums, low, mid, high);
+    }
+    
+    void merge(vector<int> &nums, int low, int mid, int high) {
+        if(low == high)
+            return;
+        
+        int i = low, j = mid + 1, k = 0;
+        vector<int> tmp(high - low + 1, 0);
+        
+        while(i <= mid && j <= high) {
+            if(nums[i] <= nums[j])
+                tmp[k++] = nums[i++];
+            else
+                tmp[k++] = nums[j++];
+        }
+        
+        while(i <= mid)
+            tmp[k++] = nums[i++];
+        
+        while(j <= high)
+            tmp[k++] = nums[j++];
+        
+        copy(tmp.begin(), tmp.end(), nums.begin() + low);
+    }
+};
