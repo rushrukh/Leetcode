@@ -23,31 +23,31 @@ public:
 class Solution {
 public:
     vector<int> sortArray(vector<int>& nums) {
-        int low = 0, high = nums.size() - 1;
-        mergesort(nums, low, high);
+        int n = nums.size();
+        mergesort(nums, 0, n - 1);
         
         return nums;
     }
     
-    void mergesort(vector<int>& nums, int low, int high) {
-        if(low == high)
+    void mergesort(vector<int> &nums, int left, int right) {
+        if(left == right)
             return;
         
-        int mid = low + (high - low) / 2;
-        mergesort(nums, low, mid);
-        mergesort(nums, mid + 1, high);
+        int mid = left + (right - left) / 2;
+        mergesort(nums, left, mid);
+        mergesort(nums, mid + 1, right);
         
-        merge(nums, low, mid, high);
+        merge(nums, left, mid, right);
     }
     
-    void merge(vector<int> &nums, int low, int mid, int high) {
-        if(low == high)
+    void merge(vector<int> &nums, int left, int mid, int right) {
+        if(left == right)
             return;
         
-        int i = low, j = mid + 1, k = 0;
-        vector<int> tmp(high - low + 1, 0);
+        vector<int> tmp (right - left + 1, 0);
+        int i = left, j = mid + 1, k = 0;
         
-        while(i <= mid && j <= high) {
+        while(i <= mid && j <= right) {
             if(nums[i] <= nums[j])
                 tmp[k++] = nums[i++];
             else
@@ -57,9 +57,9 @@ public:
         while(i <= mid)
             tmp[k++] = nums[i++];
         
-        while(j <= high)
+        while(j <= right)
             tmp[k++] = nums[j++];
         
-        copy(tmp.begin(), tmp.end(), nums.begin() + low);
+        copy(tmp.begin(), tmp.end(), nums.begin() + left);
     }
 };
