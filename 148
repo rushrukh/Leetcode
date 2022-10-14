@@ -1,0 +1,61 @@
+// TC O(n logn), SC O(logn)
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* sortList(ListNode* head) {
+        if(!head || !head -> next)
+            return head;
+        
+        ListNode* mid = find_mid(head);
+        ListNode* left = sortList(head);
+        ListNode* right = sortList(mid);
+        
+        return merge(left, right);
+    }
+    
+    ListNode* merge(ListNode *l1, ListNode *l2) {
+        ListNode *dummy_head = new ListNode(0);
+        ListNode *dummy_pointer = dummy_head;
+        
+        while(l1 && l2) {
+            if(l1 -> val <= l2 -> val) {
+                dummy_pointer -> next = l1;
+                l1 = l1 -> next;
+            }
+            else {
+                dummy_pointer -> next = l2;
+                l2 = l2 -> next;
+            }
+            
+            dummy_pointer = dummy_pointer -> next;
+        }
+        
+        if(l1) dummy_pointer -> next = l1;
+        else dummy_pointer -> next = l2;
+        
+        return dummy_head -> next;
+    }
+    ListNode* find_mid(ListNode *head) {
+        ListNode *mid_prev = NULL;
+        
+        while(head && head -> next) {
+            mid_prev = mid_prev == NULL ? head : mid_prev -> next;
+            head = head -> next -> next;
+        }
+        
+        ListNode *mid = mid_prev -> next;
+        mid_prev -> next = NULL;
+        
+        return mid;
+    }
+};
