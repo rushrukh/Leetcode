@@ -69,3 +69,97 @@ public:
         return mid;
     }
 };
+
+
+// TC O(N logN), SC O(1)
+
+class Solution {
+public:
+    ListNode *tail = NULL, *next_sublist = NULL;
+    ListNode* sortList(ListNode* head) {
+        if(!head || !head -> next)
+            return head;
+        
+        int list_size = get_length(head);
+        
+        ListNode *dummy_head = new ListNode(0);
+        ListNode *start = head;
+        for(int size = 1; size < list_size; size *= 2) {
+            tail = dummy_head;
+            
+            while(start) {
+                if(!start -> next) {
+                    tail -> next = start;
+                    break;
+                }
+                
+                ListNode *mid = split(start, size);
+                merge(start, mid);
+                start = next_sublist;
+            }
+            
+            start = dummy_head -> next;
+        }
+        
+        return dummy_head -> next;
+    }
+    
+    ListNode* split(ListNode* start, int size) {
+        ListNode* midprev = start, *end = start -> next;
+        
+        for(int index = 1; index < size; index++) {
+            if(end -> next) {
+                end = end -> next -> next ? end -> next -> next : end -> next;
+            }
+            
+            if(midprev -> next) {
+                midprev = midprev -> next;
+            }
+        }
+        
+        ListNode *mid = midprev -> next;
+        next_sublist = end -> next;
+        
+        midprev -> next = NULL;
+        end -> next = NULL;
+        
+        return mid;
+    }
+    
+    void merge(ListNode* l1, ListNode *l2) {
+        ListNode* dummy_head = new ListNode(0);
+        ListNode* new_tail = dummy_head;
+        
+        while(l1 && l2) {
+            if(l1 -> val <= l2 -> val) {
+                new_tail -> next = l1;
+                l1 = l1 -> next;
+            }
+            else {
+                new_tail -> next = l2;
+                l2 = l2 -> next;
+            }
+            
+            new_tail = new_tail -> next;
+        }
+        
+        new_tail -> next = l1 ? l1 : l2;
+        
+        while(new_tail -> next) 
+            new_tail = new_tail -> next;
+        
+        tail -> next = dummy_head -> next;
+        tail = new_tail;
+    }
+    
+    int get_length(ListNode* head) {
+        int count = 0;
+        
+        while(head) {
+            count++;
+            head = head -> next;
+        }
+        
+        return count;
+    }
+};
