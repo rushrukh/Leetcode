@@ -1,0 +1,52 @@
+// TC O(N), SC O(N)
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    string root_to_start = "", root_to_dest = "";
+    string getDirections(TreeNode* root, int startValue, int destValue) {
+        string path = "";
+        find_path(root, startValue, destValue, path);
+        
+        int i = 0;
+        while(root_to_start.size() && root_to_dest.size() && root_to_start[i] == root_to_dest[i])
+            i++;
+        
+        string new_start = root_to_start.substr(i, root_to_start.length());
+        string new_dest = root_to_dest.substr(i, root_to_dest.length());
+        
+        i = 0;
+        
+        while(i < new_start.size())
+            new_start[i++] = 'U';
+        
+        return new_start + new_dest;
+    }
+    
+    void find_path(TreeNode* root, int &startVal, int &destVal, string &path) {
+        if(!root) return;
+        if(root -> val == startVal)
+            root_to_start = path;
+        
+        if(root -> val == destVal)
+            root_to_dest = path;
+        
+        if(!root_to_start.size() || !root_to_dest.size()) {
+            path += 'L';
+            find_path(root -> left, startVal, destVal, path);
+            path[path.size() - 1] = 'R';
+            find_path(root -> right, startVal, destVal, path);
+            path.pop_back();
+        }
+    }
+};
