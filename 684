@@ -1,31 +1,37 @@
+// TC O(N), SC O(N)
+
 class Solution {
 public:
     vector<int> findRedundantConnection(vector<vector<int>>& edges) {
-        vector<int> trackParents(edges.size() + 1, -1);
+        int n = edges.size();
+        vector<int> parent(n + 1, -1);
         
-        for(auto x: edges) {
-            int u = findParent(trackParents, x[0]), v = findParent(trackParents, x[1]);
+        for(auto &edge: edges) {
+            int u = find_parent(parent, edge[0]);
+            int v = find_parent(parent, edge[1]);
             
-            if(u != v) {
-                if(trackParents[u] <= trackParents[v]) {
-                    trackParents[v] = u;
-                    trackParents[u]--;
-                } 
+            if(u == v) {
+                return edge;
+            }
+            else {
+                if(abs(parent[u]) >= abs(parent[v])) {
+                    parent[u] += parent[v];
+                    parent[v] = u;
+                }
                 else {
-                    trackParents[u] = v;
-                    trackParents[v]--;
+                    parent[v] += parent[u];
+                    parent[u] = v;
                 }
             }
-            else return x;
         }
         
         return {};
     }
     
-    int findParent(vector<int> &trackParents, int u) {
-        while(trackParents[u] > 0) 
-            u = trackParents[u];
+    int find_parent(vector<int> &parent, int node) {
+        if(parent[node] < 0)
+            return node;
         
-        return u;
+        return parent[node] = find_parent(parent, parent[node]);
     }
 };
