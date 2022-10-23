@@ -39,3 +39,40 @@ public:
         return parent[x] = find_parent(parent[x]);
     }
 };
+
+
+// TC O(N^2), SC O(N)
+
+class Solution {
+public:
+    vector<int> findRedundantConnection(vector<vector<int>>& edges) {
+        int n = edges.size();
+        vector<vector<int>> adj_list(n + 1);
+        
+        for(auto &edge: edges) {
+            vector<bool> visited(n + 1, false);
+            
+            adj_list[edge[0]].push_back(edge[1]);
+            adj_list[edge[1]].push_back(edge[0]);
+            
+            if(dfs(adj_list, visited, edge[0], -1))
+               return edge;
+        }
+        
+        return {};       
+    }
+    
+    bool dfs(vector<vector<int>> &adj_list, vector<bool> &visited, int curr, int parent) {
+        if(visited[curr])
+            return true;
+        
+        visited[curr] = true;
+        
+        for(auto &child: adj_list[curr]) {
+            if(child != parent && dfs(adj_list, visited, child, curr))
+                return true;
+        }
+        
+        return false;
+    }
+};
