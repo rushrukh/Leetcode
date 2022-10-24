@@ -1,41 +1,44 @@
+// TC O(M * N), SC O(N)
+
 class Solution {
 public:
+    unordered_map<string, vector<pair<string, double>>> graph;
+    
     vector<double> calcEquation(vector<vector<string>>& equations, vector<double>& values, vector<vector<string>>& queries) {
-        unordered_map<string, unordered_map<string, double>> graph;
-        vector<double> result;
+        vector<double> results;
         
         for(int i = 0; i < equations.size(); i++) {
-            graph[equations[i][0]][equations[i][1]] = values[i];
-            graph[equations[i][1]][equations[i][0]] = 1 / values[i];
+            graph[equations[i][0]].push_back({equations[i][1], values[i]});
+            graph[equations[i][1]].push_back({equations[i][0], 1 / values[i]});
         }
         
-        for(auto x: queries) {
-            vector<string> visited;
-            double res = DFS(graph, x[0], x[1], visited, 1);
-            
-            if(!res) result.push_back(-1.0);
-            else result.push_back(res);
+        for(auto &query: queries) {
+            unordered_set<string> visited;
+            results.push_back(dfs(visited, query[0], query[1], 1.0));
         }
         
-        return result;
+        return results;
     }
     
-    double DFS(unordered_map<string, unordered_map<string, double>>& graph, string start, string end, vector<string> &visited, double currentProduct) {
-        if(graph.find(start) == graph.end()) return 0;
+    double dfs(unordered_set<string> &visited, string start, string end, double product) {
+        if(graph.find(start) == graph.end()) return -1;
+        if(graph.find(end) == graph.end()) return -1;
         
-        if(graph[start].find(end) != graph[start].end()) return currentProduct * graph[start][end];
+        visited.insert(start);
         
-        if(find(visited.begin(), visited.end(), start) == visited.end()) {
-            visited.push_back(start);
+        if(start == end) {
+            return product;
+        }
             
-            for(auto x: graph[start]) {
-                if(find(visited.begin(), visited.end(), x.first) == visited.end()) {
-                    double res = DFS(graph, x.first, end, visited, currentProduct * x.second);
-                    if(res != 0) return res;
-                }
+        double result = -1;
+        for(auto &pair: graph[start]) {
+            if(visited.find(pair.first) == visited.end()) {
+                result = dfs(visited, pair.first, end, product * pair.second);
+                if(result != -1)
+                    break;
             }
         }
-        
-        return 0;
+
+        return result;
     }
 };
