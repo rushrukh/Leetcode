@@ -68,3 +68,30 @@ public:
         return parent[x] = find_parent(parent[x]);
     }
 };
+
+
+// TC O(N), SC O(N)
+
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        unordered_set<int> nums_set;
+        int result = 0;
+        
+        for(int &num: nums)
+            nums_set.insert(num);
+        
+        for(const int &num: nums_set) {
+            if(nums_set.find(num - 1) == nums_set.end()) {
+                int y = num + 1;
+                
+                while(nums_set.find(y) != nums_set.end())
+                    y++;
+                
+                result = max(result, y - num);
+            }
+        }
+        
+        return result;
+    }
+};
