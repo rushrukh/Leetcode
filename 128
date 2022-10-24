@@ -1,0 +1,70 @@
+// TC O(N), SC O(N)
+
+class Solution {
+public:
+    unordered_map<int, int> parent, rank, visited;
+    int longestConsecutive(vector<int>& nums) {
+        int result = 0;
+        
+        for(int &num: nums) {
+            parent.insert({num, num});
+            rank.insert({num, 0});
+            visited.insert({num, 0});
+        }
+        
+        if(!parent.size() || parent.size() == 1)
+            return parent.size();
+        
+        for(int &num: nums) {
+                int u = num, v = num - 1;
+                if(parent.find(v) != parent.end()) {
+                    Union(u, v);
+                }
+
+                v = num + 1;
+                if(parent.find(v) != parent.end()) {
+                    Union(u, v);
+                }
+        }
+        
+        for(auto pair: rank) {
+            result = max(result, pair.second);
+        }
+        
+        return !result ? 1 : result;
+    }
+    
+    void Union(int u, int v) {
+        int parent_u = find_parent(u), parent_v = find_parent(v);
+        
+        if(parent_u != parent_v) {
+            if(rank[parent_u] >= rank[parent_v]) {
+                parent[parent_v] = parent_u;
+                
+                if(!rank[parent_u] && !rank[parent_v])
+                    rank[parent_u] += 2;
+                else if(!rank[parent_v])
+                    rank[parent_u]++;
+                else
+                    rank[parent_u] += rank[parent_v];
+            }
+            else {
+                parent[parent_u] = parent_v;
+                
+                if(!rank[parent_u] && !rank[parent_v])
+                    rank[parent_v] += 2;
+                else if(!rank[parent_u])
+                    rank[parent_v]++;
+                else
+                    rank[parent_v] += rank[parent_u];
+            }
+        }
+    }
+    
+    int find_parent(int x) {
+        if(parent[x] == x)
+            return x;
+        
+        return parent[x] = find_parent(parent[x]);
+    }
+};
