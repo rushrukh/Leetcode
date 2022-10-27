@@ -25,3 +25,71 @@ public:
         return 1 + left + right + top + bottom;
     }
 };
+
+
+// TC O(R*C), SC O(R*C)
+
+class Solution {
+public:
+    vector<int> parent, rank;
+    int maxAreaOfIsland(vector<vector<int>>& grid) {
+        int m = grid.size(), n = grid[0].size(), result = 0;
+        
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                if(grid[i][j]) {
+                    parent.push_back(i * n + j);
+                    rank.push_back(1);
+                }
+                else {
+                    parent.push_back(-1);
+                    rank.push_back(0);
+                }
+            }
+        }
+        
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                if(grid[i][j]) {
+                    if(i - 1 >= 0 && grid[i - 1][j]) {
+                        Union((i - 1) * n + j, i * n + j);
+                    }
+                    if(i + 1 < m && grid[i + 1][j]) {
+                        Union((i + 1) * n + j, i * n + j);
+                    }
+                    if(j - 1 >= 0 && grid[i][j - 1]) {
+                        Union((i) * n + j - 1, i * n + j);
+                    }
+                    if(j + 1 < n && grid[i][j + 1]) {
+                        Union((i) * n + j + 1, i * n + j);
+                    }
+                }
+            }
+        }
+        
+        for(int &r: rank)
+            result = max(result, r);
+        
+        return result;
+    }
+    
+    void Union(int u, int v) {
+        int parent_u = find_parent(u), parent_v = find_parent(v);
+        
+        if(parent_u != parent_v) {
+            if(rank[u] < rank[v]) {
+                swap(parent_u, parent_v);
+            }
+            
+            parent[parent_v] = parent_u;
+            rank[parent_u] += rank[parent_v];
+        }
+    }
+    
+    int find_parent(int x) {
+        if(parent[x] == x)
+            return x;
+        
+        return parent[x] = find_parent(parent[x]);
+    }
+};
