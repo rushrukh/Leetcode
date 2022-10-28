@@ -60,3 +60,48 @@ public:
         return parent[x] = find_parent(parent[x]);
     }
 };
+
+// TC O(N), SC O(1)
+
+class Solution {
+public:
+    unordered_map<int, vector<int>> graph;
+    bool equationsPossible(vector<string>& equations) {
+        vector<int> color (26, -1);
+        
+        for(auto &eq: equations) {
+            if(eq[1] == '!') continue;
+            
+            graph[eq[0] - 'a'].push_back(eq[3] - 'a');
+            graph[eq[3] - 'a'].push_back(eq[0] - 'a');
+        }
+        
+        for(auto &pair: graph) 
+            if(color[pair.first] == -1)
+                DFS(color, pair.first, pair.first);
+        
+        for(auto &eq: equations) {
+            if(eq[1] == '=') continue;
+            
+            int u = eq[0] - 'a', v = eq[3] - 'a';
+            
+            color[u] = color[u] == -1 ? u : color[u];
+            color[v] = color[v] == -1 ? v : color[v];
+            
+            if(color[u] == color[v])
+                return false;
+        }
+        
+        return true;        
+    }
+    
+    void DFS(vector<int> &color, int node, int c) {
+        color[node] = c;
+        
+        for(int &i: graph[node]) {
+            int node = i;
+            if(color[node] == -1)
+                DFS(color, node, c);
+        }
+    }
+};
