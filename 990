@@ -1,0 +1,62 @@
+// TC O(N), SC O(N)
+
+class Solution {
+public:
+    unordered_map<char, char> parent;
+    unordered_map<char, int> rank;
+    bool equationsPossible(vector<string>& equations) {
+        for(auto &eq: equations) {
+            if(eq[1] == '!') continue;
+            
+            if(parent.find(eq[0]) == parent.end()) {
+                parent[eq[0]] = eq[0];
+                rank[eq[0]] = 1;
+            }
+            
+            if(parent.find(eq[3]) == parent.end()) {
+                parent[eq[3]] = eq[3];
+                rank[eq[3]] = 1;
+            }
+            
+            Union(eq[0], eq[3]);
+        }
+        
+        for(auto &eq: equations) {
+            if(eq[1] == '=') continue;
+            
+            if(parent.find(eq[0]) == parent.end()) {
+                parent[eq[0]] = eq[0];
+                rank[eq[0]] = 1;
+            }
+            
+            if(parent.find(eq[3]) == parent.end()) {
+                parent[eq[3]] = eq[3];
+                rank[eq[3]] = 1;
+            }
+            
+            if(find_parent(eq[0]) == find_parent(eq[3]))
+                return false;
+        }
+        
+        return true;
+    }
+    
+    void Union(char u, char v) {
+        char parent_u = find_parent(u), parent_v = find_parent(v);
+        
+        if(parent_u == parent_v) return;
+        
+        if(rank[parent_u] < rank[parent_v])
+            swap(parent_u, parent_v);
+        
+        parent[parent_v] = parent_u;
+        rank[parent_u] += rank[parent_v];
+    }
+    
+    char find_parent(char x) {
+        if(parent[x] == x)
+            return x;
+        
+        return parent[x] = find_parent(parent[x]);
+    }
+};
