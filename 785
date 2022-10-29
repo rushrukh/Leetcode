@@ -111,3 +111,47 @@ public:
 
 // use a queue to decide what to visit next
 // use color array to decide if the node has been visited already.
+
+class Solution {
+public:
+    vector<int> parent, rank;
+    bool isBipartite(vector<vector<int>>& graph) {
+        int n = graph.size();
+        
+        for(int i = 0; i < n; i++) {
+            parent.push_back(i);
+            rank.push_back(1);
+        }
+        
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < graph[i].size(); j++) {
+                if(find_parent(i) == find_parent(graph[i][j]))
+                    return false;
+                
+                Union(graph[i][0], graph[i][j]);
+            }
+        }
+        
+        return true;
+    }
+    
+    void Union(int u, int v) {
+        int parent_u = find_parent(u), parent_v = find_parent(v);
+        
+        if(parent_u == parent_v)
+            return;
+        
+        if(rank[parent_u] < rank[parent_v])
+            swap(parent_u, parent_v);
+        
+        parent[parent_v] = parent_u;
+        rank[parent_u] += rank[parent_v];
+    }
+    
+    int find_parent(int x) {
+        if(parent[x] == x)
+            return x;
+        
+        return parent[x] = find_parent(parent[x]);
+    }
+};
