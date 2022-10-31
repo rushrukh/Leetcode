@@ -66,40 +66,41 @@ public:
             }
         }
         
-        unordered_map<int, vector<int>> island_hash;
+        unordered_map<int, vector<vector<int>>> island_hash;
         
         for(int i = 0; i < m; i++) {
             for(int j = 0; j < n; j++) {
                 if(!grid[i][j]) continue;
                 
                 int tmp_parent = find_parent(i * n + j);
-                island_hash[tmp_parent].push_back(i * n + j);
+                island_hash[tmp_parent].push_back({i, j});
             }
         }
         
+        unordered_map<int, vector<int>> island_local_hash;
         for(auto &pair: island_hash) {
-            int min_x = INT_MAX;
+            int min_x = INT_MAX, min_y = INT_MAX;
             
-            vector<int> tmp = pair.second;
+            vector<vector<int>> tmp = pair.second;
             for(int i = 0; i < tmp.size(); i++) {
-                min_x = min(min_x, tmp[i]);
+                min_x = min(min_x, tmp[i][0]);
+                min_y = min(min_y, tmp[i][1]);
             }
             
             for(int i = 0; i < tmp.size(); i++) {
-                tmp[i] -= min_x;
+                island_local_hash[pair.first].push_back((tmp[i][0] - min_x) * n + tmp[i][1] - min_y);
             }
-
-            island_hash[pair.first] = tmp;
         }
         
         unordered_set<int> distinct_island;
         
-        for(auto &pair: island_hash) {
+        for(auto &pair: island_local_hash) {
             vector<int> tmp = pair.second;
             
-            int hash = 0;
+            long long hash = 1;
+            const int MOD = 1e9 + 7;
             for(auto &p: tmp) {
-                hash += p;
+                hash = (hash * 13 + p) % MOD;
             }
             distinct_island.insert(hash);
         }
