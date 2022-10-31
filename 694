@@ -40,3 +40,102 @@ public:
         DFS(grid, pattern, i, j + 1);
     }
 };
+
+
+// Union-find: there's a bug
+
+class Solution {
+public:
+    vector<int> parent, rank;
+    int numDistinctIslands(vector<vector<int>>& grid) {
+        int m = grid.size(), n = grid[0].size(), result = 0;
+        init_grid(grid);
+        
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                if(!grid[i][j]) continue;
+                
+                if(i - 1 >= 0 && grid[i - 1][j])
+                    Union((i - 1) * n + j, i * n + j);
+                if(i + 1 < m && grid[i + 1][j])
+                    Union((i + 1) * n + j, i * n + j);
+                if(j - 1 >= 0 && grid[i][j - 1])
+                    Union((i) * n + j - 1, i * n + j);
+                if(j + 1 < n && grid[i][j + 1])
+                    Union((i) * n + j + 1, i * n + j);
+            }
+        }
+        
+        unordered_map<int, vector<int>> island_hash;
+        
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                if(!grid[i][j]) continue;
+                
+                int tmp_parent = find_parent(i * n + j);
+                island_hash[tmp_parent].push_back(i * n + j);
+            }
+        }
+        
+        for(auto &pair: island_hash) {
+            int min_x = INT_MAX;
+            
+            vector<int> tmp = pair.second;
+            for(int i = 0; i < tmp.size(); i++) {
+                min_x = min(min_x, tmp[i]);
+            }
+            
+            for(int i = 0; i < tmp.size(); i++) {
+                tmp[i] -= min_x;
+            }
+
+            island_hash[pair.first] = tmp;
+        }
+        
+        unordered_set<int> distinct_island;
+        
+        for(auto &pair: island_hash) {
+            vector<int> tmp = pair.second;
+            
+            int hash = 0;
+            for(auto &p: tmp) {
+                hash += p;
+            }
+            distinct_island.insert(hash);
+        }
+        
+        return distinct_island.size();
+    }
+    
+    void init_grid(vector<vector<int>>& grid) {
+        int m = grid.size(), n = grid[0].size();
+        
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                parent.push_back(i * n + j);
+                if(grid[i][j]) rank.push_back(1);
+                else rank.push_back(0);
+            }
+        }
+    }
+    
+    void Union(int u, int v) {
+        int parent_u = find_parent(u), parent_v = find_parent(v);
+        
+        if(parent_u == parent_v) return;
+        
+        if(rank[parent_u] < rank[parent_v])
+            swap(parent_u, parent_v);
+        
+        parent[parent_v] = parent_u;
+        rank[parent_u] += rank[parent_v];
+        rank[parent_v] = 0;
+    }
+    
+    int find_parent(int x) {
+        if(parent[x] == x)
+            return x;
+        
+        return parent[x] = find_parent(parent[x]);
+    }
+};
