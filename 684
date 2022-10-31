@@ -2,44 +2,47 @@
 
 class Solution {
 public:
-	vector<int> parent, rank;
+    vector<int> parent, rank;
     vector<int> findRedundantConnection(vector<vector<int>>& edges) {
         int n = edges.size();
-
-        for(int i = 0; i <= n; i++) {
-            parent.push_back(i);
-            rank.push_back(0);
-        }
-
-        for(auto &edge: edges) {
-            int parent_u = find_parent(edge[0]);
-            int parent_v = find_parent(edge[1]);
-
-            if(parent_u == parent_v)
+        init_dsu(n + 1);
+        
+        for(auto &edge: edges) 
+            if(!Union(edge[0], edge[1]))
                 return edge;
-            else {
-                if(rank[parent_u] >= rank[parent_v]) {
-                    parent[parent_v] = parent_u;
-                    rank[parent_u]++;
-                }
-                else {
-                    parent[parent_u] = parent_v;
-                    rank[parent_v]++;
-                }
-            }
-        }
 
         return {};
     }
-
+    
+    void init_dsu(int n) {
+        for(int i = 0; i < n; i++) {
+            parent.push_back(i);
+            rank.push_back(1);
+        }
+    }
+    
+    bool Union(int u, int v) {
+        int parent_u = find_parent(u), parent_v = find_parent(v);
+        
+        if(parent_u == parent_v) return false;
+        
+        if(rank[parent_u] < rank[parent_v])
+            swap(parent_u, parent_v);
+        
+        parent[parent_v] = parent_u;
+        rank[parent_u] += rank[parent_v];
+        rank[parent_v] = 0;
+        
+        return true;
+    }
+    
     int find_parent(int x) {
         if(parent[x] == x)
             return x;
-
+        
         return parent[x] = find_parent(parent[x]);
     }
 };
-
 
 // TC O(N^2), SC O(N)
 
