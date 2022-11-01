@@ -1,33 +1,37 @@
-// TC O(N + E), SC O(N + E)
+// TC O(V + E), SC O(V + E)
 
- class Solution {
+class Solution {
 public:
+    unordered_set<int> course_done;
     bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
-        vector<vector<int>> adjList(numCourses);
+        unordered_map<int, vector<int>> graph;
         
-        for(int i = 0; i < prerequisites.size(); i++) {
-            adjList[prerequisites[i][0]].push_back(prerequisites[i][1]);
+        for(auto &pre: prerequisites) {
+            graph[pre[0]].push_back(pre[1]);
         }
         
-        vector<bool> visited(numCourses, false);
-        for(int i = 0; i < adjList.size(); i++) {
-            bool result = DFS(adjList, visited, i);
+        unordered_set<int> visited;
+        for(auto &pair: graph) {
+            bool result = DFS(graph, pair.first, visited);
             if(!result) return false;
+            
         }
         
         return true;
     }
-    bool DFS(vector<vector<int>>& adjList, vector<bool>& visited, int currNode) {
-        if(!adjList[currNode].size()) return true;
-        if(visited[currNode]) return false;
-        visited[currNode] = true;
+    
+    bool DFS(unordered_map<int, vector<int>> &graph, int course, unordered_set<int> & visited) {
+        if(!graph[course].size()) return true;
+        if(visited.find(course) != visited.end()) return false;
+        visited.insert(course);
         
-        for(int i = 0; i < adjList[currNode].size(); i++) {
-            bool result = DFS(adjList, visited, adjList[currNode][i]);
+        bool result = true;
+        for(int &course_2: graph[course]) {
+            result = DFS(graph, course_2, visited);
             if(!result) return false;
         }
-        adjList[currNode].clear();
         
+        graph[course].clear(); // this is important
         return true;
     }
 };
