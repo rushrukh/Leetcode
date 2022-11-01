@@ -1,19 +1,20 @@
-//Top Down Soln:
+//Top Down Soln: TC O(M*N), SC O(M*N)
 
 class Solution {
 public:
-    int DP[1001][1001];
     int longestCommonSubsequence(string text1, string text2) {
-        memset(DP, -1, sizeof(DP));
-        return LCS(text1, text2, text1.size(), text2.size());
+        vector<vector<int>> DP(text1.size(), (vector<int> (text2.size(), -1)));
+        return max_length(DP, text1, text2, text1.size() - 1, text2.size() - 1);
     }
     
-    int LCS(string& t1, string& t2, int n1, int n2) {
-        if(!n1 || !n2) return 0;
-        if(DP[n1][n2] != -1) return DP[n1][n2];
+    int max_length(vector<vector<int>> &DP, string &a, string &b, int i, int j) {
+        if(i < 0 || j < 0) return 0;
+        if(DP[i][j] != -1) return DP[i][j];
         
-        if(t1[n1 - 1] == t2[n2 - 1]) return DP[n1][n2] = 1 + LCS(t1, t2, n1 - 1, n2 - 1);
-        else return DP[n1][n2] = max(LCS(t1, t2, n1 - 1, n2), LCS(t1, t2, n1, n2 - 1));
+        if(a[i] == b[j])
+            return DP[i][j] = 1 + max_length(DP, a, b, i - 1, j - 1);
+        else 
+            return DP[i][j] = max(max_length(DP, a, b, i - 1, j), max_length(DP, a, b, i, j - 1));
     }
 };
 
