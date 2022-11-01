@@ -1,0 +1,41 @@
+// TC O(V + E), SC O(V + E)
+
+class Solution {
+public:
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        vector<vector<int>> graph(numCourses);
+        vector<int> order;
+        
+        for(auto &pre: prerequisites) {
+            graph[pre[0]].push_back(pre[1]);
+        }
+        
+        unordered_set<int> visited;
+        for(int i = 0; i < graph.size(); i++) {
+            bool result = DFS(graph, visited, order, i);
+            if(!result) return {};
+            
+        }
+        
+        return order;
+    }
+    
+    bool DFS(vector<vector<int>> &graph, unordered_set<int> &visited, vector<int> &order, int node) {
+        if(!graph[node].size()) {
+            if(visited.find(node) == visited.end()) order.push_back(node);
+            visited.insert(node);
+            return true;
+        }
+        if(visited.find(node) != visited.end()) return false;
+        visited.insert(node);
+        
+        for(auto &course: graph[node]) {
+            bool result = DFS(graph, visited, order, course);
+            if(!result) return false;
+        }
+        
+        graph[node].clear();
+        order.push_back(node);
+        return true;
+    }
+};
