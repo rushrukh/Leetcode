@@ -2,33 +2,29 @@
 
 class Solution {
 public:
-    static bool compare(string log_1, string log_2) {
-        int first_space = log_1.find(' ');
-        string id_1 = log_1.substr(0, first_space);
-        string rest_1 = log_1.substr(first_space + 1, log_1.size());
+    static bool compare(string A, string B) {
+        int space_1 = A.find(" ");
+        string id_1 = A.substr(0, space_1);
+        string rest_1 = A.substr(space_1 + 1, A.size());
         
-        int second_space = log_2.find(' ');
-        string id_2 = log_2.substr(0, second_space);
-        string rest_2 = log_2.substr(second_space + 1, log_2.size());
+        int space_2 = B.find(" ");
+        string id_2 = B.substr(0, space_2);
+        string rest_2 = B.substr(space_2 + 1, B.size());
         
         if(!isdigit(rest_1[0]) && isdigit(rest_2[0]))
             return true;
-        
-        else if(isdigit(rest_1[0]) && !isdigit(rest_2[0]))
-            return false;
-        
         else if(!isdigit(rest_1[0]) && !isdigit(rest_2[0])) {
-            if(rest_2.compare(rest_1) == 0)
+            if(rest_1.compare(rest_2) == 0)
                 return id_1 < id_2;
-            else 
+            else
                 return rest_1 < rest_2;
         }
         
         return false;
     }
-    
     vector<string> reorderLogFiles(vector<string>& logs) {
         stable_sort(logs.begin(), logs.end(), compare);
         return logs;
     }
+    
 };
