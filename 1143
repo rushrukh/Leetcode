@@ -18,22 +18,25 @@ public:
     }
 };
 
-/Bottom Up Soln:
+/Bottom Up Soln: TC O(M*N), SC O(M*N)
 
 class Solution {
 public:
-    int DP[1001][1001];
-    int longestCommonSubsequence(string text1, string text2) {
-        for(int i = 0; i <= text1.size(); i++)
-            for(int j = 0; j <= text2.size(); j++)
-                if(i == 0 || j == 0) DP[i][j] = 0;
+    int longestCommonSubsequence(string x, string y) {
+        int m = x.size(), n = y.size();
+        vector<vector<int>> DP(m + 1, (vector<int> (n + 1, 0)));
         
-        for(int i = 1; i <= text1.size(); i++)
-            for(int j = 1; j <= text2.size(); j++) {
-                if(text1[i - 1] == text2[j - 1]) DP[i][j] = 1 + DP[i - 1][j - 1];
-                else DP[i][j] = max(DP[i - 1][j], DP[i][j - 1]);
+        for(int i = 1; i <= m; i++) {
+            for(int j = 1; j <= n; j++) {
+                if(x[i - 1] == y[j - 1]) {
+                    DP[i][j] = 1 + DP[i - 1][j - 1];
+                }
+                else {
+                    DP[i][j] = max(DP[i - 1][j], DP[i][j - 1]);
+                }
             }
+        }
         
-        return DP[text1.size()][text2.size()];
+        return DP[m][n];
     }
 };
