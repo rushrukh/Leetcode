@@ -20,33 +20,34 @@ public:
 class Solution {
 public:
     int findKthLargest(vector<int>& nums, int k) {
-        int left = 0, n = nums.size(), right = n - 1, idx = 0;
+        int left = 0, right = nums.size() - 1, n = nums.size();
         k = n - k;
         
-        while(true) {
-            idx = partition(nums, left, right);
-            
-            if(idx == k) break;
-            else if(idx < k)
-                left = idx + 1;
-            else
-                right = idx - 1;
+        while(left < right) {
+            int tmp = partition(nums, left, right);
+            if(tmp == k) break;
+            else if(tmp < k)
+                left = tmp + 1;
+            else 
+                right = tmp - 1;
         }
         
-        return nums[idx];
+        return nums[k];
     }
     
-    int partition(vector<int>& nums, int left, int right) {
+    int partition(vector<int> &nums, int left, int right) {
+        int pivot_index = left + rand() % (right - left);
+        swap(nums[pivot_index], nums[right]);
+        
         int pivot = nums[right], p = left;
         
         for(int i = left; i < right; i++) {
-            if(nums[i] <= pivot) {
-                swap(nums[i], nums[p]);
-                p++;
-            }
+            if(nums[i] < pivot)
+                swap(nums[i], nums[p++]);
         }
         
         swap(nums[right], nums[p]);
+        
         return p;
     }
 };
