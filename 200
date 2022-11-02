@@ -85,86 +85,74 @@ public:
 
 // TC O(M*N), SC O(M*N)
 
-class Solution {
+cclass Solution {
 public:
-    int count = 0;
-    vector<int> parent;
-    vector<int> rank;	
-
+    vector<int> parent, rank;
     int numIslands(vector<vector<char>>& grid) {
-        init_union(grid);
-        int m = grid.size(), n = grid[0].size();
+        int m = grid.size(), n = grid[0].size(), islands = 0;
+        init_grid(grid);
         
         for(int i = 0; i < m; i++) {
             for(int j = 0; j < n; j++) {
                 if(grid[i][j] == '1') {
+                    
                     grid[i][j] = '0';
-
-                    if(i - 1 >= 0 && grid[i - 1][j] == '1') {
-                        union_(i * n + j, (i - 1) * n + j);
-                    }
-
-                    if(i + 1 < m && grid[i + 1][j] == '1') {
-                        union_(i * n + j, (i + 1) * n + j);
-                    }
-
-                    if(j - 1 >= 0 && grid[i][j - 1] == '1') {
-                        union_(i * n + j, i * n + (j - 1));
-                    }
-
-                    if(j + 1 < n && grid[i][j + 1] == '1'){
-                        union_(i * n + j, i * n + (j + 1));
-                    }
-
+                    
+                    if(i - 1 >= 0 && grid[i - 1][j] == '1')
+                        Union((i - 1) * n + j, i * n + j);
+                    
+                    if(i + 1 < m && grid[i + 1][j] == '1')
+                        Union((i + 1) * n + j, i * n + j);
+                    
+                    if(j - 1 >= 0 && grid[i][j - 1] == '1')
+                        Union((i) * n + j - 1, i * n + j);
+                    
+                    if(j + 1 < n && grid[i][j + 1] == '1')
+                        Union((i) * n + j + 1, i * n + j);
                 }
             }
         }
-
-        return count;
+        
+        for(int &r: rank)
+            if(r > 0)
+                islands++;
+        
+        return islands;
     }
-
-    void init_union(vector<vector<char>>& grid) {
-        int m = grid.size();
-        int n = grid[0].size();
-
-        for(int i = 0; i < m; i++) {
-            for(int j = 0; j < n; j++) {
-                if(grid[i][j] == '1') {
-                    parent.push_back(i * n + j);
-                    count++;
-                }
-                else 
-                    parent.push_back(-1);
-
-                rank.push_back(0);
-                
-            }
+    
+    void Union(int u, int v) {
+        int parent_u = find_parent(u), parent_v = find_parent(v);
+        
+        if(parent_u == parent_v) return;
+        
+        if(rank[parent_u] < rank[parent_v]) {
+            swap(parent_u, parent_v);
         }
+        
+        parent[parent_v] = parent_u;
+        rank[parent_u] += rank[parent_v];
+        rank[parent_v] = 0;
     }
-
-    void union_(int x, int y) {
-        int parent_x = find_parent(x);
-        int parent_y = find_parent(y);
-
-        if(parent_x != parent_y) {
-            if(rank[parent_x] == rank[parent_y]) {
-                parent[parent_y] = parent_x;
-                rank[parent_x]++;
-            }
-            else if(rank[parent_x] > rank[parent_y])
-                parent[parent_y] = parent_x;
-            else 
-                parent[parent_x] = parent_y;
-            
-            count--;
-        }
-    }
-
+    
     int find_parent(int x) {
         if(parent[x] == x)
             return x;
-
-        parent[x] = find_parent(parent[x]);
-        return parent[x];
+        
+        return parent[x] = find_parent(parent[x]);
+    }
+    
+    void init_grid(vector<vector<char>> &grid) {
+        int m = grid.size(), n = grid[0].size();
+        
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                if(grid[i][j] == '1')
+                    rank.push_back(1);
+                else
+                    rank.push_back(0);
+                
+                parent.push_back(i * n + j);
+            }
+        }
     }
 };
