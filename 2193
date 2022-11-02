@@ -5,31 +5,31 @@ public:
     int minMovesToMakePalindrome(string s) {
         int left = 0, right = s.size() - 1, count = 0;
         
-        while(left <= right) {
+        while(left < right) {
             if(s[left] == s[right]) {
                 left++;
                 right--;
-                continue;
             }
             else {
                 int i = left, j = right;
                 
-                while(s[j] != s[left])
-                    j--;
-                
                 while(s[i] != s[right])
                     i++;
                 
+                while(s[j] != s[left])
+                    j--;
+                
                 if(i - left < right - j) {
                     for(int k = i; k > left; k--) {
+                        swap(s[k], s[k-1]);
                         count++;
-                        swap(s[k], s[k - 1]);
                     }
                 }
+                
                 else {
                     for(int k = j; k < right; k++) {
-                        count++;
                         swap(s[k], s[k + 1]);
+                        count++;
                     }
                 }
             }
