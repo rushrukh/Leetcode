@@ -3,16 +3,16 @@
 class Solution {
 public:
     long long minimumHealth(vector<int>& damage, int armor) {
+        long long int health = 1;
         int max_damage = 0;
-        long long min_health = 0;
         
         for(int &d: damage) {
+            health += d;
             max_damage = max(max_damage, d);
-            min_health += d;
         }
         
-        min_health -= min(max_damage, armor);
+        health -= min(max_damage, armor);
         
-        return min_health + 1;
+        return health;
     }
 };
