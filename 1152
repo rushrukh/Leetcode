@@ -1,71 +1,68 @@
-// TC O(), SC O()
+// TC O(n * m^3), SC O(n * m + mC3)
 
 class Solution {
 public:
     vector<string> mostVisitedPattern(vector<string>& username, vector<int>& timestamp, vector<string>& website) {
-        unordered_map<string, map<int, string>> user_visited_websites;
-        unordered_map<string, int> visit_frequency;
+        unordered_map<string, map<int, string>> user_visits_website;
+        unordered_map<string, int> sequence_frequency;
+        int max_frequency = 0;
         string result = "";
-        int max_count = 0;
-        vector<string> answer (3);
+        vector<string> pattern(3);
         
         for(int i = 0; i < username.size(); i++) {
-            user_visited_websites[username[i]][timestamp[i]] = website[i];
+            user_visits_website[username[i]][timestamp[i]] = website[i];
         }
         
-        for(auto [user, time_websites]: user_visited_websites) {
-            unordered_set<string> three_websites;
+        for(auto [user, time_websites]: user_visits_website) {
+            unordered_set<string> three_sequences;
+            
             for(auto it1 = begin(time_websites); it1 != time_websites.end(); it1++) {
                 for(auto it2 = next(it1); it2 != time_websites.end(); it2++) {
                     for(auto it3 = next(it2); it3 != time_websites.end(); it3++) {
-                        three_websites.insert(it1 -> second + " " + it2 -> second + " " + it3 -> second);
+                        three_sequences.insert(it1 -> second + " " + it2 -> second + " " + it3 -> second + " ");
                     }
                 }
             }
             
-            for(const string &three_website: three_websites) {
-                visit_frequency[three_website]++;
-            }    
+            for(auto seq: three_sequences) {
+                sequence_frequency[seq]++;        
+            }
         }
         
-        for(auto &v_freq: visit_frequency) {
-            if(v_freq.second > max_count) {
-                max_count = v_freq.second;
-                result = v_freq.first;
+        for(auto &pair: sequence_frequency) {
+            if(pair.second > max_frequency) {
+                max_frequency = pair.second;
+                result = pair.first;
             }
-            else if(v_freq.second == max_count) {
-                result = min(result, v_freq.first);
+            else if(pair.second == max_frequency) {
+                result = min(result, pair.first);
             }
         }
         
         istringstream ss(result);
-        ss >> answer[0] >> answer[1] >> answer[2];
-        return answer;
+        ss >> pattern[0] >> pattern[1] >> pattern[2];
+        
+        return pattern;
     }
 };
 
 
 /*
-0. Return the 3-sequence with maximum frequency.
-1. Find frequency of each 3-sequences.
-2. Before 1, we need to find all the possible 3-sequences.
-3. Before 2, we need the websites sorted in time (otherwise, we will count unallowed sequences)
 
-3. For each user, we create a map<timestamp, website>
-    - By default, map will list the websites in a sorted fashion
-    - step 3 done
+0. return three-sequence with max frequency
+1. Before 0, count frequency for all possible three-sequence
+2. Before 1, find all possible three-sequences
+3. Before 2, find all the websites sorted in time
+
+3. For each user, create a map<timestamp, website>
+
+2. iterate for each user:
+    - create a list of three-websites
+    - store in a set
     
-2. Now, for each user, we traverse through the websites in the map
-and create a list of 3-websites each.
-What sort of list can help us? - Set.
-If we use a vector, we have the risk of adding the same 3-websites twice to the list.
+    1. - declare a <sequence, frequency> hash
+       - for the current user, add all the sequences to the hash and +1 freq;
 
-right after we create the sets for one user, we update a frequency list with +1 for each item
-in the set.
-Done with step 2
-
-3. Now we traverse through the frequence, find the item with max frequency
-**if there are more than one elements with max frequency, we return the item that is
-lexicographically smaller.
+0. iterate through the list, find the one that has max frequency and return;    
 
 */
