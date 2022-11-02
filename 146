@@ -20,55 +20,51 @@ public:
         tail -> prev = head;
     }
     
-    void insert(int key, int value) {
-        Node *new_node = new Node(key, value);
-        map[key] = new_node;
+    void add(Node *node) {
+        head -> next -> prev = node;
+        node -> next = head -> next;
         
-        head -> next -> prev = new_node;
-        new_node -> next = head -> next;
-        
-        head -> next = new_node;
-        new_node -> prev = head;
-        
-        curr_size++;
+        head -> next = node;
+        node -> prev = head;
     }
     
-    void remove(Node *remove_this) {
-        int curr_key = remove_this -> key;
-        map.erase(curr_key);
-        
-        remove_this -> prev -> next = remove_this -> next;
-        remove_this -> next -> prev = remove_this -> prev;
-        
-        curr_size--;
+    void remove(Node *node) {
+        node -> prev -> next = node -> next;
+        node -> next -> prev = node -> prev;
     }
     
     int get(int key) {
         if(map.find(key) == map.end())
             return -1;
         
-        Node *curr_node = map[key];
-        int return_val = curr_node -> value;
+        Node *curr = map[key];
+        int ans = curr -> value;
         
-        map.erase(curr_node -> key);
-        remove(curr_node);
-        insert(key, return_val);
+        remove(curr);
+        add(curr);
         
-        return return_val;
+        return ans;
     }
     
     void put(int key, int value) {
         if(map.find(key) != map.end()) {
-            Node *curr_node = map[key];
-            map.erase(key);
-            remove(curr_node);
-            insert(key, value);            
+            Node *curr = map[key];
+            curr -> value = value;
+            
+            remove(curr);
+            add(curr);
         }
         else {
-            if(curr_size == capacity) {
+            Node *curr = new Node(key, value);
+            add(curr);
+            map[key] = curr;
+            curr_size++;
+            
+            if(curr_size > capacity) {
+                map.erase(tail -> prev -> key);
                 remove(tail -> prev);
+                curr_size--;
             }
-            insert(key, value);
         }
     }
 };
