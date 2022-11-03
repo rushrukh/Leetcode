@@ -31,3 +31,44 @@ public:
         return result;
     }
 };
+
+// TC O(N), SC O(N)
+
+class Solution {
+public:
+    vector<int> platesBetweenCandles(string s, vector<vector<int>>& queries) {
+        int n = s.size();
+        vector<int> prev_candle(n, - 1), next_candle(n, n), prefix_sum(n, 0);
+        
+        int current_candle = -1, sum = 0;
+        for(int i = 0; i < n; i++) {
+            if(s[i] == '|')
+                current_candle = i;
+            
+            prev_candle[i] = current_candle;
+            
+            if(s[i] == '*')
+                sum++;
+            
+            prefix_sum[i] = sum;
+        }
+        
+        current_candle = n;
+        for(int i = n - 1; i >= 0; i--) {
+            if(s[i] == '|')
+                current_candle = i;
+            
+            next_candle[i] = current_candle;
+        }
+        
+        vector<int> result;
+        for(auto &query: queries) {
+            int start = next_candle[query[0]] > query[1] ? 0 : next_candle[query[0]];
+            int end = prev_candle[query[1]] < query[0] ? 0 : prev_candle[query[1]];
+            
+            result.push_back(prefix_sum[end] - prefix_sum[start]);
+        }
+        
+        return result;
+    }
+};
