@@ -1,0 +1,33 @@
+// TC O(N^2), SC O(1)
+
+class Solution {
+public:
+    vector<int> platesBetweenCandles(string s, vector<vector<int>> &queries) {
+        int n = queries.size();
+        vector<int> result;
+
+        for(auto &query: queries) {
+            string curr_ss = s.substr(query[0], query[1] - query[0] + 1);
+            vector<int> candle_list;
+            
+            for(int i = 0; i < curr_ss.size(); i++) {
+                if(curr_ss[i] == '|')
+                    candle_list.push_back(i);
+            }
+            
+            if(candle_list.size() < 2) {
+                result.push_back(0);
+                continue;
+            }
+                
+            int candle_count = 0;
+            for(int i = 0; i < candle_list.size() - 1; i++) {
+                candle_count += (candle_list[i + 1] - candle_list[i] - 1);
+            }
+
+            result.push_back(candle_count);
+        }
+
+        return result;
+    }
+};
