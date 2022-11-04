@@ -35,3 +35,38 @@ public:
         return result;
     }
 };
+
+
+// TC O(N), SC O(1)
+
+class Solution {
+public:
+    long long numberOfWays(string s) {
+        int z_right = 0, o_right = 0;
+        
+        for(char &c: s) {
+            z_right = c == '0' ? z_right + 1 : z_right;
+            o_right = c == '1' ? o_right + 1 : o_right;
+        }
+        
+        int z_left = 0, o_left = 0;
+        long long answer = 0;
+        
+        for(char &c: s) {
+            if(c == '0') {
+                answer += o_left * o_right;
+                
+                z_right--;
+                z_left++;
+            }
+            else {
+                answer += z_left * z_right;
+                
+                o_right--;
+                o_left++;
+            }
+        }
+        
+        return answer;
+    }
+};
