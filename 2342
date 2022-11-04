@@ -1,0 +1,30 @@
+// Brute Force (TLE), TC O(N^2), SC O(1)
+
+class Solution {
+public:
+    int maximumSum(vector<int>& nums) {
+        int max_sum = -1, n = nums.size();
+        
+        for(int i = 0; i < n; i++) {
+            int curr_digit_sum = getDigitSum(nums[i]);
+            
+            for(int j = i + 1; j < n; j++) {
+                if(getDigitSum(nums[j]) != curr_digit_sum) continue;
+                
+                max_sum = max(max_sum, nums[i] + nums[j]);
+            }
+        }
+        
+        return max_sum;
+    }
+    int getDigitSum(int x) {
+        int digit_sum = 0;
+        
+        while(x) {
+            digit_sum += x % 10;
+            x /= 10;
+        }
+        
+        return digit_sum;
+    }
+};
