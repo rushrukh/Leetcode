@@ -17,31 +17,23 @@ public:
 
 class Solution {
 public:
-    int calc_distance(vector<int> &point) {
-        return point[0] * point[0] + point[1] * point[1];
+    int get_distance(vector<int> x) {
+        return x[0] * x[0] + x[1] * x[1];
     }
     vector<vector<int>> kClosest(vector<vector<int>>& points, int k) {
-        // max_heap is maintained by the distance, but we also need the idx for the ans;
-        priority_queue<pair<int,int>> Q;
-        vector<vector<int>> result;
+        priority_queue<pair<int, int>> Q;
         
         for(int i = 0; i < points.size(); i++) {
-            pair<int, int> current_point = {calc_distance(points[i]), i};
+            Q.push({get_distance(points[i]), i});
             
-            if(Q.size() < k)
-                Q.push(current_point);
-            else {
-                if(current_point.first < Q.top().first) {
-                    Q.pop();
-                    Q.push(current_point);
-                }
-            }
+            if(Q.size() > k)
+                Q.pop();
         }
         
+        vector<vector<int>> result;
         while(!Q.empty()) {
-            int p = Q.top().second;
+            result.push_back(points[Q.top().second]);
             Q.pop();
-            result.push_back(points[p]);
         }
         
         return result;
