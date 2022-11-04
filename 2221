@@ -1,0 +1,18 @@
+// TC O(N^2), SC O(1)
+
+class Solution {
+public:
+    int triangularSum(vector<int>& nums) {
+        int k = nums.size(), n = nums.size();
+        
+        while(k > 0) {
+            for(int i = 0; i < n - 1; i++) {
+                nums[i] = (nums[i] + nums[i + 1]) % 10;
+            }
+            n--;
+            k--;
+        }
+        
+        return nums[0];
+    }
+};
