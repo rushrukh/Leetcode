@@ -28,3 +28,39 @@ public:
         return digit_sum;
     }
 };
+
+
+// TC O(N), SC O(N)
+
+class Solution {
+public:
+    int maximumSum(vector<int>& nums) {
+        int max_sum = -1;
+        unordered_map<int, int> hash;
+        
+        for(int &num: nums) {
+            int digitsum = get_digitsum(num);
+            
+            if(hash.find(digitsum) != hash.end()) {
+                max_sum = max(max_sum, num + hash[digitsum]);
+                hash[digitsum] = max(hash[digitsum], num);
+            }
+            else {
+                hash[digitsum] = num;
+            }
+        }
+        
+        return max_sum;
+    }
+    
+    int get_digitsum(int x) {
+        int digitsum = 0;
+        
+        while(x) {
+            digitsum += x % 10;
+            x /= 10;
+        }
+        
+        return digitsum;
+    }
+};
