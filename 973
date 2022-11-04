@@ -110,3 +110,44 @@ public:
         return answer;
     }
 };
+
+
+// TC O(N), SC O(N)
+
+class Solution {
+public:
+    int get_distance(vector<int> x) {
+        return x[0] * x[0] + x[1] * x[1];
+    }
+    vector<vector<int>> kClosest(vector<vector<int>>& points, int k) {
+        int left = 0, right= points.size() - 1;
+        
+        while(left < right) {
+            int idx = partition(points, left, right);
+            
+            if(idx == k) break;
+            else if(idx < k)
+                left = idx + 1;
+            else
+                right = idx - 1;
+        }
+        
+        return vector<vector<int>> (points.begin(), points.begin() + k);
+    }
+    int partition(vector<vector<int>> &points, int left, int right) {
+        int pivot = left + rand() % (right - left + 1);
+        swap(points[pivot], points[right]);
+        
+        int p = left;
+        int pivot_distance = get_distance(points[right]);
+        for(int i = left; i < right; i++) {
+            if(get_distance(points[i]) <= pivot_distance) {
+                swap(points[i], points[p++]);
+            }
+        }
+        
+        swap(points[p], points[right]);
+        
+        return p;
+    }
+};
