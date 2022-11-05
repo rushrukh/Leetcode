@@ -116,3 +116,48 @@ public:
  * TicTacToe* obj = new TicTacToe(n);
  * int param_1 = obj->move(row,col,player);
  */
+
+
+// More space optimization:
+
+class TicTacToe {
+public:
+    vector<int> row_, col_;
+    int diagonal = 0, anti_diagonal = 0;
+    int n = 0;
+    
+    TicTacToe(int n) {
+        row_.assign(n, 0), col_.assign(n, 0);
+        this -> n = n;
+    }
+    
+    int move(int row, int col, int player) {
+        row_[row] = player == 1 ? row_[row] + 1 : row_[row] - 1;
+        col_[col] = player == 1 ? col_[col] + 1 : col_[col] - 1;
+        
+        if(row == col)
+            diagonal = player == 1 ? diagonal + 1 : diagonal - 1;
+        if(row + col == this -> n - 1)
+            anti_diagonal = player == 1? anti_diagonal + 1 : anti_diagonal - 1;
+        
+        if(abs(row_[row]) == n)
+            return row_[row] > 0 ? 1 : 2;
+        
+        if(abs(col_[col]) == n)
+            return col_[col] > 0 ? 1 : 2;
+        
+        if(abs(diagonal) == n)
+            return diagonal > 0 ? 1 : 2;
+        
+        if(abs(anti_diagonal) == n)
+            return anti_diagonal > 0 ? 1 : 2;
+        
+        return 0;
+    }
+};
+
+/**
+ * Your TicTacToe object will be instantiated and called as such:
+ * TicTacToe* obj = new TicTacToe(n);
+ * int param_1 = obj->move(row,col,player);
+ */
