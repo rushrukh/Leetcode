@@ -1,0 +1,50 @@
+// TC O(M*N), SC O(M*N)
+
+class Solution {
+public:
+    vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
+        int m = mat.size(), n = mat[0].size();
+        
+        queue<pair<int, int>> Q;
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                if(!mat[i][j]) Q.push({i, j});
+                else mat[i][j] = -1;    // marking 1's as unvisited nodes
+            }
+        }
+        
+        while(!Q.empty()) {
+            int i = Q.front().first, j = Q.front().second;
+            Q.pop();
+            
+            if(is_valid(i - 1, j, m, n) && mat[i - 1][j] == -1) {
+                mat[i - 1][j] = mat[i][j] + 1;
+                Q.push({i - 1, j});
+            }
+                
+            if(is_valid(i + 1, j, m, n) && mat[i + 1][j] == -1) {
+                mat[i + 1][j] = mat[i][j] + 1;
+                Q.push({i + 1, j});
+            }
+                
+            if(is_valid(i, j - 1, m, n) && mat[i][j - 1] == -1) {
+                mat[i][j - 1] = mat[i][j] + 1;
+                Q.push({i, j - 1});
+            }
+                
+            if(is_valid(i, j + 1, m, n) && mat[i][j + 1] == -1) {
+                mat[i][j + 1] = mat[i][j] + 1;
+                Q.push({i, j + 1});
+            }
+        }
+        
+        return mat;
+    }
+    
+    bool is_valid(int i, int j, int m, int n) {
+        if(i < 0 || i >= m || j < 0 || j >= n) 
+            return false;
+        
+        return true;
+    }
+};
