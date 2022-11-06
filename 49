@@ -1,0 +1,28 @@
+// TC O(Nklogk), SC O(Nk)
+
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        vector<string> s = strs;
+        unordered_map<string, vector<int>> hash;
+        
+        for(int i = 0; i < s.size(); i++) {
+            sort(s[i].begin(), s[i].end());
+            hash[s[i]].push_back(i);
+        }
+        
+        vector<vector<string>> anagrams;
+        
+        for(auto &pair: hash) {
+            vector<string> anagram;
+            
+            for(int i = 0; i < pair.second.size(); i++)
+                anagram.push_back(strs[pair.second[i]]);
+            
+            anagrams.push_back(anagram);
+        }
+        
+        
+        return anagrams;
+    }
+};
