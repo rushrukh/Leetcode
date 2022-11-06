@@ -29,27 +29,31 @@ public:
 class Solution {
 public:
     ListNode* mergeKLists(vector<ListNode*>& lists) {
-        ListNode* head = new ListNode(0);
-        ListNode* dummyHead = head;
-        auto comp = [](ListNode* A, ListNode *B) {
-            return A -> val > B -> val;
-        };
-        priority_queue<ListNode*, vector<ListNode*>, decltype(comp)> Q(comp);
+        ListNode *dummy_head = new ListNode(-1);
+        ListNode *prev = dummy_head;
         
-        for(auto x: lists) {
-            if(x) Q.push(x);
-        }
+        auto comp = [](ListNode *A, ListNode *B) {
+          return A -> val > B -> val;  
+        };
+        
+        priority_queue<ListNode*, vector<ListNode*>, decltype(comp)> Q(comp); 
+        
+        for(auto &list: lists)
+            if(list)
+                Q.push(list);
         
         while(!Q.empty()) {
-            ListNode* tmp = Q.top();
+            ListNode *curr = Q.top();
             Q.pop();
             
-            dummyHead -> next = tmp;
-            dummyHead = dummyHead -> next;
+            prev -> next = curr;
+            prev = prev -> next;
             
-            if(tmp && tmp -> next) Q.push(tmp -> next);
+            if(curr && curr -> next)
+                Q.push(curr -> next);
         }
         
-        return head -> next;
+        return dummy_head -> next;
+        
     }
 };
