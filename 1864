@@ -1,0 +1,35 @@
+// TC O(N), SC O(1)
+
+class Solution {
+public:
+    int minSwaps(string s) {
+        int ones = 0, zeros = 0;
+        
+        for(char &c: s) {
+            ones = c == '1' ? ones + 1 : ones;
+            zeros = c == '0' ? zeros + 1 : zeros;
+        }
+        
+        if(abs(ones - zeros) > 1)
+            return -1;
+        
+        if(ones > zeros)
+            return count_swaps(s, '1');
+        else if (zeros > ones)
+            return count_swaps(s, '0');
+        
+        return min(count_swaps(s, '1'), count_swaps(s, '0'));
+    }
+    
+    int count_swaps(string &s, char c) {
+        int mismatches = 0;
+        for(int i = 0; i < s.size(); i++) {
+            if(s[i] != c)
+                mismatches++;
+            
+            c ^= 1;
+        }
+        
+        return mismatches / 2;
+    }
+};
