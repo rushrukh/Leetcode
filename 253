@@ -6,14 +6,16 @@ public:
         priority_queue<int, vector<int>, greater<int>> Q;
         
         for(auto &interval: intervals) {
-            if(Q.empty()) Q.push(interval[1]);
+            if(Q.empty())
+                Q.push(interval[1]);
             else {
-                int tmp = Q.top();
-                if(interval[0] >= tmp) Q.pop();
+                if(interval[0] >= Q.top())
+                    Q.pop();
                 Q.push(interval[1]);
             }
         }
-        return Q.size();
+        
+        return Q.size();;
     }
 };
 
