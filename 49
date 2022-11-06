@@ -26,3 +26,35 @@ public:
         return anagrams;
     }
 };
+
+// TC O(NK), SC O(NK)
+
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        unordered_map<string, vector<string>> hash;
+        vector<vector<string>> answer;
+        
+        for(auto &s: strs)
+            hash[counting_sort(s)].push_back(s);
+        
+        for(auto &pair: hash)
+            answer.push_back(pair.second);
+        
+        return answer;
+    }
+    
+    string counting_sort(string s) {
+        vector<int> hash (26, 0);
+        
+        for(char &c: s)
+            hash[c - 'a']++;
+        
+        string sorted_string = "";
+        
+        for(int i = 0; i < 26; i++)
+            sorted_string += string(hash[i], i + 'a');
+        
+        return sorted_string;
+    }
+};
