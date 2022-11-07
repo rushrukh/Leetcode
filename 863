@@ -9,76 +9,70 @@
  */
 class Solution {
 public:
-    vector<int> distanceK(TreeNode* root, TreeNode* target, int K) {
-        unordered_map<TreeNode*, TreeNode*> parentMap;
-        parentMap.insert({root, NULL});
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
+        // Find parent of each node
+        if(!target) return {};
+        
+        unordered_map<TreeNode*, TreeNode*> parent;
         queue<TreeNode*> Q;
         Q.push(root);
+        parent[root] = NULL;
         
         while(!Q.empty()) {
-            TreeNode* tmp = Q.front();
+            TreeNode* curr = Q.front();
             Q.pop();
             
-            if(tmp -> left) {
-                Q.push(tmp -> left);
-                parentMap.insert({tmp -> left, tmp});
+            if(curr -> left) {
+                parent[curr -> left] = curr;
+                Q.push(curr -> left);
             }
-            if(tmp -> right) {
-                Q.push(tmp -> right);
-                parentMap.insert({tmp -> right, tmp});
+            
+            if(curr -> right) {
+                parent[curr -> right] = curr;
+                Q.push(curr -> right);
             }
         }
         
-        int currLevel = 0;
         Q.push(target);
-        vector<TreeNode*> visited;
-        visited.push_back(target);
+        unordered_set<TreeNode*> visited;
+        visited.insert(target);
         
+        int level = 0;
         while(!Q.empty()) {
-            int currQueueSize = Q.size();
-            if(currLevel == K)
-                break;
+            int n = Q.size();
+            if(level == k) break;
             
-            for(int i = 0; i < currQueueSize; i++) {
-                TreeNode* tmp = Q.front();
+            for(int i = 0; i < n; i++) {
+                TreeNode *curr = Q.front();
                 Q.pop();
                 
-                if(tmp -> left) {
-                    auto it = find(visited.begin(), visited.end(), tmp -> left);
-                    if(it == visited.end()) {
-                        Q.push(tmp -> left);
-                        visited.push_back(tmp -> left);
-                    }
+                if(curr -> left && visited.find(curr -> left) == visited.end()) {
+                    Q.push(curr -> left);
+                    visited.insert(curr -> left);
+                }
+                    
+                
+                if(curr -> right && visited.find(curr -> right) == visited.end()) {
+                    Q.push(curr -> right);
+                    visited.insert(curr -> right);
                 }
                 
-                if(tmp -> right) {
-                    auto it = find(visited.begin(), visited.end(), tmp -> right);
-                    if(it == visited.end()) {
-                        Q.push(tmp -> right);
-                        visited.push_back(tmp -> right);
-                    }
-                }
-                
-                if(parentMap[tmp]) {
-                    auto it = find(visited.begin(), visited.end(), parentMap[tmp]);
-                    if(it == visited.end()) {
-                        Q.push(parentMap[tmp]);
-                        visited.push_back(parentMap[tmp]);
-                    }
+                if(parent[curr] && visited.find(parent[curr]) == visited.end()) {
+                    Q.push(parent[curr]);
+                    visited.insert(parent[curr]);
                 }
             }
-            currLevel++;
+            
+            level++;
         }
         
         vector<int> result;
-        int n = Q.size();
         
-        for(int i = 0; i < n; i++) {
-            TreeNode* tmp = Q.front();
+        while(!Q.empty()) {
+            result.push_back(Q.front() -> val);
             Q.pop();
-            result.push_back(tmp -> val);
         }
-                    
+        
         return result;
     }
 };
