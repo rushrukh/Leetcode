@@ -1,0 +1,22 @@
+// TC O(NlogN), SC O(logN)
+
+class Solution {
+public:
+    static bool compare(vector<int> A, vector<int> B) {
+        return A[1] > B[1];
+    }
+    int maximumUnits(vector<vector<int>>& boxTypes, int truckSize) {
+        sort(boxTypes.begin(), boxTypes.end(), compare);
+        
+        int units = 0;
+        for(auto &box: boxTypes) {
+            int number_of_box = min(box[0], truckSize);
+            units += number_of_box * box[1];
+            truckSize -= number_of_box;
+            
+            if(!truckSize) break;
+        }
+        
+        return units;
+    }
+};
