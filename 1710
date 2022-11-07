@@ -20,3 +20,33 @@ public:
         return units;
     }
 };
+
+// TC O(NlogN), SC O(N)
+
+class Solution {
+public:
+    int maximumUnits(vector<vector<int>>& boxTypes, int truckSize) {
+        
+        auto comp = [](vector<int> A, vector<int> B) {
+            return A[1] < B[1];
+        };
+        priority_queue<vector<int>, vector<vector<int>>, decltype(comp)> Q(comp);
+        
+        for(auto box: boxTypes)
+            Q.push(box);
+        
+        int units = 0;
+        while(!Q.empty()) {
+            int box = Q.top()[0], unit = Q.top()[1];
+            Q.pop();
+            box = min(box, truckSize);
+            
+            units += box * unit;
+            truckSize -= box;
+            
+            if(!truckSize) break;
+        }
+        
+        return units;
+    }
+};
