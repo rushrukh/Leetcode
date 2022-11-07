@@ -48,3 +48,48 @@ public:
         return result;
     }
 };
+
+
+// TC O(N), SC O(N)
+
+class Solution {
+public:
+    string reorganizeString(string s) {
+        int n = s.size(), max_s = 0;
+        
+        unordered_map<char, int> hash;
+        
+        for(char &c: s) {
+            hash[c]++;
+            max_s = max(max_s, hash[c]);
+        }
+        
+        if(max_s > ceil(s.size() / 2.0)) return "";
+        
+        string result = "";
+        
+        char last;
+        while(result.size() != s.size()) {
+            char new_ch = find_frequent(hash, last);
+            result += new_ch;
+            last = new_ch;
+            hash[last]--;
+        }
+                
+        return result;
+    }
+    
+    char find_frequent(unordered_map<char, int> &hash, char last) {
+        int max_c = 0;
+        char max_ch;
+        
+        for(auto &h: hash) {
+            if(h.second > max_c && h.first != last && h.second) {
+                max_c = h.second;
+                max_ch = h.first;
+            }
+        }
+        
+        return max_ch;
+    }
+};
