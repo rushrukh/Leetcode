@@ -1,0 +1,40 @@
+// TC O(1), SC O(1)
+
+// TC O(1), SC O(1)
+
+class Solution {
+public:
+    int romanToInt(string s) {
+        unordered_map<string, int> hash;
+        hash["M"] = 1000;
+        hash["CM"] = 900;
+        hash["D"] = 500;
+        hash["CD"] = 400;
+        hash["C"] = 100;
+        hash["XC"] = 90;
+        hash["L"] = 50;
+        hash["XL"] = 40;
+        hash["X"] = 10;
+        hash["IX"] = 9;
+        hash["V"] = 5;
+        hash["IV"] = 4;
+        hash["I"] = 1;
+        
+        int i = 0, answer = 0;
+    
+        while(i < s.size()) {
+            if(i < s.size() - 1) {
+                if(hash.find(s.substr(i, 2)) != hash.end()) {
+                    answer += hash[s.substr(i, 2)];
+                    i += 2;
+                    continue;
+                }
+            }
+            
+            answer += hash[s.substr(i, 1)];
+            i++;
+        }
+        
+        return answer;
+    }
+};
