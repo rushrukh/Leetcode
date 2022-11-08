@@ -3,33 +3,38 @@
 class Solution {
 public:
     int sumSubarrayMins(vector<int>& arr) {
-        stack<pair<int, int>> sLeft, sRight;
-        vector<int> left(arr.size()), right(arr.size());
+        int n = arr.size();
         
-        for(int i = 0; i < arr.size(); i++) {
-            left[i] = i + 1;
-            right[i] = arr.size() - i;
-        }
+        vector<int> pse (n, -1), nse(n, n);
+        stack<int> s;
         
-        for(int i = 0; i < arr.size(); i++) {
-            while(!sLeft.empty() && sLeft.top().first > arr[i]) {
-                sLeft.pop();
+        for(int i = 0; i < n; i++) {
+            while(!s.empty() && arr[s.top()] > arr[i]) {
+                s.pop();
             }
-            left[i] = sLeft.empty() ? i + 1 : i - sLeft.top().second;
-            sLeft.push({arr[i], i});
             
-            while(!sRight.empty() && sRight.top().first > arr[i]) {
-                right[sRight.top().second] = i - sRight.top().second; 
-                sRight.pop();
-            }
-            sRight.push({arr[i], i});
+            pse[i] = s.empty() ? -1 : s.top();
+            s.push(i);
         }
         
-        unsigned long long int result = 0, mod = 1e9 + 7;
+        s = {};
+        for(int i = n - 1; i >= 0; i--) {
+            while(!s.empty() && arr[s.top()] >= arr[i]) {
+                s.pop();
+            }
+            
+            nse[i] = s.empty() ? n : s.top();
+            s.push(i);
+        }
         
-        for(int i = 0; i < arr.size(); i++) 
-            result = (result + ((arr[i] % mod) * left[i] * right[i])) % mod;
+        long long int answer = 0, mod = 1e9 + 7;
         
-        return result;
+        for(int i = 0; i < n; i++) {
+            int prev = i - pse[i], next = nse[i] - i;
+            
+            answer = (((arr[i] % mod) * prev * next) % mod + answer) % mod;
+        }
+        
+        return answer;
     }
 };
