@@ -1,0 +1,34 @@
+// TC O(N), SC O(N)
+
+class Solution {
+public:
+    Node* copyRandomList(Node* head) {
+        unordered_map<Node*, Node*> hash;
+        
+        Node *t_head = head;
+        Node *d_head = new Node(-1);
+        Node *prev = d_head;
+        
+        while(t_head) {
+            Node *new_node = new Node(t_head -> val);
+            prev -> next = new_node;
+            prev = prev -> next;
+            
+            hash[t_head] = new_node;
+            t_head = t_head -> next;
+        }
+        
+        t_head = head;
+        prev = d_head -> next;
+        
+        while(t_head) {
+            if(t_head -> random)
+                prev -> random = hash[t_head -> random];
+            
+            prev = prev -> next;
+            t_head = t_head -> next;
+        }
+        
+        return d_head -> next;
+    }
+};
