@@ -32,3 +32,48 @@ public:
         return d_head -> next;
     }
 };
+
+
+// TC O(N), SC O(1)
+
+class Solution {
+public:
+    Node* copyRandomList(Node* head) {
+        if(!head) return head;
+        Node *t_head = head;
+        
+        while(t_head) {
+            Node *new_node = new Node(t_head -> val);
+            new_node -> next = t_head -> next;
+            t_head -> next = new_node;
+            
+            t_head = t_head -> next -> next;
+        }
+        
+        t_head = head;
+        Node *c_head = t_head -> next;
+        
+        while(c_head) {
+            
+            if(t_head -> random)
+                c_head -> random = t_head -> random -> next;
+            
+            t_head = t_head -> next -> next;
+            c_head = c_head -> next ? c_head -> next -> next : NULL;
+        }
+        
+        t_head = head;
+        c_head = t_head -> next;
+        Node *main = t_head -> next;
+        
+        while(c_head) {
+            t_head -> next = c_head -> next;
+            t_head = t_head -> next;
+            
+            c_head -> next = t_head ? t_head -> next : NULL;
+            c_head = c_head ? c_head -> next : NULL;
+        }
+        
+        return main;
+    }
+};
