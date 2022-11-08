@@ -1,0 +1,28 @@
+// TC O(4^N * N), SC O(4^N)
+
+class Solution {
+public:
+    vector<string> letterCombinations(string digits) {
+        if(!digits.size()) return {};
+        vector<string> result;
+        vector<string> phones = {"0", "1", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        
+        queue<string> Q;
+        Q.push("");
+        
+        while(!Q.empty()) {
+            string curr = Q.front();
+            Q.pop();
+            
+            if(curr.size() == digits.size())
+                result.push_back(curr);
+            else {
+                string temp = phones[digits[curr.size()] - '0'];
+                for(char &ch: temp)
+                    Q.push(curr + ch);    
+            }            
+        }
+        
+        return result;
+    }
+};
