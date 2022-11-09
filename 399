@@ -43,82 +43,83 @@ public:
     }
 };
 
-// TC O(N), SC O(N)
+// TC O((M+N) * log *N), SC O(N)
 
 class Solution {
-    unordered_map<string, string> parent;
-    unordered_map<string, int> rank;
-    unordered_map<string, double> value;
-    
-    void create_edge(string u) {
+private:
+    void create_node(string u) {
         if(parent.find(u) == parent.end()) {
             parent[u] = u;
             rank[u] = 1;
         }
     }
     
-    string find_parent(string u) {
-        if(parent[u] == u)
-            return u;
-        
-        return parent[u] = find_parent(parent[u]);
-    }
-    
     void Union(string u, string v) {
         string parent_u = find_parent(u), parent_v = find_parent(v);
         
-        if(parent_u != parent_v) {
-            if(rank[parent_u] < rank[parent_v])
-                swap(parent_u, parent_v);
-            
-            parent[parent_v] = parent_u;
-            rank[parent_u] += rank[parent_v];
-        }
-    }
-public:
-    vector<double> calcEquation(vector<vector<string>>& equations, vector<double>& values, vector<vector<string>>& queries) {
-        vector<double> result (queries.size(), -1);
+        if(parent_u == parent_v) return;
         
+        if(rank[parent_u] < rank[parent_v])
+            swap(parent_u, parent_v);
+        
+        parent[parent_v] = parent_u;
+        rank[parent_u] += rank[parent_v];
+        rank[parent_v] = 0;
+    }
+    
+    string find_parent(string x) {
+        if(parent[x] == x)
+            return x;
+        
+        return parent[x] = find_parent(parent[x]);
+    }
+    
+public:
+    unordered_map<string, string> parent;
+    unordered_map<string, int> rank;
+    vector<double> calcEquation(vector<vector<string>>& equations, vector<double>& values, vector<vector<string>>& queries) {
         for(auto &equation: equations) {
             string u = equation[0], v = equation[1];
-            
-            create_edge(u);
-            create_edge(v);
+            create_node(u);
+            create_node(v);
             Union(u, v);
         }
         
-        for(auto &p: parent) {
+        unordered_map<string, double> value;
+        for(auto p: parent) {
             if(p.first == p.second)
                 value[p.first] = 1;
-        }        
+        }
         
         while(value.size() < parent.size()) {
             for(int i = 0; i < equations.size(); i++) {
-                
                 string u = equations[i][0], v = equations[i][1];
+
                 if(value.find(u) == value.end() && value.find(v) == value.end()) {
                     continue;
                 }
                 else if(value.find(u) == value.end()) {
-                    value[u] = value[v] / (values[i]);
+                    value[u] = value[v] / values[i];
                 }
-                else if(value.find(v) == value.end()){
+                else {
                     value[v] = value[u] * values[i];
                 }
             }
         }
         
-        for(int i = 0; i < queries.size(); i++) {
-            string u = queries[i][0], v = queries[i][1];
+        vector<double> results;
+        for(auto &query: queries) {
+            string u = query[0], v = query[1];
             
             if(parent.find(u) == parent.end() || parent.find(v) == parent.end() || find_parent(u) != find_parent(v)) {
+                results.push_back(-1);
                 continue;
             }
-            else {
-                result[i] = value[v] / value[u];
-            }
+            
+            results.push_back(value[v] / value[u]);
         }
         
-        return result;
+        return results;
     }
 };
+
