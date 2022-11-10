@@ -1,27 +1,27 @@
+// TC O(N^2), SC O(1)
+
 class Solution {
 public:
-    int findCircleNum(vector<vector<int>>& isConnected) {
-        int count = 0;
-        vector<bool> visited (isConnected.size(), false);
+    int findCircleNum(vector<vector<int>>& v) {
+        vector<bool> visited(v.size(), false);
+        int m = v.size(), province = 0;
         
-        for(int i = 0; i < isConnected.size(); i++) {
+        for(int i = 0; i < m; i++) {
             if(!visited[i]) {
-                count++;
-                DFS(isConnected, i, visited);
-            } 
+                DFS(v, visited, i);
+                province++;
+            }
         }
         
-        return count;
+        return province;
     }
     
-    void DFS(vector<vector<int>>& isConnected, int source, vector<bool> &visited) {
-        visited[source] = true;
-        
-        for(int i = 0; i < isConnected[source].size(); i++) {
-            if(i == source) continue;
-            
-            if(isConnected[source][i] && !visited[i])
-                DFS(isConnected, i, visited);
+    void DFS(vector<vector<int>> &v, vector<bool> &visited, int i) {
+        for(int j = 0; j < v.size(); j++) {
+            if(v[i][j] == 1 && !visited[j]) {
+                visited[j] = true;
+                DFS(v, visited, j);
+            }
         }
     }
 };
