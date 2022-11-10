@@ -3,16 +3,15 @@
 class Solution {
 public:
     vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        sort(intervals.begin(), intervals.end());
         vector<vector<int>> result;
-        sort(intervals.begin(), intervals.end(), [] (vector<int> const& a, vector<int> const &b) {
-            return a[0] < b[0];
-        });
         
-        for(auto &interval: intervals) {
-            if(result.empty() || interval[0] > result.back()[1])
+        for(auto interval: intervals) {
+            if(!result.size() || result.back()[1] < interval[0])
                 result.push_back(interval);
-            else
-                result.back()[1] = max(result.back()[1], interval[1]);
+            else {
+                result.back()[1] = max(interval[1], result.back()[1]);
+            }
         }
         
         return result;
