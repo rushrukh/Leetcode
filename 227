@@ -3,31 +3,30 @@
 class Solution {
 public:
     int calculate(string s) {
-        int current = 0, result = 0;
         char operation = '+';
-        stack<int> S;
+        stack<int> stk;
+        int current = 0;
         
         for(int i = 0; i < s.size(); i++) {
             if(isdigit(s[i])) {
                 current *= 10;
                 current += s[i] - '0';
             }
+            
             if(!isdigit(s[i]) && !isspace(s[i]) || i == s.size() - 1) {
-                if(operation == '+') {
-                    S.push(current);           
-                }
-                else if(operation == '-') {
-                    S.push(-current);
-                }
+                if(operation == '+')
+                    stk.push(current);
+                else if(operation == '-')
+                    stk.push(-current);
                 else if(operation == '*') {
-                    int first = S.top();
-                    S.pop();
-                    S.push(first * current);
+                    int first = stk.top();
+                    stk.pop();
+                    stk.push(first * current);
                 }
                 else if(operation == '/') {
-                    int first = S.top();
-                    S.pop();
-                    S.push(first / current);
+                    int first = stk.top();
+                    stk.pop();
+                    stk.push(first / current);
                 }
                 
                 current = 0;
@@ -35,9 +34,10 @@ public:
             }
         }
         
-        while(!S.empty()) {
-            result += S.top();
-            S.pop();
+        int result = 0;
+        while(!stk.empty()) {
+            result += stk.top();
+            stk.pop();
         }
         
         return result;
