@@ -1,0 +1,49 @@
+// TC O(N), SC O(N)
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        if(!root) return {};
+        queue<TreeNode*> Q;
+        Q.push(root);
+        vector<vector<int>> result;
+        int l2r = 1;
+        
+        while(!Q.empty()) {
+            int n = Q.size();
+            vector<int> tmp;
+            
+            for(int i = 0; i < n; i++) {
+                TreeNode *curr = Q.front();
+                Q.pop();
+                
+                tmp.push_back(curr -> val);
+                
+                if(curr -> left) Q.push(curr -> left);
+                if(curr -> right) Q.push(curr -> right);
+            }
+            
+            if(l2r)
+                result.push_back(tmp);
+            else {
+                reverse(tmp.begin(), tmp.end());
+                result.push_back(tmp);
+            }
+            
+            l2r ^= 1;
+        }
+        
+        return result;
+    }
+};
