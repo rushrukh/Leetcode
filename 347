@@ -36,52 +36,48 @@ public:
 
 class Solution {
 public:
-    int n = 0;
-    vector<int> unique;
     unordered_map<int, int> hash;
+    vector<int> unique;
     vector<int> topKFrequent(vector<int>& nums, int k) {
-        vector<int> result(k, 0);
-        
+        vector<int> result (k, 0);
         for(int &num: nums)
             hash[num]++;
         
-        for(auto &p: hash)
-            unique.push_back(p.first);
+        for(auto &pair: hash)
+            unique.push_back(pair.first);
         
-        n = unique.size();
-        quickselect(0, n - 1, n - k);
+        int left = 0, right = unique.size() - 1;
+        k = unique.size() - k;
         
-        copy(unique.begin() + n - k, unique.end(), result.begin());
+        while(left <= right) {
+            int p = partition(left, right);
+            if(p == k)
+                break;
+            
+            else if(p < k)
+                left = p + 1;
+            
+            else
+                right = p - 1;
+        }
         
+        copy(unique.begin() + k, unique.end(), result.begin());
         return result;
     }
     
-    void quickselect(int left, int right, int k) {
-        // base case: if array size is 1, nothing to do
-        if(left == right)
-            return;
+    int partition(int left, int right) {
+        int pivot_index = left + rand() % (right - left + 1);
+        swap(unique[pivot_index], unique[right]);
         
-        int p = left + rand() % (right - left + 1);
-        int pivot = partition(left, right, p); // think about parameters
-        
-        if(pivot == k)
-            return;
-        else if(pivot < k)
-            quickselect(pivot + 1, right, k);
-        else
-            quickselect(left, pivot - 1, k);
-    }
-    
-    int partition(int left, int right, int p) {
-        int pivot_freq = hash[unique[p]], store_index = left;
-        swap(unique[p], unique[right]);
+        int pivot_value = hash[unique[right]], p = left;
         
         for(int i = left; i < right; i++) {
-            if(hash[unique[i]] <= pivot_freq)
-                swap(unique[i], unique[store_index++]);
+            if(hash[unique[i]] <= pivot_value)
+                swap(unique[i], unique[p++]);
         }
-        swap(unique[right], unique[store_index]);
         
-        return store_index;
+        swap(unique[right], unique[p]);
+        
+        return p;
     }
 };
