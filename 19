@@ -1,35 +1,40 @@
 // TC O(N), SC O(1)
 
 class Solution {
-public:
-    ListNode* removeNthFromEnd(ListNode* head, int n) {
-        int count = 0;
-        ListNode* tmp = head;
+public: 
+	ListNode* removeNthFromEnd(ListNode *head, int n) {
+		if(!head) 
+			return head;
         
-        while(tmp) {
-            count++;
-            tmp = tmp -> next;
-        }
-        
-        count = count - n + 1;
-        int tCount = 0;
-        
-        ListNode* prev = NULL;
-        tmp = head;
-        
-        while(tmp) {
-            tCount++;
-            
-            if(tCount == count) {
-                if(prev) prev -> next = tmp -> next;
-                else head = tmp -> next;
+		int length = count_length(head);
+		n = length - n + 1;
+		int i = 1;
+		ListNode *prev = NULL, *curr = head;
+		
+		while(curr) {
+			if(i == n) {
+                if(prev) 
+                    prev -> next = curr -> next;
+                else 
+                    head = curr -> next;
                 break;
             }
-            
-            prev = tmp;
-            tmp = tmp -> next;
+            i++;
+            prev = curr;
+            curr = curr-> next;
         }
-        
+
         return head;
     }
+
+    int count_length(ListNode *head) {
+        int count = 0;
+        while(head) {
+            count++;
+            head = head -> next;
+        }
+
+        return count;
+    }
 };
+
