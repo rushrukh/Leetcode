@@ -8,7 +8,7 @@ public:
         
         for(int right = 0; right < s.size(); right++) {
             if(hash.find(s[right]) != hash.end() && hash[s[right]] >= left) {
-                left = hash[s[right]] + 1;
+                left = max(hash[s[right]] + 1,  + 1);
             }
             max_len = max(max_len, right - left + 1);
             hash[s[right]] = right;
