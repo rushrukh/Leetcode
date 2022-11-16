@@ -38,33 +38,31 @@ public:
 
 class Solution {
 public:
-    int sum = 0;
+    int sum = 0, max_depth = 0;
     int deepestLeavesSum(TreeNode* root) {
-        int maxDepth = maximumDepth(root);
-        
-        return calculateSum(root, 1, maxDepth);
-    }
-    
-    int maximumDepth(TreeNode* root) {
-        if(!root)
-            return 0;
-        
-        int lDepth = maximumDepth(root -> left);
-        int rDepth = maximumDepth(root -> right);
-        
-        return max(lDepth, rDepth) + 1;
-    }
-    
-    int calculateSum(TreeNode* root, int currentDepth, int maxDepth) {
-        if(!root)
-            return sum;
-        
-        if(currentDepth == maxDepth) 
-            sum += root -> val;
-        
-        int lDepth = calculateSum(root -> left, currentDepth + 1, maxDepth);
-        int rDepth = calculateSum(root -> right, currentDepth + 1, maxDepth);
+        if(!root) return 0;
+        max_depth = find_depth(root);
+        DFS(root, 1);
         
         return sum;
+    }
+    
+    int find_depth(TreeNode* root) {
+        if(!root) return 0;
+        
+        int left = find_depth(root -> left);
+        int right = find_depth(root -> right);
+        
+        return max(left, right) + 1;
+    }
+    
+    void DFS(TreeNode *root, int curr_depth) {
+        if(!root) return;
+        
+        if(curr_depth == max_depth)
+            sum += root -> val;
+        
+        DFS(root -> left, curr_depth + 1);
+        DFS(root -> right, curr_depth + 1);
     }
 };
