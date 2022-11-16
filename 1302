@@ -15,21 +15,28 @@
 class Solution {
 public:
     int deepestLeavesSum(TreeNode* root) {
+        if(!root) return 0;
+        
         queue<TreeNode*> Q;
         Q.push(root);
         int sum = 0;
         
         while(!Q.empty()) {
-            int currQsize = Q.size();
+            int n = Q.size();
             sum = 0;
-            for(int i = 0; i < currQsize; i++) {
-                TreeNode* curr = Q.front();
+            
+            for(int i = 0; i < n; i++) {
+                TreeNode *curr = Q.front();
                 Q.pop();
+                
+                sum += curr -> val;
+                
                 if(curr -> left) Q.push(curr -> left);
                 if(curr -> right) Q.push(curr -> right);
-                sum += curr -> val;
             }
+            
         }
+        
         return sum;
     }
 };
