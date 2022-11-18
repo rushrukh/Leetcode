@@ -1,0 +1,22 @@
+// TC O(N), SC O(N)
+
+class Solution {
+public:
+    int result = 0;
+    double difference = INT_MAX;
+    int closestValue(TreeNode* root, double target) {
+        if(!root) return 0;
+        
+        if(abs(double(root -> val) - target) < difference) {
+            difference = abs(double(root -> val) - target);
+            result = root -> val;
+        }
+        
+        if(target > double(root -> val))
+            closestValue(root -> right, target);
+        else if(target < double(root -> val))
+            closestValue(root -> left, target);
+        
+        return result;
+    }
+};
