@@ -2,26 +2,28 @@
 
 class Solution {
 public:
-    int findCircleNum(vector<vector<int>>& v) {
-        vector<bool> visited(v.size(), false);
-        int m = v.size(), province = 0;
+    vector<int> visited;
+    int findCircleNum(vector<vector<int>>& isConnected) {
+        int n = isConnected.size(), province = 0;
+        visited.assign(n, 0);
         
-        for(int i = 0; i < m; i++) {
+        for(int i = 0; i < n; i++) {
             if(!visited[i]) {
-                DFS(v, visited, i);
                 province++;
+                DFS(isConnected, i);
             }
         }
         
         return province;
     }
     
-    void DFS(vector<vector<int>> &v, vector<bool> &visited, int i) {
-        for(int j = 0; j < v.size(); j++) {
-            if(v[i][j] == 1 && !visited[j]) {
-                visited[j] = true;
-                DFS(v, visited, j);
-            }
+    void DFS(vector<vector<int>> &graph, int source) {
+        visited[source] = 1;
+        
+        for(int i = 0; i < graph[source].size(); i++) {
+            if(i == source) continue;
+            if(graph[source][i] && !visited[i])
+                DFS(graph, i);
         }
     }
 };
