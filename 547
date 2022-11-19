@@ -1,4 +1,4 @@
-// TC O(N^2), SC O(1)
+// DFS: TC O(N^2), SC O(1)
 
 class Solution {
 public:
@@ -25,5 +25,37 @@ public:
             if(graph[source][i] && !visited[i])
                 DFS(graph, i);
         }
+    }
+};
+
+// BFS, TC O(N^2), SC O(N)
+
+class Solution {
+public:
+    int findCircleNum(vector<vector<int>>& isConnected) {
+        int province = 0, n = isConnected.size();
+        vector<int> visited(n, 0);
+        
+        for(int i = 0; i < n; i++) {
+            if(!visited[i]) {
+                province++;
+                
+                queue<int> Q;
+                Q.push(i);
+                
+                while(!Q.empty()) {
+                    int source = Q.front();
+                    visited[source] = 1;
+                    Q.pop();
+                    
+                    for(int i = 0; i < n; i++) {
+                        if(isConnected[source][i] && !visited[i])
+                            Q.push(i);
+                    }
+                }
+            }
+        }
+        
+        return province;
     }
 };
