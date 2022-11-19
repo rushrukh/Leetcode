@@ -1,4 +1,4 @@
-// DFS: TC O(N^2), SC O(1)
+// DFS: TC O(N^2), SC O(N)
 
 class Solution {
 public:
@@ -57,5 +57,57 @@ public:
         }
         
         return province;
+    }
+};
+
+// Union Find TC O(N^2), SC O(N)
+
+class Solution {
+public:
+    vector<int> parent, rank;
+    int n = 0;
+    int findCircleNum(vector<vector<int>>& graph) {
+        int province = 0;
+        n = graph.size();
+        parent.assign(n, 0);
+        rank.assign(n, 1);
+        init_dsu();
+        
+        for(int src = 0; src < n; src++) {
+            for(int dst = 0; dst < n; dst++) {
+                if(graph[src][dst])
+                    Union(src, dst);
+            }
+        }
+        
+        for(int i = 0; i < n; i++)
+            if(parent[i] == i)
+                province++;
+        
+        return province;
+    }
+    
+    void init_dsu() {
+        for(int i = 0; i < n; i++)
+            parent[i] = i;
+    }
+    
+    void Union(int u, int v) {
+        int parent_u = find_parent(u), parent_v = find_parent(v);
+        if(parent_u == parent_v) return;
+        
+        if(rank[parent_u] < rank[parent_v])
+            swap(parent_u, parent_v);
+        
+        parent[parent_v] = parent_u;
+        rank[parent_u] += rank[parent_v];
+        rank[parent_v] = 0;
+    }
+    
+    int find_parent(int x) {
+        if(parent[x] == x)
+            return x;
+        
+        return parent[x] = find_parent(parent[x]);
     }
 };
