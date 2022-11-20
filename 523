@@ -1,0 +1,22 @@
+// TC O(N), SC O(N)
+
+class Solution {
+public:
+    bool checkSubarraySum(vector<int>& nums, int k) {
+        unordered_map<int, int> hash;
+        hash[0] = 0;
+        int p_sum = 0;
+        
+        for(int i = 0; i < nums.size(); i++) {
+            p_sum += nums[i];
+            
+            if(hash.find(p_sum % k) != hash.end())
+                if(hash[p_sum % k] < i)
+                    return true;
+            else
+                hash[p_sum % k] = i + 1;
+        }
+        
+        return false;
+    }
+};
