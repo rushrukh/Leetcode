@@ -1,0 +1,27 @@
+// TC O(N), SC O(1)
+
+class Solution {
+public:
+    int minOperations(vector<int>& nums, int x) {
+        int max_size = -1, left = 0, right = 0, sum = accumulate(nums.begin(), nums.end(), 0), n = nums.size(), total = sum - x, current = 0;
+        
+        if(total < 0) return -1;
+        
+        while(right < n) {
+            current = current + nums[right];
+            
+            while(current > total) {
+                current -= nums[left];
+                left++;
+            }
+            
+            if(current == total) {
+                max_size = max(max_size, right - left + 1);
+            }
+            
+            right++;
+        }
+        
+        return max_size == -1 ? -1 : n - max_size;
+    }
+};
