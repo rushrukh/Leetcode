@@ -1,0 +1,51 @@
+// TC O(N), SC O(N)
+
+struct SimpleHash {
+    size_t operator()(const std::pair<int, int>& p) const {
+        return p.first ^ p.second;
+    }
+};
+
+class Solution {
+public:
+    vector<int> shortestAlternatingPaths(int n, vector<vector<int>>& red, vector<vector<int>>& blue) {
+        vector<vector<pair<int, int>>> graph(n);
+        vector<int> answer(n, -1);
+        unordered_set<pair<int, int>, SimpleHash> visited;
+        answer[0] = 0;
+        
+        for(auto edge: red) {
+            graph[edge[0]].push_back({edge[1], 1});
+        }
+        
+        for(auto edge: blue) {
+            graph[edge[0]].push_back({edge[1], 2});
+        }
+        
+        queue<pair<int,int>> Q;
+        Q.push({0, -1});
+        
+        int level = 0;
+        while(!Q.empty()) {
+            int q_size = Q.size();
+            
+            for(int i = 0; i < q_size; i++) {
+                auto front = Q.front();
+                Q.pop();
+                int curr_node = front.first, curr_color = front.second;
+                answer[curr_node] = answer[curr_node] == -1 ? level : min(answer[curr_node], level);
+                visited.insert(front);
+                
+                for(auto edge: graph[curr_node]) {
+                    if(edge.second != curr_color && visited.find(edge) == visited.end()) {
+                        Q.push(edge);
+                    }
+                }
+            }
+            
+            level++;
+        }
+        
+        return answer;
+    }
+};
