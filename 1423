@@ -1,0 +1,24 @@
+// TC O(N), SC O(1)
+
+class Solution {
+public:
+    int maxScore(vector<int>& nums, int k) {
+        int left = 0, n = nums.size(), x = n - k, min_sum = INT_MAX, curr_sum = 0;
+        if(n == x) return 0;
+        
+        for(int right = 0; right < n; right++) {
+            while(right < x) {
+                curr_sum += nums[right++];
+            }
+            
+            min_sum = min(min_sum, curr_sum);
+            curr_sum -= nums[left++];
+            curr_sum += nums[right];
+        }
+        
+        min_sum = min(min_sum, curr_sum);
+        curr_sum = accumulate(nums.begin(), nums.end(), 0);
+        
+        return curr_sum - min_sum;
+    }
+};
