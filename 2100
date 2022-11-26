@@ -1,0 +1,21 @@
+// TC O(N), SC O(N)
+
+class Solution {
+public:
+    vector<int> goodDaysToRobBank(vector<int>& nums, int time) {
+        int n = nums.size();
+        vector<int> prev(n, 0), next(n, 0), result;
+        
+        for(int i = 1; i < n; i++)
+            prev[i] = nums[i] > nums[i - 1] ? 0 : prev[i - 1] + 1;
+        
+        for(int i = n - 2; i >= 0; i--)
+            next[i] = nums[i] > nums[i + 1] ? 0 : next[i + 1] + 1;
+        
+        for(int i = 0; i < n; i++)
+            if(prev[i] >= time && next[i] >= time)
+                result.push_back(i);
+        
+        return result;
+    }
+};
