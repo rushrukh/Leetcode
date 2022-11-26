@@ -1,0 +1,37 @@
+// TC O(NLogN), SC O(N)
+
+class Solution {
+public:
+    static bool comp(vector<int> A, vector<int> B) {
+        return A[1] < B[1];
+    }
+    bool carPooling(vector<vector<int>>& trips, int capacity) {
+        sort(trips.begin(), trips.end(), comp);
+        priority_queue<pair<int, int>, vector<pair<int,int>>, greater<pair<int,int>>> Q; 
+        int tmp_cap = 0;
+        
+        for(auto &trip: trips) {
+            while(!Q.empty() && trip[1] >= Q.top().first) {
+                tmp_cap -= Q.top().second;
+                Q.pop();
+            }
+            
+            if(Q.empty()) {
+                if(trip[0] + tmp_cap <= capacity) {
+                    tmp_cap += trip[0];
+                    Q.push({trip[2], trip[0]});
+                }
+                else return false;
+            }
+            else {
+                if(tmp_cap + trip[0] <= capacity) {
+                    tmp_cap += trip[0];
+                    Q.push({trip[2], trip[0]});
+                }
+                else return false;
+            }
+        }
+        
+        return true;
+    }
+};
