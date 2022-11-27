@@ -1,0 +1,64 @@
+class Solution {
+public:
+    int openLock(vector<string>& deadends, string target) {
+        queue<string> Q;
+        Q.push("0000");
+
+        unordered_set<string> visited, deadend;
+        visited.insert("0000");
+        
+        for(auto &d: deadends)      // O(N)
+            deadend.insert(d);
+
+        if(deadend.find("0000") != deadend.end()) return -1;
+        if(target == "0000") return 0;
+        
+        int level = 0;
+        
+        while(!Q.empty()) {
+            int n = Q.size();
+            
+            for(int i = 0; i < n; i++) {
+                string curr = Q.front();
+                Q.pop();
+                
+                for(int idx = 0; idx < 4; idx++) {
+                    vector<string> combinations = get_next_combination(curr, idx);
+                    
+                    for(auto combination: combinations) {
+                        if(combination == target) return level + 1;
+                        
+                        if(visited.find(combination) == visited.end()
+                          && deadend.find(combination) == deadend.end()) {
+                            visited.insert(combination);
+                            Q.push(combination);
+                        }
+                    }
+                }
+            }
+            
+            level++;
+        }
+        
+        return -1;
+    }
+    
+    vector<string> get_next_combination(string curr, int idx) {
+        vector<string> next_comb(2, "");
+
+        int item = curr[idx] - '0';
+
+        int inc = (item + 1) % 10;
+        int dec = item - 1 < 0 ? item - 1 + 10 : (item - 1) % 10;
+
+        string tmp_1 = curr;
+        tmp_1[idx] = inc + '0';
+        next_comb[0] = tmp_1;
+        
+        tmp_1 = curr;
+        tmp_1[idx] = dec + '0';
+        next_comb[1] = tmp_1;
+
+        return next_comb;
+    }
+};
