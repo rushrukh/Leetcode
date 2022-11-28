@@ -32,3 +32,50 @@ public:
         return count;
     }
 };
+
+
+// TC O(N), SC O(N)
+
+class Solution {
+public:
+    vector<int> parent, rank;
+    int reachableNodes(int n, vector<vector<int>>& edges, vector<int>& restricted) {
+        for(int i = 0; i < n; i++) {
+            parent.push_back(i);
+            rank.push_back(1);
+        }
+        
+        unordered_set<int> restrictions;
+        for(int &r: restricted)
+            restrictions.insert(r);
+        
+        for(auto &edge: edges) {
+            if(restrictions.find(edge[0]) == restrictions.end()
+              && restrictions.find(edge[1]) == restrictions.end()) {
+                Union(edge[0], edge[1]);
+            }
+        }
+        
+        return rank[parent[0]];
+    }
+    
+    void Union(int u, int v) {
+        int parent_u = find_parent(u), parent_v = find_parent(v);
+        
+        if(parent_u == parent_v) return;
+        
+        if(rank[parent_u] < rank[parent_v])
+            swap(parent_u, parent_v);
+        
+        parent[parent_v] = parent_u;
+        rank[parent_u] += rank[parent_v];
+        rank[parent_v] = 0;
+    }
+    
+    int find_parent(int x) {
+        if(parent[x] == x)
+            return x;
+        
+        return parent[x] = find_parent(parent[x]);
+    }
+};
