@@ -16,3 +16,21 @@ public:
         return DP[n] = dp(n - 1) + dp(n - 2);
     }
 };
+
+
+// Bottom-up: TC O(N), SC O(N)
+
+class Solution {
+public:
+    int climbStairs(int n) {
+        if(n < 2) return n;
+        vector<int> DP(n + 1, -1);
+        DP[0] = 0, DP[1] = 1, DP[2] = 2;
+        
+        for(int i = 3; i <= n; i++) {
+            DP[i] = DP[i - 1] + DP[i - 2];
+        }
+        
+        return DP[n];
+    }
+};
