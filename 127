@@ -1,0 +1,58 @@
+// O(MN), SC O(M^2 N)
+
+class Solution {
+public:
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+        if(beginWord == endWord) return 0;
+        
+        unordered_map<string, vector<string>> dict = get_dict(wordList);
+        queue<string> Q;
+        Q.push(beginWord);
+        unordered_set<string> seen;
+        seen.insert(beginWord);
+        
+        int level = 0, length = beginWord.size();
+        
+        while(!Q.empty()) {
+            int n = Q.size();
+            
+            for(int i = 0; i < n; i++) {
+                string curr = Q.front(); Q.pop();
+                
+                for(int idx = 0; idx < length; idx++) {
+                    string tmp_curr = curr;
+                    tmp_curr[idx] = '_';
+
+                    if(dict.find(tmp_curr) == dict.end()) continue;
+                    
+                    for(auto &w: dict[tmp_curr]) {
+                        if(seen.find(w) == seen.end()) {
+                            if(w == endWord) return level + 2;
+                            seen.insert(w);
+                            Q.push(w);
+                        }
+                    }
+                }
+            }
+            
+            level++;
+        }
+        
+        return 0;
+    }
+    
+    unordered_map<string, vector<string>> get_dict(vector<string> &wordList) {
+        unordered_map<string, vector<string>> dictionary;
+        int length = wordList[0].size();
+        
+        for(auto &word: wordList) {
+            for(int i = 0; i < length; i++) {
+                string curr = word;
+                curr[i] = '_';
+                dictionary[curr].push_back(word);
+            }
+        }
+        
+        return dictionary;
+    }
+};
