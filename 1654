@@ -1,0 +1,41 @@
+class Solution {
+public:
+    int minimumJumps(vector<int>& forbidden, int a, int b, int x) {
+        unordered_set<int> restricted;
+        int limit = 2000 + a + b;
+        
+        for(auto &f: forbidden)
+            restricted.insert(f);
+        
+        queue<pair<int, int>> Q;
+        Q.push({0, 1});
+        
+        int level = 0;
+        while(!Q.empty()) {
+            int n = Q.size();
+            
+            for(int i = 0; i < n; i++) {
+                int curr_loc = Q.front().first, prev_move = Q.front().second;
+                Q.pop();
+            
+                if(curr_loc == x) return level;
+                if(restricted.find(curr_loc) != restricted.end()) continue;
+                restricted.insert(curr_loc);
+                
+                int next_loc_forward = curr_loc + a, next_loc_backward = curr_loc - b;
+                
+                if(prev_move && next_loc_backward >= 0) {
+                    Q.push({next_loc_backward, 0});
+                }
+                
+                if(next_loc_forward <= limit) {
+                    Q.push({next_loc_forward, 1});
+                }
+            }
+            
+            level++;
+        }
+        
+        return -1;
+    }
+};
