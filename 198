@@ -1,17 +1,19 @@
-//Top Down Soln: Time O(n), Space O(n);
+//Top Down Soln: TC O(N), SC O(N);
 
 class Solution {
 public:
-    int DP[101];
+    vector<int> DP;
     int rob(vector<int>& nums) {
-        memset(DP, -1, sizeof(DP));
-        return knapSack(nums, nums.size());
+        DP.assign(nums.size(), -1);
+        return max_profit(nums, nums.size() - 1);
     }
-    int knapSack(vector<int>& nums, int n) {
-        if(n <= 0) return 0;
-        if(DP[n] != -1) return DP[n];
+    
+    int max_profit(vector<int> &nums, int i) {
+        if(i == 0) return nums[i];
+        if(i == 1) return max(nums[i], nums[i - 1]);
+        if(DP[i] != -1) return DP[i];
         
-        return DP[n] = max(nums[n - 1] + knapSack(nums, n - 2), knapSack(nums, n - 1));
+        return DP[i] = max(nums[i] + max_profit(nums, i - 2), max_profit(nums, i - 1));
     }
 };
 
