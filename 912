@@ -53,3 +53,28 @@ public:
         copy(tmp.begin(), tmp.end(), nums.begin() + left);
     }
 };
+
+// 3. Counting Sort TC O(N), SC O(N)
+
+class Solution {
+public:
+    vector<int> sortArray(vector<int>& nums) {
+        int max_ = *max_element(nums.begin(), nums.end()),
+        min_ = *min_element(nums.begin(), nums.end());
+        
+        int freq_size = max_ - min_ + 1;
+        vector<int> frequency (freq_size, 0), result(nums.size(), 0);
+        
+        for(int &num: nums)
+            frequency[num - min_]++;
+        
+        for(int i = 1; i < freq_size; i++)
+            frequency[i] += frequency[i - 1];
+        
+        for(int &num: nums) {
+            result[frequency[num - min_]-- -1] = num;
+        }
+        
+        return result;
+    }
+};
