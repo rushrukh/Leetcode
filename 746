@@ -1,4 +1,4 @@
-//KnapSack Recursion Trial O(2^n)
+// Knapsack Recursion O(2^n)
 
 class Solution {
 public:
@@ -11,6 +11,28 @@ public:
             return i == 0 ? cost[0] : cost[1];
         
         return cost[i] + min(calc_cost(cost, i - 1), calc_cost(cost, i - 2));
+    }
+};
+
+// Knapsack Recursion Memoization: TC O(N), SC O(N)
+
+class Solution {
+public:
+    vector<int> DP;
+    int minCostClimbingStairs(vector<int>& cost) {
+        int n = cost.size();
+        DP.assign(n, -1);
+        DP[0] = cost[0], DP[1] = cost[1];
+        
+        find_min(cost, n - 1);
+        return min(DP[n - 1], DP[n - 2]);
+    }
+    
+    int find_min(vector<int> &cost, int i) {
+        if(i < 2) return i == 1 ? DP[1] = cost[1] : DP[0] = cost[0];
+        if(DP[i] != -1) return DP[i];
+        
+        return DP[i] = cost[i] + min(find_min(cost, i - 1), find_min(cost, i - 2));
     }
 };
 
