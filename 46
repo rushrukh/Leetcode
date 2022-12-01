@@ -1,0 +1,26 @@
+// TC O(N* N!), SC O(N!)
+
+class Solution {
+public:
+    vector<vector<int>> answer;
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<int> curr;
+        make_perms(nums, curr);
+        return answer;
+    }
+    
+    void make_perms(vector<int> &nums, vector<int> &curr) {
+        if(curr.size() == nums.size()) {
+            answer.push_back(curr);
+            return;
+        }
+        
+        for(int &num: nums) {
+            if(find(curr.begin(), curr.end(), num) == curr.end()) {
+                curr.push_back(num);
+                make_perms(nums, curr);
+                curr.pop_back();
+            }
+        }
+    }
+};
