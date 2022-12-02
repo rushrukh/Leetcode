@@ -4,8 +4,14 @@ class Solution {
 public:
     vector<string> letterCombinations(string digits) {
         if(!digits.size()) return {};
+        
+        unordered_map<char, string> hash;
         vector<string> result;
-        vector<string> phones = {"0", "1", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        
+        hash = {
+            {'2', "abc"}, {'3', "def"}, {'4', "ghi"}, {'5', "jkl"},
+            {'6', "mno"}, {'7', "pqrs"}, {'8', "tuv"}, {'9', "wxyz"}
+        };
         
         queue<string> Q;
         Q.push("");
@@ -14,13 +20,16 @@ public:
             string curr = Q.front();
             Q.pop();
             
+            // Termination condition
             if(curr.size() == digits.size())
                 result.push_back(curr);
             else {
-                string temp = phones[digits[curr.size()] - '0'];
-                for(char &ch: temp)
-                    Q.push(curr + ch);    
-            }            
+                string tmp = hash[digits[curr.size()]];
+                
+                for(int i = 0; i < tmp.size(); i++) {
+                    Q.push(curr + tmp[i]);
+                }
+            }
         }
         
         return result;
