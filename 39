@@ -1,0 +1,27 @@
+/* Backtracking: N = Number of elements, T = target, M = smallest number, T/M = maximum depth of a tree
+TC: O(N ^ (T/M + 1)), SC O(T/M)
+*/
+
+class Solution {
+public:
+    vector<vector<int>> result;
+    vector<vector<int>> combinationSum(vector<int>& nums, int target) {
+        vector<int> curr;
+        find_combinations(nums, curr, target, 0, 0);
+        
+        return result;
+    }
+    
+    void find_combinations(vector<int> &nums, vector<int> &curr, int target, int sum, int start) {
+        if(sum >= target) {
+            if(sum == target) result.push_back(curr);
+            return;
+        }
+        
+        for(int i = start; i < nums.size(); i++) {
+            curr.push_back(nums[i]);
+            find_combinations(nums, curr, target, sum + nums[i], i);
+            curr.pop_back();
+        }
+    }
+};
