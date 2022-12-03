@@ -1,0 +1,56 @@
+class Solution {
+public:
+    vector<vector<int>> dir = {{0, 1}, {0, -1}, {-1, 0}, {1, 0}};
+    vector<vector<char>> board;
+    string word;
+    vector<vector<bool>> seen;
+    int row = 0, col = 0, n = 0;
+    bool exist(vector<vector<char>>& board, string word) {
+        this -> board = board;
+        this -> word = word;
+        n = word.size();
+        row = board.size();
+        col = board[0].size();
+        
+        seen.assign(row, vector<bool> (col, false));
+        
+        for(int i = 0; i < row; i++) {
+            for(int j = 0; j < col; j++) {
+                if(board[i][j] == word[0]) {
+                    seen[i][j] = true;
+                    if(find_word(i, j, 1))
+                        return true;
+                    seen[i][j] = false;
+                }
+            }
+        }
+        
+        return false;
+    }
+    
+    bool find_word(int r, int c, int idx) {
+        if(idx == n) return true;
+        
+        int next_r = 0, next_c = 0;
+        for(auto &d: dir) {
+            next_r = r + d[0];
+            next_c = c + d[1];
+            
+            if(is_valid(next_r, next_c) && !seen[next_r][next_c]) {
+                if(board[next_r][next_c] == word[idx]) {
+                    seen[next_r][next_c] = true;
+                    if(find_word(next_r, next_c, idx + 1))
+                        return true;
+                    seen[next_r][next_c] = false;
+                }
+                    
+            }
+        }
+        
+        return false;
+    }
+    
+    bool is_valid(int i, int j) {
+        return i >= 0 && j >= 0 && i < row && j < col;
+    }
+};
