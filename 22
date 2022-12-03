@@ -1,0 +1,34 @@
+// TC O(), SC O()
+
+class Solution {
+public:
+    int total_length = 0, n = 0;
+    unordered_set<string> result;
+    vector<string> generateParenthesis(int n) {
+        this -> total_length = n * 2;
+        this -> n = n;
+        string curr = "";
+        generate_p(curr, 0, true);
+        vector<string> answer(result.begin(), result.end());
+        
+        return answer;
+    }
+    void generate_p(string &curr, int validator, bool openning_p) {
+        if(validator < 0 || curr.size() > total_length) return;
+        if(curr.size() == total_length) {
+            if(validator == 0) {
+                result.insert(curr);
+            }
+        }
+        
+        char curr_p = openning_p ? '(' : ')';
+        validator = curr_p == '(' ? validator + 1 : validator - 1;
+        curr.push_back(curr_p);
+        
+        generate_p(curr, validator, true);
+        generate_p(curr, validator, false);
+        
+        validator = curr_p == '(' ? validator - 1: validator + 1;
+        curr.pop_back();
+    }
+};
