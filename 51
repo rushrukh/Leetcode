@@ -1,0 +1,47 @@
+class Solution {
+public:
+    int n;
+    vector<vector<string>> result;
+    vector<vector<string>> solveNQueens(int n) {
+        this -> n = n;
+        unordered_set<int> cols, diagonals, antidiagonals;
+        vector<string> curr;
+        find_combinations(0, cols, diagonals, antidiagonals, curr);
+        
+        return result;
+    }
+    
+    void find_combinations(int row, unordered_set<int> &cols, unordered_set<int> &diagonals, unordered_set<int> &antidiagonals, vector<string> &curr) {
+        // base case
+        if(row == n) {
+            result.push_back(curr);
+            return;
+        }
+        
+        for(int col = 0; col < n; col++) {
+            int diagonal = row - col, antidiagonal = row + col;
+            
+            // check if queen is placable:
+            if(cols.find(col) != cols.end() || diagonals.find(diagonal) != diagonals.end() || antidiagonals.find(antidiagonal) != antidiagonals.end())
+                continue;
+            
+            cols.insert(col);
+            diagonals.insert(diagonal);
+            antidiagonals.insert(antidiagonal);
+            
+            string tmp = "";
+            
+            for(int c = 0; c < n; c++)
+                tmp += c == col ? 'Q' : '.';
+            
+            curr.push_back(tmp);
+            
+            find_combinations(row + 1, cols, diagonals, antidiagonals, curr);
+            
+            cols.erase(col);
+            diagonals.erase(diagonal);
+            antidiagonals.erase(antidiagonal);
+            curr.pop_back();
+        }
+    }
+};
