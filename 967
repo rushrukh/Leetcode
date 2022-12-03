@@ -1,0 +1,41 @@
+// TC O(2^N), SC O(2^N)
+
+class Solution {
+public:
+    int n = 0, k = 0;
+    unordered_set<int> result;
+    vector<int> numsSameConsecDiff(int n, int k) {
+        this -> n = n;
+        this -> k = k;
+        
+        for(int i = 1; i <= 9; i++) {
+            find_numbers(0, i);
+        }
+        
+        vector<int> answer(result.begin(), result.end());
+        return answer;
+    }
+    
+    void find_numbers(int idx, int curr) {
+        if(idx == n - 1) {
+            result.insert(curr);
+            return;
+        }
+        
+        int last_digit = curr % 10;
+        
+        if(last_digit + k < 10) {
+            curr *= 10;
+            curr += (last_digit + k);
+            find_numbers(idx + 1, curr);
+            curr /= 10;
+        }
+        
+        if(last_digit - k >= 0) {
+            curr *= 10;
+            curr += (last_digit - k);
+            find_numbers(idx + 1, curr);  
+            curr /= 10;
+        }
+    }
+};
