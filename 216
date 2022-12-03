@@ -1,0 +1,40 @@
+// TC O(), SC O()
+
+class Solution {
+public:
+    int k = 0, n = 0;
+    vector<vector<int>> result;
+    vector<vector<int>> combinationSum3(int k, int n) {
+        this -> k = k;
+        this -> n = n;
+        vector<int> curr;
+        
+        for(int i = 1; i <= 9; i++) {
+            curr.push_back(i);
+            find_nums(0, i, curr, i + 1);
+            curr.pop_back();
+        }
+        
+        return result;
+    }
+    
+    void find_nums(int idx, int curr_sum, vector<int> &curr, int start) {
+        if(curr_sum > n) {
+            return;
+        }
+        if(idx == k - 1) {
+            if(curr_sum == n) result.push_back(curr);
+            return;
+        }
+        
+        for(int i = start; i <= 9; i++) {
+            if(find(curr.begin(), curr.end(), i) == curr.end()) {
+                curr_sum += i;
+                curr.push_back(i);
+                find_nums(idx + 1, curr_sum, curr, i + 1);
+                curr_sum -= i;
+                curr.pop_back();
+            }            
+        }
+    }
+};
