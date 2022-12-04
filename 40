@@ -1,0 +1,28 @@
+// TC O(), SC O()
+
+class Solution {
+public:
+    vector<vector<int>> result;
+    vector<vector<int>> combinationSum2(vector<int>& nums, int target) {
+        vector<int> curr;
+        sort(nums.begin(), nums.end());
+        find_combinations(nums, curr, target, 0, 0);
+        
+        return result;
+    }
+    
+    void find_combinations(vector<int> &nums, vector<int> &curr, int target, int sum, int start) {
+        if(sum >= target) {
+            if(sum == target) result.push_back(curr);
+            return;
+        }
+        
+        for(int i = start; i < nums.size(); i++) {
+            if(i > start && nums[i] == nums[i - 1]) continue;
+            
+            curr.push_back(nums[i]);
+            find_combinations(nums, curr, target, sum + nums[i], i + 1);
+            curr.pop_back();
+        }
+    }
+};
