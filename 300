@@ -1,0 +1,30 @@
+// Top-down: TC O(N^2), SC O(N)
+
+class Solution {
+public:
+    vector<int> DP, nums;
+    int lengthOfLIS(vector<int>& nums) {
+        this -> nums = nums;
+        int n = nums.size(), answer = INT_MIN;
+        DP.assign(n, -1);
+        
+        for(int i = 0; i < n; i++) {
+            answer = max(dp(i), answer);
+        }
+        
+        return answer;
+    }
+    
+    int dp(int i) {
+        if(DP[i] != -1) return DP[i];
+        
+        int answer = 1;
+        
+        for(int j = 0; j < i; j++) {
+            if(nums[j] < nums[i])
+                answer = max(dp(j) + 1, answer);
+        }
+        
+        return DP[i] = answer;
+    }
+};
