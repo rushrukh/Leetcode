@@ -2,19 +2,26 @@
 
 class Solution {
 public:
-    int DP[10001][13];
+    vector<int> coins;
+    vector<vector<int>> DP;
     int coinChange(vector<int>& coins, int amount) {
-        memset(DP, -1, sizeof(DP));
-        int result = helper(coins, amount, coins.size());
-        return result == INT_MAX - 1? -1 : result;
+        DP.assign(coins.size(), vector<int> (amount + 1, -1));
+        this -> coins = coins;
+        
+        int answer = calc_coins(coins.size() - 1, amount);
+        return answer == INT_MAX - 1 ? -1 : answer;
     }
     
-    int helper(vector<int>& coins, int amount, int idx) {
-        if(!amount || !idx) return !amount ? 0 : INT_MAX - 1;
-        if(DP[amount][idx] != -1) return DP[amount][idx];
+    int calc_coins(int i, int amount) {
+        if(amount == 0) return 0;
+        if(amount < 0 || i < 0) return INT_MAX - 1;
+        if(DP[i][amount] != -1) return DP[i][amount];
         
-        if(coins[idx - 1] <= amount) return DP[amount][idx] = min(1 + helper(coins, amount - coins[idx - 1], idx), helper(coins, amount, idx - 1));
-        else return DP[amount][idx] = helper(coins, amount, idx - 1);
+        if(coins[i] > amount)
+            return DP[i][amount] = calc_coins(i - 1, amount);
+            
+        else
+            return DP[i][amount] = min(calc_coins(i, amount - coins[i]) + 1, calc_coins(i - 1, amount));
     }
 };
 
