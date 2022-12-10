@@ -1,0 +1,28 @@
+// TC O(N*K), SC O(N*K)
+
+class Solution {
+public:
+    vector<int> prices;
+    vector<vector<vector<int>>> DP;
+    int n = 0;
+    int maxProfit(int k, vector<int>& prices) {
+        
+        this -> prices = prices;
+        this -> n = prices.size();
+        DP.assign(n + 1, vector<vector<int>> (k + 1, vector<int> (2, -1)));
+        
+        return find_profit(0, k, true);
+    }
+    
+    int find_profit(int idx, int transaction, bool buy) {
+        if(idx == n || !transaction) return 0;
+        if(DP[idx][transaction][buy] != -1) return DP[idx][transaction][buy];
+        
+        if(buy) {
+            return DP[idx][transaction][buy] = max(-prices[idx] + find_profit(idx + 1, transaction, !buy), find_profit(idx + 1, transaction, buy));
+        }
+        else {
+            return DP[idx][transaction][buy] = max(prices[idx] + find_profit(idx + 1, transaction - 1, !buy), find_profit(idx + 1, transaction, buy));
+        }
+    }
+};
