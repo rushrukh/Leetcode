@@ -2,19 +2,25 @@
 
 class Solution {
 public:
+    vector<vector<int>> DP;
+    string text1 = "", text2 = "";
     int longestCommonSubsequence(string text1, string text2) {
-        vector<vector<int>> DP(text1.size(), (vector<int> (text2.size(), -1)));
-        return max_length(DP, text1, text2, text1.size() - 1, text2.size() - 1);
+        int m = text1.size(), n = text2.size();
+        DP.assign(m, vector<int> (n, -1));
+        this -> text1 = text1;
+        this -> text2 = text2;
+        
+        return find_max(m - 1, n - 1);
     }
     
-    int max_length(vector<vector<int>> &DP, string &a, string &b, int i, int j) {
-        if(i < 0 || j < 0) return 0;
+    int find_max(int i, int j) {
+        if(i == -1 || j == - 1) return 0;
         if(DP[i][j] != -1) return DP[i][j];
         
-        if(a[i] == b[j])
-            return DP[i][j] = 1 + max_length(DP, a, b, i - 1, j - 1);
-        else 
-            return DP[i][j] = max(max_length(DP, a, b, i - 1, j), max_length(DP, a, b, i, j - 1));
+        if(text1[i] == text2[j])
+            return DP[i][j] = 1 + find_max(i - 1, j - 1);
+        else
+            return DP[i][j] = max(find_max(i, j - 1), find_max(i - 1, j));
     }
 };
 
