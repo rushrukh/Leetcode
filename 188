@@ -1,4 +1,4 @@
-// TC O(N*K), SC O(N*K)
+// Top-down solution: TC O(N*K), SC O(N*K)
 
 class Solution {
 public:
