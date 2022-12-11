@@ -1,4 +1,4 @@
-//TC O(m*n), SC O(m*n)
+// Top-Down TC O(m*n), SC O(m*n)
 
 class Solution {
 public:
@@ -16,19 +16,23 @@ public:
     }
 };
 
-
+// Top-Down TC O(m*n), SC O(m*n)
 class Solution {
 public:
-    int DP[101][101];
+    int m = 0, n = 0;
+    vector<vector<int>> DP;
     int uniquePaths(int m, int n) {
-        memset(DP, -1, sizeof(DP));
-        return checkPaths(m, n);
-    }
-    int checkPaths(int m, int n) {
-        if(m == 1 || n == 1) return 1;
-        if(DP[m][n] != -1) return DP[m][n];
+        this -> m = m, this -> n = n;
+        DP.assign(m, vector<int> (n, -1));
         
-        return DP[m][n] = checkPaths(m - 1, n) + checkPaths(m, n - 1); 
+        return find_path(m - 1,  n - 1);
+    }
+    
+    int find_path(int i, int j) {
+        if(!i || !j) return 1;
+        if(DP[i][j] != -1) return DP[i][j];
+        
+        return DP[i][j] = find_path(i - 1, j) + find_path(i, j - 1);
     }
 };
 
