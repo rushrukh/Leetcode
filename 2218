@@ -1,0 +1,43 @@
+// FML if this ever comes in any interview :) 
+// Top-down TC (N*M) where M = sum(lens(piles[i])), SC O(N*K)
+
+class Solution {
+public:
+    vector<vector<int>> piles, DP;
+    int n = 0;
+    int maxValueOfCoins(vector<vector<int>>& piles, int k) {
+        this -> n = piles.size();
+        this -> piles = piles;
+        DP.assign(n + 1, vector<int> (k + 1, -1));
+        
+        return find_max(0, k);
+    }
+    
+    int find_max(int i, int remains) {
+        if(i == n || !remains) return 0;
+        if(DP[i][remains] != -1) return DP[i][remains];
+        // First, calculate the answer if we are to skip the ith pile
+        int answer = find_max(i + 1, remains);
+        
+        // Its time to see, if we pick between 1 to min(piles[i].size(), remains) number of
+        // coins from ith pile, and the rest from i + 1 to n - 1 piles
+        // and it gives us a better answer than the skipped part
+        
+        // Since we can pick 1, 2, 3, ... k coins
+        // Or,   we can pick 1, 2, 3, ... piles[i].size() coins
+        // We need a loop, good.
+        // As soon as we pick j amount of coins from ith pile, we need to pick the rest
+        // from i + 1 to n - 1 piles. That means, we need another recursive call along with
+        // each picking of coins from current pile.
+        
+        int curr_gain_from_this_pile = 0, pile_size = piles[i].size();
+        int limit = min(pile_size, remains);
+        
+        for(int j = 0; j < limit; j++) {
+            curr_gain_from_this_pile += piles[i][j];
+            answer = max(answer, curr_gain_from_this_pile + find_max(i + 1, remains - j - 1)); // After picking j number of coins, pick the rest of the coints from i + 1th pile and beyond
+        }
+        
+        return DP[i][remains] = answer;
+    }
+};
