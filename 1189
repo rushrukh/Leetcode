@@ -1,29 +1,23 @@
+// TC O(N), SC O(N)
+
 class Solution {
 public:
     int maxNumberOfBalloons(string text) {
+        unordered_map<char, int> hash;
+        hash = {{'b', 0}, {'a', 0}, {'l', 0}, {'o', 0}, {'n', 0}};
         
-        unordered_map<char, int> balloon;
+        for(char &c: text)
+            if(c == 'b' || c == 'a' || c == 'l' || c == 'o' || c == 'n')
+                hash[c]++;
         
-        balloon.insert({'b', 0});
-        balloon.insert({'a', 0});
-        balloon.insert({'l', 0});
-        balloon.insert({'o', 0});
-        balloon.insert({'n', 0});
-
-        for(auto s: text) {
-            if(s == 'b' || s == 'a' || s == 'l' || s == 'o' || s == 'n')
-                balloon[s]++;
-        }
-        balloon['l'] = balloon['l'] / 2;
-        balloon['o'] = balloon['o'] / 2;
+        hash['l'] /= 2;
+        hash['o'] /= 2;
         
-        int min = INT_MAX;
+        int max_balloons = INT_MAX;
         
-        for(auto s: balloon)
-            if(s.first == 'b' || s.first == 'a' || s.first == 'l' || s.first == 'o' || s.first == 'n')
-                if(s.second < min)
-                    min = s.second;
+        for(auto &p: hash)
+            max_balloons = min(max_balloons, p.second);
         
-        return min;
+        return max_balloons == INT_MAX ? 0 : max_balloons;
     }
 };
