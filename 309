@@ -1,0 +1,26 @@
+// Top-down TC O(N^2), SC O(N)
+
+class Solution {
+public:
+    vector<int> prices;
+    vector<vector<int>> DP;
+    int n = 0;
+    int maxProfit(vector<int>& prices) {
+        this -> prices = prices;
+        this -> n = prices.size();
+        DP.assign(n + 1, vector<int> (2, -1));
+        return find_profit(0, true);
+    }
+    
+    int find_profit(int i, bool buy) {
+        if(i >= n) return 0;
+        if(DP[i][buy] != -1) return DP[i][buy];
+        
+        if(buy) {
+            return DP[i][buy] = max(-prices[i] + find_profit(i + 1, !buy), find_profit(i + 1, buy));
+        }
+        else {
+            return DP[i][buy] = max(prices[i] + find_profit(i + 2, !buy), find_profit(i + 1, buy));
+        }
+    }
+};
