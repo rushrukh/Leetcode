@@ -2,17 +2,22 @@
 
 class Solution {
 public:
-    int DP[201][201];
+    int row = 0, col = 0;
+    vector<vector<int>> grid, DP;
     int minPathSum(vector<vector<int>>& grid) {
-        memset(DP, -1, sizeof(DP));
-        return helper(grid, 0, 0);
-    }
-    int helper(vector<vector<int>>& grid, int row, int col) {
-        if(row >= grid.size() || col >= grid[0].size()) return INT_MAX;
-        if(DP[row][col] != -1) return DP[row][col];
-        if(row == grid.size() - 1 && col == grid[0].size() - 1) return DP[row][col] = grid[row][col];
+        this -> row = grid.size(), this -> col = grid[0].size();
+        this -> grid = grid;
+        DP.assign(row, vector<int> (col, -1));
         
-        return DP[row][col] = min(helper(grid, row + 1, col), helper(grid, row, col + 1)) + grid[row][col];
+        return find_sum(row - 1, col - 1);
+    }
+    
+    int find_sum(int i, int j) {
+        if(i < 0 || j < 0) return INT_MAX;
+        if(!i && !j) return grid[i][j];
+        if(DP[i][j] != -1) return DP[i][j];
+        
+        return DP[i][j] = grid[i][j] + min(find_sum(i - 1, j), find_sum(i, j - 1));
     }
 };
 
