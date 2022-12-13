@@ -7,29 +7,19 @@ public:
     }
     bool carPooling(vector<vector<int>>& trips, int capacity) {
         sort(trips.begin(), trips.end(), comp);
-        priority_queue<pair<int, int>, vector<pair<int,int>>, greater<pair<int,int>>> Q; 
-        int tmp_cap = 0;
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int,int>>> Q;
+        int cap = capacity;
         
-        for(auto &trip: trips) {
-            while(!Q.empty() && trip[1] >= Q.top().first) {
-                tmp_cap -= Q.top().second;
+        for(int i = 0; i < trips.size(); i++) {
+            while(!Q.empty() && Q.top().first <= trips[i][1]) {
+                cap += Q.top().second;
                 Q.pop();
             }
             
-            if(Q.empty()) {
-                if(trip[0] + tmp_cap <= capacity) {
-                    tmp_cap += trip[0];
-                    Q.push({trip[2], trip[0]});
-                }
-                else return false;
-            }
-            else {
-                if(tmp_cap + trip[0] <= capacity) {
-                    tmp_cap += trip[0];
-                    Q.push({trip[2], trip[0]});
-                }
-                else return false;
-            }
+            if(trips[i][0] > cap) return false;
+            
+            cap -= trips[i][0];
+            Q.push({trips[i][2], trips[i][0]});
         }
         
         return true;
