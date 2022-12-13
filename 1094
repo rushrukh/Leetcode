@@ -25,3 +25,28 @@ public:
         return true;
     }
 };
+
+// TC O(N), SC O(N)
+
+class Solution {
+public:
+    bool carPooling(vector<vector<int>>& trips, int capacity) {
+        int far_right = INT_MIN;
+        for(auto &trip: trips) far_right = max(far_right, trip[2]);
+        
+        vector<int> hash(far_right + 1, 0);
+        for(auto &trip: trips) {
+            hash[trip[1]] += trip[0];
+            hash[trip[2]] -= trip[0];
+        }
+        
+        int passenger_count = 0;
+        
+        for(int &x: hash) {
+            passenger_count += x;
+            if(passenger_count > capacity) return false;
+        }
+        
+        return true;
+    }
+};
