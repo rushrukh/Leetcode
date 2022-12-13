@@ -1,25 +1,30 @@
-//Top Down Soln:
+//Top Down Soln: TC O(N^2), SC O(N^2)
 
 class Solution {
 public:
-    int DP[101][101];
-    int minFallingPathSum(vector<vector<int>>& matrix) {
-        int n = matrix.size(), minSum = INT_MAX;
-        memset(DP, -1, sizeof(DP));
-        for(int i = 0; i < n; i++) minSum = min(minSum, helper(matrix, 0, i, n));
-
-        return minSum;
-    }
-    int helper(vector<vector<int>>& matrix, int row, int col, int n) {
-        if(row < 0 || row >= n || col < 0 || col >= n) return INT_MAX;
-        if(DP[row][col] != -1) return DP[row][col];
-
-        int leftDiagonal = helper(matrix, row + 1, col - 1, n);
-        int directBottom = helper(matrix, row + 1, col, n);
-        int rightDiagonal = helper(matrix, row + 1, col + 1, n);
+    vector<vector<int>> grid, DP;
+    int m = 0, n = 0;
+    int minFallingPathSum(vector<vector<int>>& grid) {
+        this -> grid = grid, this -> m = grid.size(), this -> n = grid[0].size();
+        DP.assign(m, vector<int> (n, -1));
+        int answer = INT_MAX;
         
-        int currMin = min(leftDiagonal, min(directBottom, rightDiagonal));
-        return DP[row][col] = currMin == INT_MAX ? 0 + matrix[row][col] : currMin + matrix[row][col];
+        for(int j = 0; j < n; j++)
+            answer = min(answer, find_sum(0, j));
+        return answer;
+    }
+    
+    int find_sum(int i, int j) {
+        if(j < 0 || j >= n) return INT_MAX;
+        if(i == m) return 0;
+        if(DP[i][j] != -1) return DP[i][j];
+        
+        int answer = INT_MAX;
+        answer = min(answer, find_sum(i + 1, j - 1));
+        answer = min(answer, find_sum(i + 1, j));
+        answer = min(answer, find_sum(i + 1, j + 1));
+        
+        return DP[i][j] = grid[i][j] + answer;
     }
 };
 
