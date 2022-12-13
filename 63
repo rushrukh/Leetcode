@@ -1,0 +1,21 @@
+// Top-down TC O(M*N), SC O(M*N)
+
+class Solution {
+public:
+    vector<vector<int>> grid, DP;
+    int m = 0, n = 0;
+    int uniquePathsWithObstacles(vector<vector<int>>& grid) {
+        this -> grid = grid, this -> m = grid.size(), this -> n = grid[0].size();
+        DP.assign(m, vector<int> (n, -1));
+        
+        return find_paths(m - 1, n - 1);
+    }
+    
+    int find_paths(int i, int j) {
+        if(i < 0 || j < 0 || grid[i][j]) return 0;
+        if(i + j == 0) return 1;
+        if(DP[i][j] != -1) return DP[i][j];
+        
+        return DP[i][j] = find_paths(i - 1, j) + find_paths(i, j - 1);
+    }
+};
