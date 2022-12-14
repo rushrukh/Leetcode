@@ -1,0 +1,32 @@
+// TC O(NlogN), SC O(N)
+
+class Solution {
+public:
+    static bool comp(vector<int> A, vector<int> B) {
+        return A[0] - A[1] < B[0] - B[1];        
+    }
+        
+    int brightestPosition(vector<vector<int>>& lights) {
+        sort(lights.begin(), lights.end(), comp);
+        
+        int overlap_count = 0, min_idx = 0;
+        priority_queue<int, vector<int>, greater<int>> Q;
+        unordered_map<int, int> hash;
+        
+        for(auto &light: lights) {
+            int this_start = light[0] - light[1], this_end = light[1] + light[0];
+            while(!Q.empty() && Q.top() < this_start) {
+                Q.pop();
+            }
+            
+            Q.push(this_end);
+            
+            if(Q.size() > overlap_count) {
+                overlap_count = Q.size();
+                min_idx = this_start;
+            }
+        }
+        
+        return min_idx;
+    }
+};
