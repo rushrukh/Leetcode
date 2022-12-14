@@ -34,3 +34,55 @@ public:
         return results;
     }
 };
+
+
+// Trie O(N*K + m)
+
+class TrieNode {
+public:
+    vector<string> suggestions;
+    unordered_map<char, TrieNode*> children;
+    TrieNode(): suggestions({}), children(unordered_map<char, TrieNode*>()) {}
+};
+
+class Solution {
+public:
+    vector<vector<string>> suggestedProducts(vector<string>& words, string search_word) {
+        TrieNode *root = new TrieNode();
+        
+        for(auto &word: words) {
+            TrieNode *node = root;
+            
+            for(char &w: word) {
+                if(node -> children.find(w) == node -> children.end()) {
+                    node -> children[w] = new TrieNode();
+                }
+                
+                node = node -> children[w];
+                node -> suggestions.push_back(word);
+                sort(node -> suggestions.begin(), node -> suggestions.end());
+                
+                if(node -> suggestions.size() > 3) node -> suggestions.pop_back();
+            }
+        }
+        
+        int i = 0;
+        vector<vector<string>> answer;
+        TrieNode *node = root;
+        for(char &w: search_word) {
+            if(node -> children.find(w) != node -> children.end()) {
+                node = node -> children[w];
+                answer.push_back(node -> suggestions);
+                i++;
+            }
+            else {
+                break;
+            }
+        }
+        
+        for(i; i < search_word.size(); i++)
+            answer.push_back({});
+        
+        return answer;
+    }
+};
