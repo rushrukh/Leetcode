@@ -3,37 +3,33 @@
 class Solution {
 public:
     int n = 0;
+    unordered_set<int> cols, diagonals, anti_diagonals;
     int totalNQueens(int n) {
-        unordered_set<int> cols, diagonals, antidiagonals;
         this -> n = n;
-        return find_combinations(0, cols, diagonals, antidiagonals);
+        return find_combinations(0);
     }
     
-    int find_combinations(int row, unordered_set<int> &cols, unordered_set<int> &diagonals, unordered_set<int> &antidiagonals) {
-        if(row == n) {
-            return 1;
-        }
+    int find_combinations(int row) {
+        if(row == n) return 1;
         
-        int solution = 0;
+        int answer = 0;
         
         for(int col = 0; col < n; col++) {
-            int diagonal = row - col, antidiagonal = row + col;
+            int diagonal = row - col, anti_diagonal = row + col;
             
-            // check if queen is placable:
-            if(cols.find(col) != cols.end() || diagonals.find(diagonal) != diagonals.end() || antidiagonals.find(antidiagonal) != antidiagonals.end())
-                continue;
+            if(cols.find(col) != cols.end() || diagonals.find(diagonal) != diagonals.end() || anti_diagonals.find(anti_diagonal) != anti_diagonals.end()) continue;
             
             cols.insert(col);
             diagonals.insert(diagonal);
-            antidiagonals.insert(antidiagonal);
+            anti_diagonals.insert(anti_diagonal);
             
-            solution += find_combinations(row + 1, cols, diagonals, antidiagonals);
+            answer += find_combinations(row + 1);
             
             cols.erase(col);
             diagonals.erase(diagonal);
-            antidiagonals.erase(antidiagonal);
+            anti_diagonals.erase(anti_diagonal);
         }
         
-        return solution;
+        return answer;
     }
 };
