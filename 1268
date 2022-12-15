@@ -40,7 +40,10 @@ public:
 
 class TrieNode {
 public:
+    // suggestions: for each character stores the words that are relevant
     vector<string> suggestions;
+    // children: for each character, all the next character that appears, it stores
+    // the character with a TrieNode
     unordered_map<char, TrieNode*> children;
     TrieNode(): suggestions({}), children(unordered_map<char, TrieNode*>()) {}
 };
@@ -48,41 +51,57 @@ public:
 class Solution {
 public:
     vector<vector<string>> suggestedProducts(vector<string>& words, string search_word) {
+        // Instantiate a main TrieNode that will contain everything.
         TrieNode *root = new TrieNode();
         
+        // Build the Trie for each word in words
         for(auto &word: words) {
             TrieNode *node = root;
             
-            for(char &w: word) {
-                if(node -> children.find(w) == node -> children.end()) {
-                    node -> children[w] = new TrieNode();
+            for(char &c: word) {
+                // See if this character has been seen before at this level in the trie
+                if(node -> children.find(c) == node -> children.end()) {
+                    // At this level in trie, this character appears for the first time
+                    // Hence, we'll crate a pair {c, new TrieNode} that be a children of the node
+                    node -> children[c] = new TrieNode();
                 }
+                // To store the current word as a possible suggestion for this character c, we should update the node to the newly created node
+                node = node -> children[c];
                 
-                node = node -> children[w];
+                // Now that we are on the new node, let's add the current word as a possible suggestion
                 node -> suggestions.push_back(word);
+                
+                // Sort the suggestions vector as we need to return the words lexicographically
                 sort(node -> suggestions.begin(), node -> suggestions.end());
                 
-                if(node -> suggestions.size() > 3) node -> suggestions.pop_back();
+                // It is possible that we have seen more than 3 words at this point, bump the extra word out
+                if(node -> suggestions.size() > 3)
+                    node -> suggestions.pop_back();
             }
         }
         
+        // Now that the trie is ready, iterate through each character of the search word, and for each character push the suggestions into
+        // the answer
+        
         int i = 0;
-        vector<vector<string>> answer;
-        TrieNode *node = root;
-        for(char &w: search_word) {
-            if(node -> children.find(w) != node -> children.end()) {
-                node = node -> children[w];
-                answer.push_back(node -> suggestions);
+        vector<vector<string>> result;
+        TrieNode *curr = root;
+        for(char &c: search_word) {
+            if(curr -> children.find(c) != curr -> children.end()) {
+                // We have found the character at current Trie level.
+                curr = curr -> children[c];
+                result.push_back(curr -> suggestions);
                 i++;
             }
             else {
+                // At this level during the Trie traversal, the character c is not found. That means, the subsequent traversals are meaningless
                 break;
             }
         }
         
         for(i; i < search_word.size(); i++)
-            answer.push_back({});
+            result.push_back({});
         
-        return answer;
+        return result;
     }
 };
