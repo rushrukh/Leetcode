@@ -3,41 +3,29 @@
 class Solution {
 public:
     vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
-        if(!intervals.size()) {
-            intervals.push_back(newInterval);
-            return intervals;
-        }
-        
+        if(!intervals.size()) return {newInterval};
+        bool interval_inserted = false;
         vector<vector<int>> result;
-        bool new_interval_pushed = false;
         
         for(int i = 0; i < intervals.size(); i++) {
-            if(!new_interval_pushed) {
-                if(intervals[i][0] <= newInterval[0])
-                    result.push_back(intervals[i]);
-                else {
+            if(!interval_inserted) {
+                if(intervals[i][0] > newInterval[0]) {
                     result.push_back(newInterval);
-                    new_interval_pushed = true;
-                    result.push_back(intervals[i]);
+                    interval_inserted = true;
                 }
-            }
-            else {
                 result.push_back(intervals[i]);
             }
+            else result.push_back(intervals[i]);
         }
         
-        if(!new_interval_pushed)
-            result.push_back(newInterval);
+        if(!interval_inserted) result.push_back(newInterval);
         
         intervals.clear();
-        
         for(int i = 0; i < result.size(); i++) {
-            if(intervals.empty() || intervals.back()[1] < result[i][0]) {
+            if(intervals.empty() || intervals.back()[1] < result[i][0])
                 intervals.push_back(result[i]);
-            }
-            else {
+            else
                 intervals.back()[1] = max(intervals.back()[1], result[i][1]);
-            }
         }
         
         return intervals;
