@@ -64,36 +64,38 @@ public:
 
 class Solution {
 public:
-    vector<int> parent, rank;
     int n = 0;
-    int findCircleNum(vector<vector<int>>& graph) {
-        int province = 0;
-        n = graph.size();
-        parent.assign(n, 0);
-        rank.assign(n, 1);
-        init_dsu();
+    vector<int> parent, rank;
+    int findCircleNum(vector<vector<int>>& isConnected) {
+        n = isConnected.size();
+        initialize_dsu();
         
-        for(int src = 0; src < n; src++) {
-            for(int dst = 0; dst < n; dst++) {
-                if(graph[src][dst])
-                    Union(src, dst);
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < n; j++) {
+                if(i == j) continue;
+                
+                if(isConnected[i][j]) Union(i, j);                
             }
         }
         
-        for(int i = 0; i < n; i++)
-            if(parent[i] == i)
-                province++;
+        int provinces = 0;
+        for(int i = 0; i < parent.size(); i++)
+            if(i == parent[i]) provinces++;
         
-        return province;
+        return provinces;
+        
     }
     
-    void init_dsu() {
-        for(int i = 0; i < n; i++)
-            parent[i] = i;
+    void initialize_dsu() {
+        for(int i = 0; i < n; i++) {
+            parent.push_back(i);
+            rank.push_back(1);
+        }
     }
     
     void Union(int u, int v) {
         int parent_u = find_parent(u), parent_v = find_parent(v);
+        
         if(parent_u == parent_v) return;
         
         if(rank[parent_u] < rank[parent_v])
@@ -105,9 +107,7 @@ public:
     }
     
     int find_parent(int x) {
-        if(parent[x] == x)
-            return x;
-        
+        if(parent[x] == x) return x;
         return parent[x] = find_parent(parent[x]);
     }
 };
