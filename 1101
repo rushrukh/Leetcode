@@ -1,0 +1,50 @@
+// TC O(), SC O()
+
+class Solution {
+public:
+    int n = 0;
+    int number_of_groups = 0;
+    vector<int> parent, rank;
+    static bool comp(vector<int> A, vector<int> B) {
+        return A[0] < B[0];
+    }
+    int earliestAcq(vector<vector<int>>& logs, int n) {
+        sort(logs.begin(), logs.end(), comp);
+        this -> n = n, this -> number_of_groups = n;
+        init_dsu();
+        
+        for(int i = 0; i < logs.size(); i++) {
+            Union(logs[i][1], logs[i][2]);
+            if(number_of_groups == 1) return logs[i][0];
+        }
+        
+        return -1;
+    }
+    
+    void Union(int u, int v) {
+        int parent_u = find_parent(u), parent_v = find_parent(v);
+        
+        if(parent_u == parent_v) return;
+        
+        if(rank[parent_u] < rank[parent_v])
+            swap(parent_u, parent_v);
+        
+        parent[parent_v] = parent_u;
+        rank[parent_u] += parent_v;
+        rank[parent_v] = 0;
+        
+        number_of_groups--;
+    }
+    
+    int find_parent(int x) {
+        if(parent[x] == x) return x;
+        return parent[x] = find_parent(parent[x]);
+    }
+    
+    void init_dsu() {
+        for(int i = 0; i < n; i++) {
+            parent.push_back(i);
+            rank.push_back(1);
+        }
+    }
+};
