@@ -1,0 +1,31 @@
+// TC O(NlogN), SC O(N)
+
+class Solution {
+public:
+    int maximumProduct(vector<int>& nums, int k) {
+        priority_queue<int, vector<int>, greater<int>> Q;
+        long long result = 1;
+        
+        int MOD = 1000000007;
+        
+        for(int &num: nums) {
+            Q.push(num);
+        }
+        
+        while(k) {
+            int tmp = Q.top();
+            Q.pop();
+            tmp += 1;
+            Q.push(tmp);
+            k--;
+        }
+        
+        while(!Q.empty()) {
+            result *= (Q.top() % MOD);
+            result = result % MOD;
+            Q.pop();
+        }
+        
+        return result % MOD;
+    }
+};
