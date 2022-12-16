@@ -1,0 +1,52 @@
+// TC O(N), SC O(N)
+
+class Solution {
+public:
+    int n = 0;
+    vector<int> parent, rank;
+    bool cycle_found = false;
+    bool validTree(int n, vector<vector<int>>& edges) {
+        this -> n = n;
+        init_dsu();
+        
+        for(int i = 0; i < edges.size(); i++) {
+            Union(edges[i][0], edges[i][1]);
+            if(cycle_found) return false;
+        }
+        
+        int roots = 0;
+        
+        for(int i = 0; i < parent.size(); i++)
+            if(parent[i] == i) roots++;
+        
+        return roots == 1 ? true: false;
+    }
+    
+    void Union(int u, int v) {
+        int parent_u = find_parent(u), parent_v = find_parent(v);
+        
+        if(parent_u == parent_v) {
+            cycle_found = true;
+            return;
+        }
+        
+        if(rank[parent_u] < rank[parent_v])
+            swap(parent_u, parent_v);
+        
+        parent[parent_v] = parent_u;
+        rank[parent_u] += rank[parent_v];
+        rank[parent_v] = 0;
+    }
+    
+    int find_parent(int x) {
+        if(parent[x] == x) return x;
+        return parent[x] = find_parent(parent[x]);
+    }
+    
+    void init_dsu() {
+        for(int i = 0; i < n; i++)  {
+            parent.push_back(i);
+            rank.push_back(1);
+        }
+    }
+};
