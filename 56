@@ -4,16 +4,15 @@ class Solution {
 public:
     vector<vector<int>> merge(vector<vector<int>>& intervals) {
         sort(intervals.begin(), intervals.end());
-        vector<vector<int>> result;
+        vector<vector<int>> answer;
         
-        for(auto interval: intervals) {
-            if(!result.size() || result.back()[1] < interval[0])
-                result.push_back(interval);
-            else {
-                result.back()[1] = max(interval[1], result.back()[1]);
-            }
+        for(auto &interval: intervals) {
+            if(answer.empty() || answer.back()[1] < interval[0])
+                answer.push_back(interval);
+            else
+                answer.back()[1] = max(answer.back()[1], interval[1]);
         }
         
-        return result;
+        return answer;
     }
 };
