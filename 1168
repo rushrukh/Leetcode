@@ -1,0 +1,59 @@
+// Kruskal: TC O((N + M) log (N + M)), SC O(N + M)
+
+class Solution {
+public:
+    int n = 0;
+    vector<int> parent, rank;
+    int minCostToSupplyWater(int n, vector<int>& wells, vector<vector<int>>& pipes) {
+        this -> n = n;
+        init_dsu();
+        vector<vector<int>> edges = pipes;
+        
+        for(int i = 0; i < n; i++) {
+            edges.push_back({0, i + 1, wells[i]});
+        }
+    
+        sort(edges.begin(), edges.end(), comp);
+        int edges_used = 0, cost = 0;
+        
+        for(auto &edge: edges) {
+            if(edges_used == n) break;
+            
+            if(Union(edge[0], edge[1])) {
+                cost += edge[2];
+                edges_used++;
+            }
+        }
+        
+        return cost;
+    }
+    
+    bool Union(int u, int v) {
+        int parent_u = find_parent(u), parent_v = find_parent(v);
+        if(parent_u == parent_v) return false;
+        
+        if(rank[parent_u] < rank[parent_v]) swap(parent_u, parent_v);
+        
+        parent[parent_v] = parent_u;
+        rank[parent_u] += rank[parent_v];
+        rank[parent_v] = 0;
+        
+        return true;
+    }
+    
+    int find_parent(int x) {
+        if(parent[x] == x) return x;
+        return parent[x] = find_parent(parent[x]);
+    }
+    
+    void init_dsu() {
+        for(int i = 0; i <= n; i++) {
+            parent.push_back(i);
+            rank.push_back(0);
+        }
+    }    
+        
+    static bool comp(vector<int> A, vector<int> B) {
+        return A[2] < B[2];
+    }
+};
