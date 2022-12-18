@@ -1,0 +1,65 @@
+// Kruskal - TC O(N^2 logN), SC O(N^2)
+
+class Solution {
+public:
+    int n = 0;
+    vector<int> parent, rank;
+    int minCostConnectPoints(vector<vector<int>>& points) {
+        this -> n = points.size();   
+        init_dsu();
+        vector<pair<int, pair<int,int>>> edges;
+        
+        for(int i = 0; i < n - 1; i++) {
+            for(int j = i + 1; j < n; j++) {
+                edges.push_back({manhattan_dist(points[i], points[j]), {i, j}});
+            }
+        }
+        
+        sort(edges.begin(), edges.end());
+        int number_of_edges = 0, cost = 0;
+        
+        for(auto &edge: edges) {
+            if(number_of_edges == n - 1) break;
+            
+            if(Union(edge.second.first, edge.second.second)) {
+                cost += edge.first;
+                number_of_edges++;
+            }
+        }
+        
+        return cost;
+    }
+    
+    int find_parent(int x) {
+        if(parent[x] == x) return x;
+        return parent[x] = find_parent(parent[x]);
+    }
+    
+    bool Union(int u, int v) {
+        int parent_u = find_parent(u), parent_v = find_parent(v);
+        if(parent_u == parent_v) return false;
+        
+        if(rank[parent_u] < rank[parent_v]) swap(parent_u, parent_v);
+        
+        parent[parent_v] = parent_u;
+        rank[parent_u] += rank[parent_v];
+        rank[parent_v] = 0;
+        
+        return true;
+    }
+    
+    void init_dsu() {
+        for(int i = 0; i < n; i++) {
+            parent.push_back(i);
+            rank.push_back(1);
+        }
+    }
+    
+    int manhattan_dist(vector<int> A, vector<int> B) {
+        return abs(A[0] - B[0]) + abs(A[1] - B[1]);
+    }
+    
+    static bool comp(vector<int> A, vector<int> B) {
+        return A[2] < B[2];
+    }
+};
