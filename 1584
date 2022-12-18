@@ -63,3 +63,40 @@ public:
         return A[2] < B[2];
     }
 };
+
+
+// Prims:
+
+class Solution {
+public:
+    int minCostConnectPoints(vector<vector<int>>& points) {
+        int n = points.size(), cost = 0;
+        vector<bool> visited(n, false);
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> Q;
+        Q.push({0, 0});
+        
+        while(!Q.empty()) {
+            int curr = Q.top().second;
+            cost += Q.top().first;
+            Q.pop();
+            visited[curr] = true;
+            
+            for(int i = 0; i < n; i++) {
+                if(!visited[i]) {
+                    Q.push({manhattan(points[curr], points[i]), i});
+                }
+            }
+            
+            if(curr == 2) cout << Q.size() << endl;
+            while(visited[Q.top().second] && !Q.empty()) {
+                Q.pop();
+            }
+        }
+        
+        return cost;
+    }
+    
+    int manhattan(vector<int> A, vector<int> B) {
+        return abs(A[0] - B[0]) + abs(A[1] - B[1]);
+    }
+};
