@@ -30,3 +30,44 @@ public:
         return false;
     }
 };
+
+// DSU: TC O(m * alpha(n), SC O(n)
+
+class Solution {
+public:
+    int n = 0;
+    vector<int> parent, rank;
+    bool validPath(int n, vector<vector<int>>& edges, int source, int destination) {
+        this -> n = n;
+        init_dsu();
+        
+        for(auto &edge: edges)
+            Union(edge[0], edge[1]);
+        
+        return find_parent(source) == find_parent(destination);
+    }
+    
+    void Union(int u, int v) {
+        int parent_u = find_parent(u), parent_v = find_parent(v);
+        if(parent_u == parent_v) return;
+        
+        if(rank[parent_u] < rank[parent_v])
+            swap(parent_u, parent_v);
+        
+        parent[parent_v] = parent_u;
+        rank[parent_u] += rank[parent_v];
+        rank[parent_v] = 0;
+    }
+    
+    int find_parent(int x) {
+        if(parent[x] == x) return x;
+        return parent[x] = find_parent(parent[x]);
+    }
+    
+    void init_dsu() {
+        for(int i = 0; i < n; i++) {
+            parent.push_back(i);
+            rank.push_back(1);
+        }
+    }
+};
