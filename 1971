@@ -1,0 +1,32 @@
+// DFS TC O(M + N), SC O(M + N)
+
+class Solution {
+public:
+    int destination = 0;
+    unordered_map<int, vector<int>> adj_list;
+    unordered_set<int> visited;
+    bool validPath(int n, vector<vector<int>>& edges, int source, int destination) {
+        this -> destination = destination;
+        
+        for(auto &edge: edges) {
+            adj_list[edge[0]].push_back(edge[1]);
+            adj_list[edge[1]].push_back(edge[0]);
+        }
+        
+        return find_path(source);
+    }
+    
+    bool find_path(int source) {
+        if(source == destination) return true;
+        
+        for(auto &next: adj_list[source]) {
+            if(visited.find(next) == visited.end()) {
+                visited.insert(next);
+                bool answer = find_path(next);
+                if(answer) return true;
+            }
+        }
+        
+        return false;
+    }
+};
