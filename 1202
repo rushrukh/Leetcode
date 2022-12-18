@@ -1,61 +1,63 @@
+// TC O(E + V + VlogV), SC O(V)
+
+// TC O(E + V + VlogV), SC O(V)
+
 class Solution {
 public:
+    int n = 0;
+    vector<int> parent, rank;
     string smallestStringWithSwaps(string s, vector<vector<int>>& pairs) {
-        //the indices within one componenet will be swapped to any places
-        //use union find to create disjoint sets
+        this -> n = s.size();
+        init_dsu();
         
-        int n=s.length();
-        //every index is itself a parent
-        
-        vector<int> parent(n,-1);
-        
-        //union the pairs given in the pairs array
-        for(int i=0;i<pairs.size();i++)
-        {
-            int p1=find(parent,pairs[i][0]);
-            int p2=find(parent,pairs[i][1]);
-            if(p1!=p2)
-            {
-                //union them
-                parent[p2]=p1;
-            }
+        for(auto &pair: pairs) {
+            Union(pair[0], pair[1]);
         }
         
+        vector<vector<int>> hash(n);
         
-        vector<vector<int>> store(n);
-        //now get the all characters that have same root and sort them
-        for(int i=0;i<n;i++)
-        {
-            int p=find(parent,i);
-            store[p].push_back(i);
+        for(int i = 0; i < n; i++) {
+            hash[find_parent(i)].push_back(i);
         }
         
-        for(auto ind:store)
-        {
-            //ss stores the sorted string
-            string ss="";
-            for(auto i:ind)
-            {
-                //get the char at the indices and sort them and rearrange them
-                ss.push_back(s[i]);
+        for(auto &indices: hash) {
+            string tmp_s = "";
+            for(int i = 0; i < indices.size(); i++) {
+                tmp_s += s[indices[i]];
             }
-            sort(ss.begin(),ss.end());
-            //now replace the char in s with that of in ss in order
-            int j=0;
-            for(auto i:ind)
-            {
-                s[i]=ss[j++];
+            
+            sort(tmp_s.begin(), tmp_s.end());
+            
+            int curr_char = 0;
+            for(int i = 0; i < indices.size(); i++) {
+                s[indices[i]] = tmp_s[curr_char++];
             }
         }
         
         return s;
-        
     }
     
-    //here we are using path compression
-    //i.e., the parent of x will directly stores the root value
-    int find(vector<int>& parent,int x)
-    {
-        return parent[x] < 0 ? x : parent[x]=find(parent,parent[x]); 
+    void Union(int u, int v) {
+        int parent_u = find_parent(u), parent_v = find_parent(v);
+        if(parent_u == parent_v) return;
+        
+        if(rank[parent_u] < rank[parent_v])
+            swap(parent_u, parent_v);
+        
+        parent[parent_v] = parent_u;
+        rank[parent_u] += rank[parent_v];
+        rank[parent_v] = 0;
+    }
+    
+    int find_parent(int x) {
+        if(parent[x] == x) return x;
+        return parent[x] = find_parent(parent[x]);
+    }
+    
+    void init_dsu() {
+        for(int i = 0; i < n; i++) {
+            parent.push_back(i);
+            rank.push_back(1);
+        }
     }
 };
