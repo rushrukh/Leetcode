@@ -57,3 +57,49 @@ public:
         return A[2] < B[2];
     }
 };
+
+
+// Prims:
+
+class Solution {
+public:
+    int minCostToSupplyWater(int n, vector<int>& wells, vector<vector<int>>& pipes) {
+        vector<bool> visited(n + 1, false);
+        unordered_map<int, vector<pair<int, int>>> edges;
+        
+        for(int i = 0; i < n; i++)
+            edges[0].push_back({i + 1, wells[i]});
+        
+        for(int i = 0; i < pipes.size(); i++) {
+            edges[pipes[i][0]].push_back({pipes[i][1], pipes[i][2]});
+            edges[pipes[i][1]].push_back({pipes[i][0], pipes[i][2]});
+        }
+        
+        int cost = 0;
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int,int>>> Q;
+        Q.push({0, 0});
+        
+        while(!Q.empty()) {
+            int curr = Q.top().second;
+            cost += Q.top().first;
+            visited[curr] = true;
+            
+            for(auto &edge: edges[curr])
+                if(!visited[edge.first])
+                    Q.push({edge.second, edge.first});
+            
+            while(!Q.empty() && visited[Q.top().second])
+                Q.pop();
+        }
+        
+        return cost;
+    }
+};
+
+
+/* 
+Watch out for this guy: 
+5
+[3,5,4,1,2]
+[[2,1,1],[3,2,3],[5,3,2]]
+*/
