@@ -1,0 +1,32 @@
+// DFS: TC O(V + E), SC O(V + E)
+
+class Solution {
+public:
+    int source = 0, destination = 0;
+    unordered_set<int> visited;
+    unordered_map<int, vector<int>> adj_list;
+    bool leadsToDestination(int n, vector<vector<int>>& edges, int source, int destination) {
+        this -> source = source, this -> destination = destination;
+        
+        for(auto &edge: edges)
+            adj_list[edge[0]].push_back(edge[1]);
+        
+        if(!find_path(source)) return false;
+        return true;
+    }
+    
+    bool find_path(int source) {
+        if(source == destination && !adj_list[source].size()) return true;
+        if(!adj_list[source].size()) return false;
+        if(visited.find(source) != visited.end()) return false;
+        
+        visited.insert(source);
+        
+        for(auto &node: adj_list[source])
+            if(!find_path(node)) return false;
+        
+        visited.erase(source);
+        
+        return true;
+    }
+};
