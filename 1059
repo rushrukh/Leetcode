@@ -5,8 +5,10 @@ public:
     int source = 0, destination = 0;
     unordered_set<int> visited;
     unordered_map<int, vector<int>> adj_list;
+    vector<bool> cache;
     bool leadsToDestination(int n, vector<vector<int>>& edges, int source, int destination) {
         this -> source = source, this -> destination = destination;
+        cache.assign(n, false);
         
         for(auto &edge: edges)
             adj_list[edge[0]].push_back(edge[1]);
@@ -19,6 +21,7 @@ public:
         if(source == destination && !adj_list[source].size()) return true;
         if(!adj_list[source].size()) return false;
         if(visited.find(source) != visited.end()) return false;
+        if(cache[source]) return true;
         
         visited.insert(source);
         
@@ -27,6 +30,6 @@ public:
         
         visited.erase(source);
         
-        return true;
+        return cache[source] = true;
     }
 };
