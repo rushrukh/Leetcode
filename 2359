@@ -1,0 +1,37 @@
+// TC O(N), SC O(N)
+
+class Solution {
+public:
+    int n = 0;
+    vector<int> visited_1, distance_1, visited_2, distance_2, edges;
+    int closestMeetingNode(vector<int>& edges, int node1, int node2) {
+        this -> n = edges.size();
+        this -> edges = edges;
+        
+        visited_1.assign(n, 0), visited_2.assign(n, 0);
+        distance_1.assign(n, INT_MAX), distance_2.assign(n, INT_MAX);
+        distance_1[node1] = 0, distance_2[node2] = 0;
+        
+        DFS(node1, visited_1, distance_1);
+        DFS(node2, visited_2, distance_2);
+        
+        int node_idx = 0, min_distance = INT_MAX;
+        
+        for(int i = 0; i < n; i++) {
+            if(max(distance_1[i], distance_2[i]) < min_distance) {
+                min_distance = max(distance_1[i], distance_2[i]);
+                node_idx = i;
+            }
+        }
+        
+        return min_distance == INT_MAX ? -1: node_idx;
+    }
+    
+    void DFS(int root, vector<int> &visited, vector<int> &distance) {
+        if(visited[root] || edges[root] == -1) return;
+        if(!visited[edges[root]])
+            distance[edges[root]] = distance[root] + 1;
+        visited[root] = 1;
+        DFS(edges[root], visited, distance);
+    }
+};
