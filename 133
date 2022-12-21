@@ -2,20 +2,21 @@
 
 class Solution {
 public:
-    unordered_map<Node*, Node*> visited;
+    unordered_map<int, Node*> hash;
     Node* cloneGraph(Node* node) {
-        if(!node) return node;
+        if(!node) return NULL;
+        Node *new_node;
+        new_node = new Node(node -> val);
+        hash[node -> val] = new_node;
         
-        Node* newNode = new Node(node -> val);
-        visited[node] = newNode;
-        
-        for(int i = 0; i < node -> neighbors.size(); i++) {
-            if(visited.find(node -> neighbors[i]) == visited.end())
-                newNode -> neighbors.push_back(cloneGraph(node -> neighbors[i]));
+        for(auto &next: node -> neighbors) {
+            if(hash.find(next -> val) == hash.end())
+                new_node -> neighbors.push_back(cloneGraph(next));
             else
-                newNode -> neighbors.push_back(visited[node -> neighbors[i]]);
+                new_node -> neighbors.push_back(hash[next -> val]);
         }
+            
         
-        return newNode;
+        return new_node;
     }
 };
