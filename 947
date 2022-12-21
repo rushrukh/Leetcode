@@ -1,0 +1,50 @@
+// DSU: TC O(N^2 * alpha(N), SC O(N)
+
+class Solution {
+public:
+    int n = 0;
+    vector<int> parent, rank;
+    int removeStones(vector<vector<int>>& stones) {
+        this -> n = stones.size();
+        int removed = 0;
+        init_dsu();
+        
+        for(int i = 0; i < n - 1; i++) {
+            for(int j = i + 1; j < n; j++) {
+                if(same_row_or_col(stones[i], stones[j]) && Union(i, j))
+                    removed++;
+            }
+        }
+        
+        return removed;
+    }
+    
+    int find_parent(int x) {
+        if(parent[x] == x) return x;
+        return parent[x] = find_parent(parent[x]);
+    }
+    
+    bool Union(int u, int v) {
+        int parent_u = find_parent(u), parent_v = find_parent(v);
+        if(parent_u == parent_v) return false;
+        
+        if(rank[parent_u] < rank[parent_v]) swap(parent_u, parent_v);
+        
+        parent[parent_v] = parent_u;
+        rank[parent_u] += rank[parent_v];
+        rank[parent_v] = 0;
+        
+        return true;
+    }
+    
+    bool same_row_or_col(vector<int> &A, vector<int> &B) {
+        return A[0] == B[0] || A[1] == B[1];
+    }
+    
+    void init_dsu() {
+        for(int i = 0; i < n; i++) {
+            parent.push_back(i);
+            rank.push_back(1);
+        }
+    }
+};
