@@ -1,0 +1,35 @@
+// Dijkstra: TC O(N + E logN), SC O(N + E)
+
+class Solution {
+public:
+    int networkDelayTime(vector<vector<int>>& times, int n, int k) {
+        vector<vector<pair<int,int>>> adj_list(n + 1);
+        vector<int> distance(n + 1, INT_MAX);
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> Q;
+        Q.push({0, k});
+        distance[k] = 0;
+        
+        for(auto &time: times)
+            adj_list[time[0]].push_back({time[1], time[2]});
+        
+        while(!Q.empty()) {
+            int u = Q.top().second;
+            Q.pop();
+            
+            for(auto &edge: adj_list[u]) {
+                int v = edge.first, dw = edge.second;
+                
+                if(distance[u] + dw < distance[v]) {
+                    distance[v] = distance[u] + dw;
+                    Q.push({distance[v], v});
+                }
+            }
+        }
+        
+        int result = INT_MIN;
+        for(int i = 1; i < distance.size(); i++)
+            result = max(result, distance[i]);
+        
+        return result == INT_MAX ? -1 : result;
+    }
+};
