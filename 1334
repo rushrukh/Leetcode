@@ -1,0 +1,60 @@
+// TC O(), SC O()
+
+class Solution {
+public:
+    int n = 0, threshold = 0;
+    vector<vector<pair<int, int>>> adj_list;
+    vector<pair<int, int>> result;
+    
+    int findTheCity(int n, vector<vector<int>>& edges, int threshold) {
+        this -> n = n, this -> threshold = threshold;
+        adj_list.assign(n, vector<pair<int, int>>());
+        for(auto &edge: edges) {
+            adj_list[edge[0]].push_back({edge[1], edge[2]});
+            adj_list[edge[1]].push_back({edge[0], edge[2]});
+        }
+        
+        for(int i = 0; i < n; i++)
+            dijkstra(i);
+        
+        sort(result.begin(), result.end(), comp);
+        
+        return result[0].second;
+    }
+    
+    void dijkstra(int node) {
+        vector<int> d(n, INT_MAX);
+        d[node] = 0;
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> Q;
+        Q.push({0, node});
+        
+        while(!Q.empty()) {
+            int u = Q.top().second;
+            Q.pop();
+            
+            for(auto &next: adj_list[u]) {
+                int v = next.first, dw = next.second;
+                
+                if(d[u] + dw < d[v]) {
+                    d[v] = d[u] + dw;
+                    Q.push({d[v], v});
+                }
+            }
+        }
+        
+        int count = 0;
+        for(int i = 0; i < n; i++) {
+            if(i == node) continue;
+            if(d[i] <= threshold) count++;
+        }
+        
+        result.push_back({count, node});
+    }
+    
+    static bool comp(pair<int, int> A, pair<int, int> B) {
+        if(A.first != B.first)
+            return A.first < B.first;
+        
+        return A.second > B.second;
+    }
+};
