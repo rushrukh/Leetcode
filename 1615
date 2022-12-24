@@ -1,0 +1,24 @@
+// TC O(N^2), SC O(N*M)
+
+class Solution {
+public:
+    vector<unordered_set<int>> adj_list;
+    int maximalNetworkRank(int n, vector<vector<int>>& roads) {
+        adj_list.assign(n, unordered_set<int> ());
+        for(auto &road: roads) {
+            adj_list[road[0]].insert(road[1]);
+            adj_list[road[1]].insert(road[0]);
+        }
+        
+        int max_rank = INT_MIN;
+        for(int i = 0; i < n - 1; i++) {
+            for(int j = i + 1; j < n; j++) {
+                int total_rank = adj_list[i].size() + adj_list[j].size();
+                if(adj_list[i].find(j) != adj_list[i].end()) total_rank -= 1;
+                max_rank = max(max_rank, total_rank);
+            }
+        }
+        
+        return max_rank;
+    }
+};
