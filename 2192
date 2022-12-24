@@ -1,0 +1,32 @@
+// DFS: TC O(N^2), SC O(N) 
+
+class Solution {
+public:
+    vector<vector<int>> ans;
+    vector<vector<int>> adj_list;
+    vector<vector<int>> getAncestors(int n, vector<vector<int>>& edges) {
+        ans.assign(n, vector<int> ());
+        adj_list.assign(n, vector<int> ());
+        
+        for(auto &edge: edges) {
+            adj_list[edge[0]].push_back(edge[1]);
+        }
+        
+        for(int i = 0; i < n; i++) {
+            vector<bool> visited(n, false);
+            DFS(i, i, visited);
+        }
+        
+        return ans;
+    }
+    
+    void DFS(int curr, int parent, vector<bool> &visited) {
+        visited[curr] = true;
+        
+        for(int &next: adj_list[curr])
+            if(!visited[next]) {
+                ans[next].push_back(parent);
+                DFS(next, parent, visited);
+            }
+    }
+};
