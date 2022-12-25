@@ -44,3 +44,37 @@ public:
 // 3. For each course, we will visit all its prerequisites.
 // 4. Before that, we will check if the course that we are now visiting, has it already been visited?
 //    If yes, that means we are in a cycle, return false;
+
+// Topological Sort: TC O(V + E), SC O(V + E)
+
+class Solution {
+public:
+    bool canFinish(int n, vector<vector<int>>& prerequisites) {
+        vector<int> indegree(n, 0);
+        vector<vector<int>> graph(n, vector<int>());
+        for(auto &edge: prerequisites) {
+            graph[edge[1]].push_back(edge[0]);
+            indegree[edge[0]]++;
+        }
+        
+        queue<int> Q;
+        for(int i = 0; i < n; i++)
+            if(!indegree[i])
+                Q.push(i);
+        
+        while(!Q.empty()) {
+            int curr_node = Q.front();
+            Q.pop();
+            
+            for(int &next_node: graph[curr_node]) {
+                indegree[next_node]--;
+                if(!indegree[next_node]) Q.push(next_node);
+            }
+        }
+        
+        for(int &x: indegree)
+            if(x) return false;
+        
+        return true;
+    }
+};
