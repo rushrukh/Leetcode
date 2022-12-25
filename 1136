@@ -1,0 +1,47 @@
+// DFS TC O(N + E), SC O(N + E)
+
+class Solution {
+public:
+    bool cycle = false;
+    int result = INT_MIN;
+    vector<int> depth;
+    vector<vector<int>> adj_list;
+    int minimumSemesters(int n, vector<vector<int>>& relations) {
+        this -> adj_list.assign(n + 1, vector<int> ());
+        this -> depth.assign(n + 1, 0);
+        
+        for(auto &rel: relations)
+            adj_list[rel[0]].push_back(rel[1]);
+        
+        for(int i = 1; i <= n; i++) {
+            vector<bool> visited(n + 1, false);
+            result = max(result, DFS(i, visited));
+            if(cycle) return -1;
+        }
+        
+        return result;
+    }
+    
+    int DFS(int node, vector<bool> &visited) {
+        if(visited[node]) {
+            cycle = true;
+            return -1;
+        }
+        
+        if(!adj_list[node].size()) return 1;
+        
+        if(depth[node]) return depth[node];
+        visited[node] = true;
+        
+        int this_depth = 0;
+        for(int &next: adj_list[node]) {
+            int child_depth = DFS(next, visited);
+            if(child_depth == -1) return -1;
+            this_depth = max(this_depth, child_depth);
+        }
+        visited[node] = false;
+        depth[node] = this_depth + 1;
+        
+        return depth[node];
+    }
+};
