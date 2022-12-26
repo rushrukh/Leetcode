@@ -1,0 +1,44 @@
+// Topological Sort: TC O(V + E), SC O(V + E)
+
+class Solution {
+public:
+    vector<string> findAllRecipes(vector<string>& recipes, vector<vector<string>>& ingredients, vector<string>& supplies) {
+        int n = recipes.size();
+        unordered_map<string, vector<string>> graph;
+        unordered_map<string, int> indegree;
+        
+        for(string &supply: supplies) {
+            graph[supply] = {};
+            indegree[supply] = 0;
+        }
+        
+        for(int i = 0; i < n; i++) {
+            for(string &ingred: ingredients[i]) {
+                graph[ingred].push_back(recipes[i]);
+                indegree[recipes[i]]++;
+            }
+        }
+        
+        queue<string> Q;
+        for(auto &pair: indegree)
+            if(!pair.second)
+                Q.push(pair.first);
+        
+        while(!Q.empty()) {
+            string curr_node = Q.front();
+            Q.pop();
+            
+            for(string &next_node: graph[curr_node]) {
+                indegree[next_node]--;
+                if(!indegree[next_node]) Q.push(next_node);
+            }
+        }
+        
+        vector<string> result;
+        for(string &recipe: recipes)
+            if(!indegree[recipe])
+                result.push_back(recipe);
+        
+        return result;
+    }
+};
