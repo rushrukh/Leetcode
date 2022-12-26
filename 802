@@ -1,0 +1,38 @@
+// Topological Sort: TC O(V + E), SC O(V + E)
+
+class Solution {
+public:
+    vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
+        int n = graph.size();
+        vector<vector<int>> adj_list(n, vector<int> ());
+        vector<int> outdegree(n, 0);
+        
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < graph[i].size(); j++) {
+                adj_list[graph[i][j]].push_back(i);
+                outdegree[i]++;
+            }
+        }
+        
+        queue<int> Q;
+        
+        for(int i = 0; i < n; i++)
+            if(!outdegree[i]) Q.push(i);
+        
+        vector<int> result;
+        
+        while(!Q.empty()) {
+            int curr_node = Q.front();
+            result.push_back(curr_node);
+            Q.pop();
+            
+            for(int &next_node: adj_list[curr_node]) {
+                outdegree[next_node]--;
+                if(!outdegree[next_node]) Q.push(next_node);
+            }
+        }
+        
+        sort(result.begin(), result.end());
+        return result;
+    }
+};
