@@ -1,0 +1,40 @@
+// Dijkstra: TC O(V + E), SC O(V + E)
+
+class Solution {
+public:
+    int MOD = 1e9 + 7;
+    int countPaths(int n, vector<vector<int>>& roads) {
+        vector<vector<pair<long long,long long>>> graph(n, vector<pair<long long, long long>> ());
+        vector<long long> d(n, LONG_MAX);
+        vector<long long> ways(n, 0);
+        for(auto &road: roads) {
+            graph[road[0]].push_back({road[1], road[2]});
+            graph[road[1]].push_back({road[0], road[2]});
+        }
+        
+        priority_queue<pair<long, long>, vector<pair<long, long>>, greater<pair<long, long>>> Q;
+        Q.push({0, 0});
+        d[0] = 0;
+        ways[0] = 1;
+        
+        while(!Q.empty()) {
+            int u = Q.top().second, cost_u = Q.top().first;
+            Q.pop();
+            
+            if(cost_u > d[u]) continue;
+            
+            for(auto &next: graph[u]) {
+                int v = next.first, dW = next.second;
+                if(d[u] + dW < d[v]) {
+                    d[v] = d[u] + dW;
+                    Q.push({d[v], v});
+                    ways[v] = ways[u];
+                }
+                else if(d[u] + dW == d[v])
+                    ways[v] = (ways[v] + ways[u]) % MOD;
+            }
+        }
+        
+        return ways[n - 1];
+    }
+};
