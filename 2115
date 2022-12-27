@@ -12,12 +12,18 @@ public:
             indegree[supply] = 0;
         }
         
+        
+        
         for(int i = 0; i < n; i++) {
             for(string &ingred: ingredients[i]) {
                 graph[ingred].push_back(recipes[i]);
                 indegree[recipes[i]]++;
             }
         }
+        
+        for(auto pair: indegree)
+            if(pair.first == "j")
+                cout << "Indegree of j: " << indegree["j"] << endl;
         
         queue<string> Q;
         for(auto &pair: indegree)
