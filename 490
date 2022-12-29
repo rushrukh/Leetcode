@@ -1,0 +1,42 @@
+// BFS
+
+class Solution {
+public:
+    int row = 0, col = 0;
+    vector<vector<int>> maze;
+    vector<vector<int>> dir = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+    bool hasPath(vector<vector<int>>& maze, vector<int>& start, vector<int>& destination) {
+        this -> row = maze.size(), this -> col = maze[0].size(), this -> maze = maze;
+        queue<pair<int, int>> Q;
+        Q.push({start[0], start[1]});
+        maze[start[0]][start[1]] = -1;
+        
+        while(!Q.empty()) {
+            int r = Q.front().first, c = Q.front().second;
+            Q.pop();
+
+            for(auto &d: dir) {
+                int new_r = r + d[0], new_c = c + d[1];
+                
+                while(valid_index(new_r, new_c) && maze[new_r][new_c] <= 0) {
+                    new_r += d[0]; 
+                    new_c += d[1];
+                }
+                    
+                new_r -= d[0], new_c -= d[1];
+                if(new_r == destination[0] && new_c == destination[1]) return true;
+
+                if(maze[new_r][new_c] == 0) {
+                    maze[new_r][new_c] = -1;
+                    Q.push({new_r, new_c});
+                }
+            }
+        }
+        
+        return false;
+    }
+    
+    bool valid_index(int i, int j) {
+        return i >= 0 && i < row && j >= 0 && j < col;
+    }
+};
