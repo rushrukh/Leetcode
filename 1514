@@ -1,0 +1,34 @@
+// Dijkstra: TC O(V + E), SC O(V + E)
+
+class Solution {
+public:
+    double maxProbability(int n, vector<vector<int>>& edges, vector<double>& probability, int start, int end) {
+        vector<double> d(n, INT_MIN);
+        vector<vector<pair<int, double>>> graph(n, vector<pair<int, double>> ());
+        
+        for(int i = 0; i < edges.size(); i++) {
+            graph[edges[i][0]].push_back({edges[i][1], probability[i]});
+            graph[edges[i][1]].push_back({edges[i][0], probability[i]});
+        }
+        
+        queue<pair<double, int>> Q;
+        Q.push({0, start});
+        d[start] = 1;
+        
+        while(!Q.empty()) {
+            int u = Q.front().second;
+            Q.pop();
+            
+            for(auto &next: graph[u]) {
+                int v = next.first;
+                double dw = next.second;
+                if(d[u] * dw > d[v]) {
+                    d[v] = d[u] * dw;
+                    Q.push({d[v], v});
+                }
+            }
+        }
+        
+        return d[end] == INT_MIN ? 0 : d[end];
+    }
+};
