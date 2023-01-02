@@ -37,3 +37,43 @@ public:
         return i >= 0 && i < row && j >= 0 && j < col;
     }
 };
+
+// DFS:
+
+class Solution {
+public:
+    int row = 0, col = 0;
+    bool hasPath(vector<vector<int>>& maze, vector<int>& start, vector<int>& destination) {
+        this -> row = maze.size(), this -> col = maze[0].size();
+        vector<vector<int>> dir = {{-1, 0}, {1, 0}, {0, 1}, {0, -1}};
+        stack<pair<int, int>> S;
+        S.push({start[0], start[1]});
+        
+        while(!S.empty()) {
+            int r = S.top().first, c = S.top().second;
+            S.pop();
+            
+            for(auto &d: dir) {
+                int new_r = r + d[0], new_c = c + d[1];
+                
+                while(is_valid(new_r, new_c) && maze[new_r][new_c] != 1)
+                    new_r += d[0], new_c += d[1];
+                
+                new_r -= d[0], new_c -= d[1];
+                if(new_r == destination[0] && new_c == destination[1]) return true;
+                
+                if(!maze[new_r][new_c]) {
+                    S.push({new_r, new_c});
+                    maze[new_r][new_c] = -1;
+                }
+            }
+                
+        }
+        
+        return false;
+    }
+    
+    bool is_valid(int r, int c) {
+        return r >= 0 && r < row && c >= 0 && c < col;
+    }
+};
