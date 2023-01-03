@@ -39,3 +39,47 @@ public:
         return r >= 0 && r < row && c >= 0 && c < col;
     }
 };
+
+
+// Dijkstra:
+
+class Solution {
+public:
+    int row = 0, col = 0;
+    int shortestDistance(vector<vector<int>>& maze, vector<int>& start, vector<int>& destination) {
+        this -> row = maze.size(), this -> col = maze[0].size();
+        vector<vector<int>> dir = {{-1, 0}, {1, 0}, {0, 1}, {0, -1}};
+        vector<vector<int>> dist(row, vector<int> (col, INT_MAX));
+        dist[start[0]][start[1]] = 0;
+        priority_queue<pair<int, pair<int, int>>, vector<pair<int, pair<int, int>>>, greater<pair<int, pair<int, int>>>> Q;
+        Q.push({0, {start[0], start[1]}});
+        
+        while(!Q.empty()) {
+            int r = Q.top().second.first, c = Q.top().second.second;
+            Q.pop();
+            
+            for(auto &d: dir) {
+                int new_r = r + d[0], new_c = c + d[1], count = 0;
+                
+                while(is_valid(new_r, new_c) && !maze[new_r][new_c]) {
+                    new_r += d[0], new_c += d[1];
+                    count++;
+                }
+                
+                new_r -= d[0], new_c -= d[1];
+                if(dist[r][c] + count < dist[new_r][new_c]) {
+                    dist[new_r][new_c] = dist[r][c] + count;
+                    Q.push({count, {new_r, new_c}});
+                }
+            }
+            
+        }
+        
+        return dist[destination[0]][destination[1]] == INT_MAX ? -1 : dist[destination[0]][destination[1]];
+        
+    }
+    
+    bool is_valid(int r, int c) {
+        return r >= 0 && r < row && c >= 0 && c < col;
+    }
+};
