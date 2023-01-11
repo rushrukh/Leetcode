@@ -25,3 +25,26 @@ public:
         return DP[x] = false;
     }
 };
+
+// Greedy: TC O(N), SC O(1)
+
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        int n = nums.size();
+        int leftmost_idx = n - 1;
+        
+        for(int i = n - 1; i >= 0; i--) {
+            if(i == n - 1 || i + nums[i] >= n - 1) {
+                leftmost_idx = min(leftmost_idx, i);
+                continue;
+            }
+            
+            int left = i, right = nums[i] + i;
+            if(leftmost_idx <= right)
+                leftmost_idx = min(leftmost_idx, left);
+        }
+        
+        return leftmost_idx == 0;
+    }
+};
