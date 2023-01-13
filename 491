@@ -1,0 +1,32 @@
+class Solution {
+public:
+    set<vector<int>> hash;
+    vector<int> nums;
+    int n = 0;
+    vector<vector<int>> findSubsequences(vector<int>& nums) {
+        this -> n = nums.size(), this -> nums = nums;
+        
+        vector<int> curr;
+        for(int i = 0; i < n - 1; i++)
+            find_seq(i, curr);
+        
+        vector<vector<int>> result (hash.size());
+        copy(hash.begin(), hash.end(), result.begin());
+        return result;
+    }
+    
+    void find_seq(int i, vector<int> &curr) {
+        if(i == n) return;
+        
+        if(!curr.size() || nums[i] >= curr.back()) {
+            curr.push_back(nums[i]);
+            if(curr.size() > 1) hash.insert(curr);
+            
+            for(int j = i + 1; j < n; j++) {
+                find_seq(j, curr);
+            }
+            
+            curr.pop_back();
+        }
+    }
+};
