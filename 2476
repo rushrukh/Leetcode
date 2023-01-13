@@ -1,0 +1,40 @@
+class Solution {
+public:
+    vector<int> nums;
+    vector<vector<int>> closestNodes(TreeNode* root, vector<int>& queries) {
+        inorder(root);
+        vector<vector<int>> result;
+        
+        for(int &query: queries)
+            result.push_back(binary_search(query));
+        
+        return result;
+    }
+    
+    void inorder(TreeNode* root) {
+        if(!root) return;
+        inorder(root -> left);
+        nums.push_back(root -> val);
+        inorder(root -> right);
+    }
+    
+    vector<int> binary_search(int target) {
+        int left = 0, right = nums.size() - 1;
+        int min_ = INT_MIN, max_ = INT_MAX;
+        
+        while(left <= right) {
+            int mid = left + (right - left) / 2;
+            if(nums[mid] == target) return {nums[mid], nums[mid]};
+            else if(nums[mid] < target) {
+                min_ = max(min_, nums[mid]);
+                left = mid + 1;
+            }
+            else {
+                max_ = min(max_, nums[mid]);
+                right = mid - 1;
+            }
+        }
+        
+        return {min_ == INT_MIN ? -1 : min_, max_ == INT_MAX ? -1 : max_};
+    }
+};
