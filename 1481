@@ -1,0 +1,24 @@
+// TC (n + ilogm) where m = number of unique elements, SC O(m)
+
+class Solution {
+public:
+    int findLeastNumOfUniqueInts(vector<int>& arr, int k) {
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> Q;
+        unordered_map<int, int> hash;
+        for(int &n: arr) hash[n]++;
+        
+        for(auto &p: hash) Q.push({p.second, p.first});
+        
+        while(k) {
+            int curr = Q.top().second;
+            Q.pop();
+            
+            k--;
+            hash[curr]--;
+            
+            if(hash[curr] > 0) Q.push({hash[curr], curr});
+        }
+        
+        return Q.size();
+    }
+};
