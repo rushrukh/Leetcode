@@ -19,3 +19,28 @@ public:
         return weak;
     }
 };
+
+
+// TC O(N + K), SC O(K)
+
+class Solution {
+public:
+    int numberOfWeakCharacters(vector<vector<int>>& properties) {
+        int max_attack = 0;
+        for(auto &p: properties)
+            max_attack = max(max_attack, p[0]);
+        
+        vector<int> max_defense(max_attack + 2, 0);
+        for(auto &p: properties)
+            max_defense[p[0]] = max(max_defense[p[0]], p[1]);
+        
+        for(int i = max_defense.size() - 2; i >= 0; i--)
+            max_defense[i] = max(max_defense[i + 1], max_defense[i]);
+        
+        int weak = 0;
+        for(auto &p: properties)
+            if(p[1] < max_defense[p[0] + 1]) weak++;
+        
+        return weak;
+    }
+};
