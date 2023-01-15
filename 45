@@ -1,0 +1,21 @@
+class Solution {
+public:
+    vector<int> nums, DP;
+    int n = 0, min_jump = INT_MAX;
+    int jump(vector<int>& nums) {
+        this -> n = nums.size(), this -> nums = nums;
+        DP.assign(n, -1);
+        return find_jumps(0);
+    }
+    
+    int find_jumps(int i) {
+        if(i == n - 1) return 0;
+        if(DP[i] != -1) return DP[i];
+        
+        int right_limit = min(i + nums[i], n - 1), curr_min = INT_MAX;
+        for(int j = i + 1; j <= right_limit; j++)
+            curr_min = min(find_jumps(j), curr_min);
+        
+        return DP[i] = curr_min == INT_MAX ? curr_min : curr_min + 1;
+    }
+};
