@@ -1,0 +1,27 @@
+// DFS: TC O(N), SC O(N)
+
+class Solution {
+public:
+    unordered_map<int, vector<int>> hash;
+    vector<vector<int>> findLeaves(TreeNode* root) {
+        find_height(root);
+        vector<vector<int>> result (hash.size());
+        
+        for(auto &p: hash) 
+            result[p.first] = p.second;
+        
+        return result;
+    }
+    
+    int find_height(TreeNode *root) {
+        if(!root) return -1;
+        
+        int left = find_height(root -> left);
+        int right = find_height(root -> right);
+        
+        int height = max(left, right) + 1;
+        hash[height].push_back(root -> val);
+        
+        return height;
+    }
+};
