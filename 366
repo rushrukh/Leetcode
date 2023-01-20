@@ -25,3 +25,58 @@ public:
         return height;
     }
 };
+
+class Solution {
+public:
+    unordered_map<TreeNode*, TreeNode*> hash;
+    unordered_map<TreeNode*, int> outdegree;
+    vector<vector<int>> findLeaves(TreeNode* root) {
+        if(!root) return {};
+        find_parent(root);
+
+        queue<TreeNode*> Q;
+        for(auto &x: outdegree)
+            if(!x.second)
+                Q.push(x.first);
+                
+        vector<vector<int>> answer;
+        while(!Q.empty()) {
+            int n = Q.size();
+            
+            vector<int> tmp_answer;
+            for(int i = 0; i < n; i++) {
+                TreeNode* curr = Q.front();
+                Q.pop();
+                tmp_answer.push_back(curr -> val);
+                
+                TreeNode* parent = hash[curr];
+                outdegree[parent]--;
+                if(!outdegree[parent]) 
+                    Q.push(parent);
+            }
+            
+            answer.push_back(tmp_answer);
+        }
+        
+        return answer;
+    }
+    
+    void find_parent(TreeNode *root) {
+        if(!root) return;
+        
+        if(root -> left) {
+            outdegree[root]++;
+            hash[root -> left] = root;
+            find_parent(root -> left);
+        }
+        
+        if(root -> right) {
+            outdegree[root]++;
+            hash[root -> right] = root;
+            find_parent(root -> right);
+        }
+        
+        if(!root -> left && !root -> right)
+            outdegree[root] = 0;
+    }
+};
