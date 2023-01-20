@@ -126,3 +126,24 @@ public:
         return root1;
     }
 };
+
+
+// Recursive DFS Solution:
+
+class Solution {
+public:
+    TreeNode* mergeTrees(TreeNode* root1, TreeNode* root2) {
+        return merge_nodes(root1, root2);
+    }
+    TreeNode* merge_nodes(TreeNode* root_1, TreeNode* root_2) {
+        if(!root_1 && !root_2) return NULL;
+        if(!root_1) return root_2;
+        if(!root_2) return root_1;
+        
+        root_1 -> val += root_2 -> val;
+        root_1 -> left = merge_nodes(root_1 -> left, root_2 -> left);
+        root_1 -> right = merge_nodes(root_1 -> right, root_2 -> right);
+        
+        return root_1;
+    }
+};
