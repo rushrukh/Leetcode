@@ -1,0 +1,56 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+
+class Solution {
+public:
+    long long mod = 1e9 + 7;
+    int total = 0; 
+    long long max_prod = 0;
+    unordered_map<TreeNode*, int> subtree_sum;
+    int maxProduct(TreeNode* root) {
+        find_sum(root);
+        maximize_sum(root);
+        return max_prod % mod;
+    }
+    
+    int find_sum(TreeNode *root) {
+        if(!root) return 0;
+        
+        int children_sum = find_sum(root -> left);
+        children_sum += find_sum(root -> right);
+        children_sum += root -> val;
+        subtree_sum[root] = children_sum;
+        total += root -> val;
+        
+        return children_sum;
+    }
+    
+    void maximize_sum(TreeNode* root) {
+        if(!root) return;
+        
+        long long s1_sum = 0, s2_sum = 0;
+        if(root -> left) {
+            s1_sum = subtree_sum[root -> left];
+            s2_sum = (total - s1_sum);
+            max_prod = max(max_prod, s1_sum * s2_sum);
+        }
+        
+        if(root -> right) {
+            s1_sum = subtree_sum[root -> right];
+            s2_sum = total - s1_sum;
+            max_prod = max(max_prod, s1_sum * s2_sum);
+        }
+        
+        maximize_sum(root -> left);
+        maximize_sum(root -> right);
+    }
+};
