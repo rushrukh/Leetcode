@@ -1,0 +1,32 @@
+class Solution {
+public:
+    vector<vector<int>> adj_list;
+    vector<bool> hasApple;
+    int minTime(int n, vector<vector<int>>& edges, vector<bool>& hasApple) {
+        adj_list.assign(n, vector<int> ());
+        this -> hasApple = hasApple;
+        
+        for(auto &edge: edges) {
+            adj_list[edge[0]].push_back(edge[1]);
+            adj_list[edge[1]].push_back(edge[0]);
+        }
+        
+        return find_time(0, -1) * 2;
+    }
+    
+    int find_time(int curr_node, int parent_node) {
+        
+        int curr_time = 0, total_time = 0;
+        bool apple_found = false;
+        
+        for(int &next_node: adj_list[curr_node]) {
+            if(next_node == parent_node) continue;
+            curr_time = find_time(next_node, curr_node);
+            
+            if(curr_time || hasApple[next_node]) total_time += curr_time + 1;
+                
+        }
+        
+        return total_time;
+    }
+};
