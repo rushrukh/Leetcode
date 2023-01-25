@@ -1,0 +1,32 @@
+// TC O(NlogN), SC O(logN)
+
+class Solution {
+public:
+    unordered_map<int, int> hash;
+    vector<int> frequencySort(vector<int>& nums) {
+        
+        for(int &num: nums)
+            hash[num]++;
+        
+        auto comp = [this] (int a, int b) {
+            return hash[a] == hash[b] ? a < b : hash[a] > hash[b];
+        };
+        
+        priority_queue<int, vector<int>, decltype(comp)> Q(comp);
+        
+        for(auto &x: hash)
+            Q.push(x.first);
+        
+        vector<int> answer;
+        
+        while(!Q.empty()) {
+            int curr = Q.top();
+            Q.pop();
+            
+            for(int i = 0; i < hash[curr]; i++)
+                answer.push_back(curr);
+        }
+        
+        return answer;
+    }
+};
