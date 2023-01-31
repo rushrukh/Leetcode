@@ -42,3 +42,39 @@ public:
         return root;
     }
 };
+
+// DFS Solution:
+
+class Solution {
+public:
+    int val = 0, depth = 0;
+    TreeNode* addOneRow(TreeNode* root, int val, int depth) {
+        this -> val = val, this -> depth = depth;
+        if(depth == 1) {
+            TreeNode *new_root = new TreeNode(val);
+            new_root -> left = root;
+            return new_root;
+        }
+        
+        DFS(root, 1);
+        return root;        
+    }
+    
+    void DFS(TreeNode* root, int d) {
+        if(!root) return;
+        
+        if(d == depth - 1) {
+            TreeNode *tmp_l = root -> left, *tmp_r = root -> right;
+            root -> left = new TreeNode(val);
+            root -> right = new TreeNode(val);
+            
+            root -> left -> left = tmp_l;
+            root -> right -> right = tmp_r;
+            
+            return;
+        }
+        
+        DFS(root -> left, d + 1);
+        DFS(root -> right, d + 1);
+    }
+};
