@@ -1,0 +1,23 @@
+// DFS: TC O(N), SC O(N)
+
+class Solution {
+public:
+    unsigned long long max_width = 0;
+    unordered_map<int, unsigned long long> hash;
+    int widthOfBinaryTree(TreeNode* root) {
+        DFS(root, 0, 1);
+        return max_width + 1;
+    }
+    
+    void DFS(TreeNode *root, int depth, int column_index) {
+        if(!root) return;
+        if(hash.find(depth) == hash.end())
+            hash[depth] = column_index;
+        else max_width = max(max_width, column_index - hash[depth]);
+        
+        if(root -> left)
+            DFS(root -> left, depth + 1, 2 * (column_index - hash[depth]));
+        if(root -> right) 
+            DFS(root -> right, depth + 1, 2 * (column_index - hash[depth]) + 1);
+    }
+};
