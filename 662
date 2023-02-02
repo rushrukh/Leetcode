@@ -21,3 +21,34 @@ public:
             DFS(root -> right, depth + 1, 2 * (column_index - hash[depth]) + 1);
     }
 };
+
+// BFS: TC O(N), SC O(N)
+
+class Solution {
+public:
+    int widthOfBinaryTree(TreeNode* root) {
+        unsigned long long max_width = 0;
+        queue<pair<TreeNode*, unsigned long long>> Q;
+        Q.push({root, 1});
+        
+        while(!Q.empty()) {
+            int n = Q.size();
+            unsigned long long min_idx = INT_MAX, max_idx = 0;
+            
+            for(int i = 0; i < n; i++) {
+                TreeNode *curr = Q.front().first;
+                unsigned long long col_index = Q.front().second;
+                Q.pop();
+                
+                if(i == 0) min_idx = col_index;
+                if(i == n - 1) max_idx = col_index;
+                if(curr -> left) Q.push({curr -> left, col_index * 2});
+                if(curr -> right) Q.push({curr -> right, col_index * 2 + 1});
+            }
+            
+            max_width = max(max_width, max_idx - min_idx);
+        }
+        
+        return max_width + 1;
+    }
+};
