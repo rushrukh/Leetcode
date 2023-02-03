@@ -1,0 +1,55 @@
+// TC O(N), SC O(N)
+
+class Solution {
+public:
+    unordered_map<TreeNode*, TreeNode*> parent;
+    TreeNode *p_node = NULL, *q_node = NULL;
+    int p = 0, q = 0;
+    int findDistance(TreeNode* root, int p, int q) {
+        this -> p = p, this -> q = q;
+        add_parents(root, NULL);
+        unordered_set<TreeNode*> visited;
+        visited.insert(p_node);
+        queue<TreeNode*> Q;
+        Q.push(p_node);
+        int level = 0;
+        
+        while(!Q.empty()) {
+            int n = Q.size();
+            
+            for(int i = 0; i < n; i++) {
+                TreeNode *curr = Q.front();
+                if(curr == q_node) return level;
+                Q.pop();
+                
+                if(curr -> left && visited.find(curr -> left) == visited.end()) {
+                    Q.push(curr -> left);
+                    visited.insert(curr -> left);
+                }
+                    
+                if(curr -> right && visited.find(curr -> right) == visited.end()) {
+                    Q.push(curr -> right);
+                    visited.insert(curr -> right);
+                }
+                    
+                if(parent[curr] && visited.find(parent[curr]) == visited.end()) {
+                    Q.push(parent[curr]);
+                    visited.insert(parent[curr]);
+                }
+            }
+            
+            level++;
+        }
+        
+        return 0;
+    }
+    
+    void add_parents(TreeNode *root, TreeNode *par) {
+        if(!root) return;
+        parent[root] = par;
+        if(root -> val == p) p_node = root;
+        else if(root -> val == q) q_node = root;
+        add_parents(root -> left, root);
+        add_parents(root -> right, root);
+    }
+};
