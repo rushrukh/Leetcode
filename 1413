@@ -1,0 +1,17 @@
+// TC O(N), SC O(1)
+
+class Solution {
+public:
+    int minStartValue(vector<int>& nums) {
+        int p_sum = 0, start_val = 1;
+        
+        for(int &num: nums) {
+            p_sum += num;
+            if(p_sum > 1) continue;
+            if(start_val + p_sum > 0) continue;
+            start_val = -(p_sum) + 1;
+        }
+        
+        return start_val;
+    }
+};
