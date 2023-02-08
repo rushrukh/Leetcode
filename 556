@@ -1,0 +1,50 @@
+// TC O(N), SC O(1)
+
+class Solution {
+public:
+    int nextGreaterElement(int n) {
+        vector<int> nums;
+        
+        while(n) {
+            nums.push_back(n % 10);
+            n /= 10;
+        }
+        
+        reverse(nums.begin(), nums.end());
+        
+        int pivot = find_decreasing_element(nums);
+        if(pivot < 0) return -1;
+        
+        int min_item = INT_MAX, min_idx = 0;
+        
+        for(int i = pivot + 1; i < nums.size(); i++) {
+            if(nums[i] <= min_item && nums[i] > nums[pivot]) {
+                min_item = nums[i];
+                min_idx = i;
+            }
+        }
+        
+        swap(nums[pivot], nums[min_idx]);
+        int left = pivot + 1, right = nums.size() - 1;
+        while(left <= right)
+            swap(nums[left++], nums[right--]);
+        
+        int result = 0;
+        for(int i = 0; i < nums.size(); i++) {
+            if(result > INT_MAX / 10) return -1;
+            result *= 10;
+            if(result > INT_MAX - nums[i]) return -1;
+            result += nums[i];
+        }
+        
+        return result;
+    }
+    
+    int find_decreasing_element(vector<int> &nums) {
+        for(int i = nums.size() - 1; i > 0; i--)
+            if(nums[i] > nums[i - 1])
+                return i - 1;
+        
+        return -1;
+    }
+};
