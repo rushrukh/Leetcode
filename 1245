@@ -1,0 +1,53 @@
+class Solution {
+public:
+    int treeDiameter(vector<vector<int>>& edges) {
+        int n = edges.size() + 1, level = 0;
+        if(n - 1 == 0) return 0;
+        vector<vector<int>> adj_list(n, vector<int> ());
+        vector<int> in_degree(n, 0);
+        
+        for(auto &edge: edges) {
+            adj_list[edge[0]].push_back(edge[1]);
+            adj_list[edge[1]].push_back(edge[0]);
+            
+            in_degree[edge[0]]++, in_degree[edge[1]]++;
+        }
+        
+        queue<int> Q;
+        for(int i = 0; i < n; i++)
+            if(in_degree[i] == 1)
+                Q.push(i);
+        
+        while(!Q.empty()) {
+            int q_size = Q.size();
+            if(n == 1) return level * 2;
+            else if(n == 2) return level * 2 + 1;
+            
+            for(int i = 0; i < q_size; i++) {
+                int curr_node = Q.front(); Q.pop();
+                n--;
+                
+                for(int &next_node: adj_list[curr_node]) {
+                    in_degree[curr_node]--;
+                    if(--in_degree[next_node] == 1) Q.push(next_node);
+                }
+            }
+            
+            level++;
+        }
+        
+        return -1;
+    }
+};
+
+/*
+
+- Centroid of graph
+- can be 1, can be 2
+- Top Sort gives it away.
+- In the last level, if there is 1 node == centroid
+- 2 node == centroid
+- then you have the level
+- find the number of edges for that level given centroid number
+
+*/
