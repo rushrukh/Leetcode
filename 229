@@ -1,0 +1,37 @@
+class Solution {
+public:
+    vector<int> majorityElement(vector<int>& nums) {
+        int first_num = 0, second_num = 0, f_count = 0, s_count = 0, n = nums.size();
+        
+        for(int &num: nums) {
+            if(num == first_num) 
+                f_count++;
+            else if(num == second_num)
+                s_count++;
+            else if(!f_count) {
+                first_num = num;
+                f_count++;
+            }
+            else if(!s_count) {
+                second_num = num;
+                s_count++;
+            }
+            else {
+                f_count--, s_count--;
+            }
+        }
+        
+        f_count = 0, s_count = 0;
+        
+        for(int &num: nums) {
+            if(num == first_num) f_count++;
+            else if(num == second_num) s_count++;
+        }
+        
+        vector<int> answer;
+        if(f_count > (n / 3)) answer.push_back(first_num);
+        if(s_count > (n / 3)) answer.push_back(second_num);
+        
+        return answer;
+    }
+};
