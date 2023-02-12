@@ -52,3 +52,26 @@ public:
         return answer;
     }
 };
+
+
+// BS:
+
+class Solution {
+public:
+    long long countFairPairs(vector<int>& nums, int lower, int upper) {
+        sort(nums.begin(), nums.end());
+        int n = nums.size();
+        long long answer = 0;
+        
+        for(int i = 0; i < n - 1; i++) {
+            int min_v = lower - nums[i], max_v = upper - nums[i];
+            int leftmost_ = lower_bound(nums.begin() + i + 1, nums.end(), min_v) - nums.begin();
+            int rightmost_ = upper_bound(nums.begin() + i + 1, nums.end(), max_v) - nums.begin();
+            if(rightmost_ < leftmost_ || rightmost_ == -1 || leftmost_ == -1) continue;
+            
+            answer += rightmost_ - leftmost_;
+        }
+        
+        return answer;
+    }
+};
