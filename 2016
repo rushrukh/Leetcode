@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int maximumDifference(vector<int>& nums) {
+        int max_ = NULL, min_ = NULL, max_idx = -1, min_idx = -1, answer = -1;
+        
+        for(int i = 0; i < nums.size(); i++) {
+            if(!min_ || nums[i] <= min_) {
+                min_ = nums[i];
+                min_idx = i;
+                max_ = NULL;
+                max_idx = -1;
+            }
+            else if(!max_ || nums[i] >= max_) {
+                max_ = nums[i];
+                max_idx = i;
+            }
+            if(max_ && min_ && max_idx > min_idx)
+                answer = max(answer, max_ - min_);
+        }
+        
+        return answer;
+    }
+};
