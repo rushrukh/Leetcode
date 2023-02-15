@@ -1,0 +1,20 @@
+// TC O(M)
+
+class Solution {
+public:
+    void rotate(vector<vector<int>>& matrix) {
+        int mat_size = matrix.size(), n = mat_size - 1;
+        
+        for(int i = 0; i <= (n / 2); i++) {
+            for(int j = i; j < n - i; j++) {
+                int curr_i = i, curr_j = j;
+                for(int k = 0; k < 4; k++) {
+                    int next_i = curr_j, next_j = n - curr_i;
+                    swap(matrix[i][j], matrix[next_i][next_j]);
+                    curr_i = next_i, curr_j = next_j;
+                }
+            }
+        }
+        
+    }
+};
