@@ -1,0 +1,30 @@
+// TC O(N + K), SC O(N + K)
+
+class Solution {
+public:
+    vector<int> DP;
+    unordered_map<int, int> hash;
+    int deleteAndEarn(vector<int>& nums) {
+        for(int &num: nums) hash[num]++;
+        for(auto &p: hash) hash[p.first] = p.first * p.second;
+        
+        int max_p = *max_element(nums.begin(), nums.end());
+        DP.assign(max_p + 1, -1);
+        find_max(max_p);
+        
+        return DP[max_p];
+    }
+    
+    int find_max(int curr_item) {
+        if(curr_item == 0) return DP[curr_item] = 0;
+        if(hash.find(curr_item) == hash.end()) return find_max(curr_item - 1);
+        if(curr_item == 1) return DP[curr_item] = hash[curr_item];
+        
+        if(DP[curr_item] != -1) return DP[curr_item];   // Check this: not sure yet
+        
+        int dont_take = find_max(curr_item - 1);
+        int take_curr_item = hash[curr_item] + find_max(curr_item - 2);
+        
+        return DP[curr_item] = max(take_curr_item, dont_take);
+    }
+};
